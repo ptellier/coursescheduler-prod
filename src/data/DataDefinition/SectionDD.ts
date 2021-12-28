@@ -78,7 +78,7 @@ export type Term = "1" | "2" | "summer";
  * Registration availability: "Available", "Full", or "Restricted"
  * @typedef {string} Status
  */
-export type Status = "Available" | "Full" | "Restricted" | "Blocked";
+export type Status = "Available" | "Full" | "Restricted" | "Blocked" | "Waiting List";
 
 /**
  * Type of course activity. e.g. "Laboratory", "Tutorial", "Lecture"

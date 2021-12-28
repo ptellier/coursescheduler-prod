@@ -40,7 +40,13 @@ export const TriggerAPI = ({ losw, set_los, userTerm, setUserTerm }: Props) => {
    * a user clicks Generate Schedule btn
    */
   const handleGenerate = async() => {
-    set_los(solve(await fetchSections(losw)));
+    const data_from_api = await fetchSections(losw)
+    console.log(data_from_api)
+    const permutations = solve(data_from_api)
+    console.log(permutations)
+    
+    
+    //set_los(solve(await fetchSections(losw)));
   };
 
   return (

@@ -22,17 +22,27 @@ interface Node {
  */
 export const solve = (los: ListOfSection): ListOfSection[] => {
     const og_los = los
-    const fn_for_node = (node: Node): ListOfSection[] => {
+    const fn_for_node = (node: Node, node_wl:Node[], rsf: ListOfSection[]): ListOfSection[] => {
         if (finished(node)) {
-            if (goodSchedule(node)) {
-                return [node.assigned]
+            if (complete(node.assigned, og_los)) {
+                return fn_for_lon(node_wl, [...rsf, node.assigned])
             } else {
-                return []
+                return fn_for_lon(node_wl, rsf) 
             }
         } else {
-            return fn_for_node(pick(node)).concat(fn_for_node(skip(node)))
+            return fn_for_lon(node_wl.concat(next(node)), rsf) 
         }
     }
+
+    const fn_for_lon = (node_wl:Node[], rsf: ListOfSection[]): ListOfSection[] => {
+        if (empty(node_wl)) {
+            return rsf
+        } else {
+            const [first, ...rest] = node_wl
+            return fn_for_node(first, rest, rsf)
+        }
+    }
+
     /**
      * produce true if given node's remain is empty
      * @param {Node} node 
@@ -42,14 +52,17 @@ export const solve = (los: ListOfSection): ListOfSection[] => {
         return empty(node.remain)
     }
 
+    const next = (node: Node): Node[] => {
+        return [pick(node), skip(node)].filter(x => goodSchedule(x))
+    }
     /**
      * produce true if given' node's assigned satisfy conditions
      * @param {Node} node 
      * @returns {Boolean}
      */
     const goodSchedule = (node:Node): Boolean => {
-        return !(alreadyContains(node.assigned)) &&
-                complete(node.assigned, og_los)
+        return !(alreadyContains(node.assigned))
+                //complete(node.assigned, og_los)
     }
 
     /**
@@ -71,7 +84,7 @@ export const solve = (los: ListOfSection): ListOfSection[] => {
         return { "assigned": node.assigned, "remain": rest }
     }
 
-    return fn_for_node({ "assigned": [], "remain": los })
+    return fn_for_node({ "assigned": [], "remain": los }, [], [])
 }
 
 
@@ -93,10 +106,9 @@ export const alreadyContains = (los: ListOfSection):Boolean => {
                 return alreadyContains(rest)
             }
         }
-
     }
     if (empty(los)) {
-        return true
+        return false
     } else {
         return alreadyContains(los)
     }
@@ -123,7 +135,7 @@ export const complete = (assigned:ListOfSection, og_los:ListOfSection): Boolean 
  */
 export const matchCourse = (s1:Section, s2:Section): Boolean => {
     return s1.subject === s2.subject &&
-           s1.course == s2.course
+           s1.course === s2.course
 }
 
 
