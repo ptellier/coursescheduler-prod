@@ -61,7 +61,7 @@ export const solve = (los: ListOfSection): ListOfSection[] => {
      * @returns {Boolean}
      */
     const goodSchedule = (node:Node): Boolean => {
-        return !(alreadyContains(node.assigned))
+        return !(alreadyContains(node.assigned)) // CPSC 121-lecture,  CPSC 121-Lab, CPSC 121-Lab ,_ filtered out 
                 //complete(node.assigned, og_los)
     }
 
@@ -100,7 +100,7 @@ export const alreadyContains = (los: ListOfSection):Boolean => {
         const [first, ...rest] = los
         if (empty(los)) { return false }
         else {
-            if (rest.some(s => matchCourse(s, first))) {
+            if (rest.some(s => matchCourse(s, first))) { // using ormap
                 return true
             } else {
                 return alreadyContains(rest)
@@ -134,8 +134,9 @@ export const complete = (assigned:ListOfSection, og_los:ListOfSection): Boolean 
  * @returns {Boolean}
  */
 export const matchCourse = (s1:Section, s2:Section): Boolean => {
-    return s1.subject === s2.subject &&
-           s1.course === s2.course
+    return s1.subject === s2.subject && // CPSC
+           s1.course === s2.course &&   // 121
+           s1.activity === s2.activity  // Lab, Lecture 
 }
 
 
