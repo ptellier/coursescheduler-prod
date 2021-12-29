@@ -2,10 +2,10 @@ import React from 'react'
 import { ListOfSection, Section } from '../data/DataDefinition/SectionDD'
 
 /**
- * A timeslot for a course with start and end time
+ * Sections chosen and sections remaining at each node in the search tree
  * @typedef {Object} Node
- * @property {ListOfSection} assigned; listof Section that are assigned
- * @property {ListOfSection} remain; listof Section remainng to be assigned
+ * @property {ListOfSection} assigned - listof Section that are assigned
+ * @property {ListOfSection} remain - listof Section remainng to be assigned
  */
 interface Node {
     assigned: ListOfSection
