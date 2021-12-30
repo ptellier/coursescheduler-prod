@@ -135,8 +135,7 @@ export const complete = (assigned:ListOfSection, og_los:ListOfSection): Boolean 
  */
 export const matchCourse = (s1:Section, s2:Section): Boolean => {
     return s1.subject === s2.subject && // CPSC
-           s1.course === s2.course &&   // 121
-           s1.activity === s2.activity  // Lab, Lecture 
+           s1.course === s2.course    // 121
 }
 
 
