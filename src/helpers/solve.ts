@@ -134,20 +134,26 @@ export const solve = (los: ListOfSection): ListOfSection[] => {
    let node: Node; //current node
    let rsf: ListOfSection[] = [];
    let root:Node = { assigned: [], remain: los }
+   //let ii:number = 0; //keep track of total number of loops
    n_wl.push(root);
 
-   while (n_wl.length > 0) {
+   while (n_wl.length > 0 /*&& ii<10000*/) {
         node = n_wl.pop() as Node;
         if (complete(node.assigned, og_los)) {//solution??
-            n_wl.concat(next_nodes(node));
             rsf.push(node.assigned);
-        } else {
             if (node.remain.length > 0) {
                 n_wl.concat(next_nodes(node));
+            }
+        } else {
+            if (node.remain.length > 0) {
+                n_wl = n_wl.concat(next_nodes(node));
             } //else {do nothing (discards node)}
         }
+        //nii=+ ii;
     }
+    console.log(rsf);
     return rsf;
+    
 }
 
 
@@ -198,7 +204,8 @@ export const complete = (assigned:ListOfSection, og_los:ListOfSection): Boolean 
  */
 export const matchCourse = (s1:Section, s2:Section): Boolean => {
     return s1.subject === s2.subject && // CPSC
-           s1.course === s2.course    // 121
+           s1.course === s2.course && // 121
+           s1.activity === s2.activity
 }
 
 

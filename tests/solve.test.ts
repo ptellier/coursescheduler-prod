@@ -121,12 +121,34 @@ test("isDuplicateSection: produce true given list contains duplicate course", ()
   );
 });
 
+const COMM388_101:Section = {
+  "course": "388",
+  "section": "101",
+  "subject": "COMM",
+  "activity": "Lecture",
+  "link": "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-section&dept=COMM&course=388&section=101&campuscd=UBC",
+  "name": "COMM 388 101",
+  "schedule": [
+    {
+      "day": "Wed",
+      "start_time": 870,
+      "end_time": 1050,
+      "term": "1",
+    }
+  ],
+  "status": "Restricted",
+  "term": "1",
+}
+
 test("completed: produce true if assigned contains all neccessary courses in og-loc", () => {
-  expect(complete([], COURSES)).toEqual(false);
-  expect(complete([CPSC121_101], COURSES)).toEqual(false);
-  expect(complete([CPSC121_101, CPSC110_101], COURSES)).toEqual(false);
-  expect(complete([CPSC121_101, CPSC110_101, CPSC210_101], COURSES)).toEqual(true);
+  expect(complete([], COURSES)).toBe(false);
+  expect(complete([CPSC121_101], COURSES)).toBe(false);
+  expect(complete([CPSC121_101, CPSC110_101], COURSES)).toBe(false);
+  expect(complete([CPSC121_101, CPSC110_101, CPSC210_101], COURSES)).toBe(true);
+  expect(complete([COMM388_101], [COMM388_101])).toBe(true);
+  expect(complete([COMM388_101], [CPSC110_101])).toBe(false);
 });
+
 
 test("solve", () => {
   expect(solve_opti([])).toEqual([

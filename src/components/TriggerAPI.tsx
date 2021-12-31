@@ -32,7 +32,7 @@ export const TriggerAPI = ({ losw, set_los, userTerm, setUserTerm }: Props) => {
    * @returns {ListOfSection}
    */
   const filterAvailSections = (los: ListOfSection): ListOfSection => {
-    return los.filter((c) => c.status !== "Full" && c.term === userTerm);
+    return los.filter((c) => c.term === userTerm && c.activity !== "Waiting List");
   };
  
   /**
