@@ -2,7 +2,7 @@ import {ListOfSearchWord,
 } from "../data/DataDefinition/SearchWordDD";
 import { ListOfSection } from "../data/DataDefinition/SectionDD";
 import { fetchSection } from "../helpers/fetch";
-import { solve } from "../helpers/solve";
+import { solve_opti } from "../helpers/solve";
 
 export interface Props {
   losw: ListOfSearchWord;
@@ -42,11 +42,11 @@ export const TriggerAPI = ({ losw, set_los, userTerm, setUserTerm }: Props) => {
   const handleGenerate = async() => {
     const data_from_api = await fetchSections(losw)
     console.log(data_from_api)
-    const permutations = solve(data_from_api)
+    const permutations = solve_opti(data_from_api)
     console.log(permutations)
     
     
-    //set_los(solve(await fetchSections(losw)));
+    //set_los(solve_opti(await fetchSections(losw)));
   };
 
   return (

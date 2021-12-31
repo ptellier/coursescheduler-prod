@@ -12,8 +12,8 @@ import React from "react";
  * @property {Status}   status      - "Restricted", "Available", "Full"
  * @property {Activity} activity    - "Laboratory", "Lecture" "Tutorial", "Seminar"
  * @property {Term}     term        - "1", "2"
- * @property {Schedule} schedule    
- * @property {String}   link
+ * @property {Schedule} schedule    - "List of timeslots for all meetings of the section"  
+ * @property {String}   link        - link to the UBC webpage for the section
  */
 export interface Section {
   name:     String;

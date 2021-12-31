@@ -1,79 +1,96 @@
+import { link } from "fs";
+import { Section,Timeslot } from "../src/data/DataDefinition/SectionDD";
 const fns = require("../src/index.ts");
 
 //CONSTANTS:
 
-const CS1: Course = {
+const CS1: Section = {
+  name: "CPSC 110 102",
   subject: "CPSC",
-  courseNum: "110",
+  course: "110",
+  section: "102",
   activity: "Laboratory",
-  timeslot: {start_time: 900,
+  schedule: [{start_time: 900,
               end_time: 960,
               day: "Wed",
-              term: "2"},
+              term: "2"}],
   status: "Available",
-  term: "2"
+  term: "2",
+  link:"www.asdfghjkl.com"
 };
 const CS1NAME: string = fns.get_course_name(CS1);
 
-const CS2: Course = {
+const CS2: Section = {
+  name: "CPSC 121 102",
   subject: "CPSC",
-  courseNum: "121",
+  course: "121",
+  section: "102",
   activity: "Tutorial",
-  timeslot: {start_time: 930,
+  schedule: [{start_time: 930,
               end_time: 990,
               day: "Wed",
-              term: "2"},
+              term: "2"}],
   status: "Available",
-  term: "2"
+  term: "2",
+  link:"www.asdfghjkl.com"
 };
 const CS2NAME: string = fns.get_course_name(CS2);
 
-const CS3: Course = {
+const CS3: Section = {
+  name: "CPSC 121 T02",
   subject: "CPSC",
-  courseNum: "121",
+  course: "121",
+  section: "T02",
   activity: "Tutorial",
-  timeslot: {start_time: 1020,
+  schedule: [{start_time: 1020,
               end_time: 1050,
               day: "Wed",
-              term: "2"},
+              term: "2"}],
   status: "Available",
-  term: "2"
+  term: "2",
+  link:"www.asdfghjkl.com"
 };
 const CS3NAME: string = fns.get_course_name(CS3);
 
-const CS4: Course = {
+const CS4: Section = {
+  name: "STAT 302 T02",
   subject: "STAT",
-  courseNum: "302",
+  course: "302",
+  section: "T02",
   activity: "Tutorial",
-  timeslot: {start_time: 60,
+  schedule: [{start_time: 60,
               end_time: 120,
               day: "Wed",
-              term: "2"},
+              term: "2"}],
   status: "Available",
-  term: "2"
+  term: "2",
+  link:"www.asdfghjkl.com"
 };
 const CS4NAME: string = fns.get_course_name(CS4);
 
-const CS5: Course = {
+const CS5: Section = {
+  name: "ENGL 301 102",
   subject: "ENGL",
-  courseNum: "301",
+  course: "301",
+  section: "102",
   activity: "Lecture",
-  timeslot: {start_time: 340,
+  schedule: [{start_time: 340,
               end_time: 370,
               day: "Wed",
-              term: "2"},
+              term: "2"}],
   status: "Available",
-  term: "2"
+  term: "2",
+  link:"www.asdfghjkl.com"
 };
 const CS5NAME: string = fns.get_course_name(CS5);
 
-const CS1_Full: Course = Object.assign({}, CS1)
+const CS1_Full: Section = Object.assign({}, CS1)
 CS1_Full.status = "Full"
 
-const CS2_Full: Course = Object.assign({}, CS2)
+const CS2_Full: Section = Object.assign({}, CS2)
 CS2_Full.status = "Full"
 
-const CS3_Restricted: Course = Object.assign({}, CS3)
+const CS3_Restricted: Section = Object.assign({}, CS3)
 CS3_Restricted.status = "Restricted"
 
 const TS2: Timeslot = 
@@ -171,10 +188,10 @@ test("overlap is false: different terms", () => {
   )).toBe(false)
 });
 
-test("overlap is true: Course1 ends after Course2 starts", () => {
+test("overlap is true: Section1 ends after Section2 starts", () => {
   expect(fns.is_overlap_courses(CS1, CS2)).toBe(true)
 });
-test("overlap is false: Course2 starts after Course1 ends", () => {
+test("overlap is false: Section2 starts after Section1 ends", () => {
   expect(fns.is_overlap_courses(CS1, CS3)).toBe(false)
 });
 

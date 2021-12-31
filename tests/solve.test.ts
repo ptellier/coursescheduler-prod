@@ -5,6 +5,7 @@ import {
   alreadyContains,
   complete,
   solve,
+  solve_opti,
 } from "../src/helpers/solve";
 
 const CPSC121_101: Section = {
@@ -128,7 +129,7 @@ test("completed: produce true assigned contains all neccessary courses in og-loc
 });
 
 test("solve", () => {
-  expect(solve(COURSES)).toEqual([
+  expect(solve_opti(COURSES)).toEqual([
     [CPSC210_101, CPSC110_101, CPSC121_101],
     [CPSC210_102, CPSC110_101, CPSC121_101],
     [CPSC210_101, CPSC110_102, CPSC121_101],
@@ -142,7 +143,7 @@ test("solve", () => {
     [CPSC210_101, CPSC110_102, CPSC121_103],
     [CPSC210_102, CPSC110_102, CPSC121_103],
   ]);
-  expect(solve([CPSC121_101, CPSC121_102, CPSC110_101, CPSC210_101])).toEqual([
+  expect(solve_opti([CPSC121_101, CPSC121_102, CPSC110_101, CPSC210_101])).toEqual([
     [CPSC210_101, CPSC110_101, CPSC121_101],
     [CPSC210_101, CPSC110_101, CPSC121_102],
   ])
