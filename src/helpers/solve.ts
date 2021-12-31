@@ -87,6 +87,78 @@ export const solve = (los: ListOfSection): ListOfSection[] => {
     return fn_for_node({ "assigned": [], "remain": los }, [], [])
 }
 
+/**
+ * produce all of the valid (listof sections) that can be taken
+ * valid schedule means:
+ * 1. All sections in assigned are unique
+ * 2. All sections in assinged satisfy user's required courses
+ * @param {ListOfSection} los 
+ * @returns {ListOfSection[]}
+ */
+ export const solve_opti = (los: ListOfSection): ListOfSection[] => {
+     
+    /**
+     * produce true if given node's remain is empty
+     * @param {Node} node 
+     * @returns {Boolean}
+     */
+   const finished = (node:Node): Boolean => {
+       return empty(node.remain)
+   }
+
+   const next_nodes = (node: Node): Node[] => {
+       return [pick(node), skip(node)].filter(x => goodSchedule(x))
+   }
+   /**
+    * produce true if given' node's assigned satisfy conditions
+    * @param {Node} node 
+    * @returns {Boolean}
+    */
+   const goodSchedule = (node:Node): Boolean => {
+       return !(alreadyContains(node.assigned)) // CPSC 121-lecture,  CPSC 121-Lab, CPSC 121-Lab ,_ filtered out 
+               //complete(node.assigned, og_los)
+   }
+
+   /**
+    * pick the first section of remain and place it in assigned
+    * @param {Node} node 
+    * @returns {Node}
+    */
+   const pick = (node:Node): Node => {
+       const [first, ...rest] = node.remain
+       return { "assigned": [first, ...node.assigned], "remain": rest }
+   }
+   /**
+    * skip the first section of remain
+    * @param {Node} node 
+    * @returns {Node}
+    */
+   const skip = (node:Node): Node => {
+       const [first, ...rest] = node.remain
+       return { "assigned": node.assigned, "remain": rest }
+   }
+   
+   const og_los = los /*keep track of original list of sections */
+   let n_wl: Node[] = []; //node worklist
+   let node: Node; //current node
+   let rsf: ListOfSection[] = [];
+   let root:Node = { assigned: [], remain: los }
+   n_wl.push(root);
+
+   while (n_wl.length > 0) {
+       node = n_wl.pop() as Node;
+       if (finished(node)) {
+           if (complete(node.assigned, og_los)) {
+               n_wl.concat(next_nodes(node));
+               rsf.push(node.assigned);
+           } //else {do nothing (discards node)}
+       } else {
+           n_wl.concat(next_nodes(node));
+       }
+   }
+   return rsf;
+}
+
 
 /**
  * produce true if sections have duplicate, false otherwise
