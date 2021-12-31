@@ -1,11 +1,11 @@
-import { ListOfSection, Section } from "../../data/DataDefinition/SectionDD";
+import { ListOfSection, Section } from "../src/data/DataDefinition/SectionDD";
 import {
   empty,
   matchCourse,
   alreadyContains,
   complete,
   solve,
-} from "../solve";
+} from "../src/helpers/solve";
 
 const CPSC121_101: Section = {
   name: "CPSC 121 101",
@@ -127,7 +127,7 @@ test("completed: produce true assigned contains all neccessary courses in og-loc
   expect(complete([CPSC121_101, CPSC110_101, CPSC210_101], COURSES)).toEqual(true);
 });
 
-test("solve ", () => {
+test("solve", () => {
   expect(solve(COURSES)).toEqual([
     [CPSC210_101, CPSC110_101, CPSC121_101],
     [CPSC210_102, CPSC110_101, CPSC121_101],
