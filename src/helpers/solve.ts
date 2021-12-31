@@ -61,7 +61,7 @@ export const solve = (los: ListOfSection): ListOfSection[] => {
      * @returns {Boolean}
      */
     const goodSchedule = (node:Node): Boolean => {
-        return !(alreadyContains(node.assigned)) // CPSC 121-lecture,  CPSC 121-Lab, CPSC 121-Lab ,_ filtered out 
+        return !(isDuplicateSection(node.assigned)) // CPSC 121-lecture,  CPSC 121-Lab, CPSC 121-Lab ,_ filtered out 
                 //complete(node.assigned, og_los)
     }
 
@@ -96,15 +96,6 @@ export const solve = (los: ListOfSection): ListOfSection[] => {
  * @returns {ListOfSection[]}
  */
  export const solve_opti = (los: ListOfSection): ListOfSection[] => {
-     
-    /**
-     * produce true if given node's remain is empty
-     * @param {Node} node 
-     * @returns {Boolean}
-     */
-   const finished = (node:Node): Boolean => {
-       return empty(node.remain)
-   }
 
    const next_nodes = (node: Node): Node[] => {
        return [pick(node), skip(node)].filter(x => goodSchedule(x))
@@ -115,7 +106,7 @@ export const solve = (los: ListOfSection): ListOfSection[] => {
     * @returns {Boolean}
     */
    const goodSchedule = (node:Node): Boolean => {
-       return !(alreadyContains(node.assigned)) // CPSC 121-lecture,  CPSC 121-Lab, CPSC 121-Lab ,_ filtered out 
+       return !(isDuplicateSection(node.assigned)) // CPSC 121-lecture,  CPSC 121-Lab, CPSC 121-Lab ,_ filtered out 
                //complete(node.assigned, og_los)
    }
 
@@ -146,17 +137,17 @@ export const solve = (los: ListOfSection): ListOfSection[] => {
    n_wl.push(root);
 
    while (n_wl.length > 0) {
-       node = n_wl.pop() as Node;
-       if (finished(node)) {
-           if (complete(node.assigned, og_los)) {
-               n_wl.concat(next_nodes(node));
-               rsf.push(node.assigned);
-           } //else {do nothing (discards node)}
-       } else {
-           n_wl.concat(next_nodes(node));
-       }
-   }
-   return rsf;
+        node = n_wl.pop() as Node;
+        if (complete(node.assigned, og_los)) {//solution??
+            n_wl.concat(next_nodes(node));
+            rsf.push(node.assigned);
+        } else {
+            if (node.remain.length > 0) {
+                n_wl.concat(next_nodes(node));
+            } //else {do nothing (discards node)}
+        }
+    }
+    return rsf;
 }
 
 
@@ -167,22 +158,22 @@ export const solve = (los: ListOfSection): ListOfSection[] => {
  * @param {ListOfSection} los 
  * @returns {Boolean}
  */
-export const alreadyContains = (los: ListOfSection):Boolean => {
-    const alreadyContains = (los: ListOfSection):Boolean => {
+export const isDuplicateSection = (los: ListOfSection):Boolean => {
+    const isDuplicateSection = (los: ListOfSection):Boolean => {
         const [first, ...rest] = los
         if (empty(los)) { return false }
         else {
             if (rest.some(s => matchCourse(s, first))) { // using ormap
                 return true
             } else {
-                return alreadyContains(rest)
+                return isDuplicateSection(rest)
             }
         }
     }
     if (empty(los)) {
         return false
     } else {
-        return alreadyContains(los)
+        return isDuplicateSection(los)
     }
 }
 

@@ -2,7 +2,7 @@ import { ListOfSection, Section } from "../src/data/DataDefinition/SectionDD";
 import {
   empty,
   matchCourse,
-  alreadyContains,
+  isDuplicateSection,
   complete,
   solve,
   solve_opti,
@@ -111,17 +111,17 @@ test("matchCourse: produce true if c1 and c2 have same course subject and number
   expect(matchCourse(CPSC121_101, CPSC110_101)).toEqual(false);
 });
 
-test("alreadyContains: produce true given list contains duplicate course", () => {
-  expect(alreadyContains([])).toEqual(false);
-  expect(alreadyContains([CPSC121_101])).toEqual(false);
-  expect(alreadyContains([CPSC121_101, CPSC121_102])).toEqual(true);
-  expect(alreadyContains([CPSC121_101, CPSC110_102, CPSC210_101])).toEqual(false);
-  expect(alreadyContains([CPSC121_101, CPSC110_102, CPSC210_101, CPSC210_102])).toEqual(
+test("isDuplicateSection: produce true given list contains duplicate course", () => {
+  expect(isDuplicateSection([])).toEqual(false);
+  expect(isDuplicateSection([CPSC121_101])).toEqual(false);
+  expect(isDuplicateSection([CPSC121_101, CPSC121_102])).toEqual(true);
+  expect(isDuplicateSection([CPSC121_101, CPSC110_102, CPSC210_101])).toEqual(false);
+  expect(isDuplicateSection([CPSC121_101, CPSC110_102, CPSC210_101, CPSC210_102])).toEqual(
     true
   );
 });
 
-test("completed: produce true assigned contains all neccessary courses in og-loc", () => {
+test("completed: produce true if assigned contains all neccessary courses in og-loc", () => {
   expect(complete([], COURSES)).toEqual(false);
   expect(complete([CPSC121_101], COURSES)).toEqual(false);
   expect(complete([CPSC121_101, CPSC110_101], COURSES)).toEqual(false);
@@ -129,6 +129,16 @@ test("completed: produce true assigned contains all neccessary courses in og-loc
 });
 
 test("solve", () => {
+  expect(solve_opti([])).toEqual([
+    []
+  ]);
+  expect(solve_opti([CPSC121_101, CPSC110_101])).toEqual([
+    [CPSC110_101, CPSC121_101]
+  ]);
+  expect(solve_opti([CPSC121_101, CPSC121_102, CPSC110_101, CPSC210_101])).toEqual([
+    [CPSC210_101, CPSC110_101, CPSC121_101],
+    [CPSC210_101, CPSC110_101, CPSC121_102],
+  ]);
   expect(solve_opti(COURSES)).toEqual([
     [CPSC210_101, CPSC110_101, CPSC121_101],
     [CPSC210_102, CPSC110_101, CPSC121_101],
@@ -143,8 +153,4 @@ test("solve", () => {
     [CPSC210_101, CPSC110_102, CPSC121_103],
     [CPSC210_102, CPSC110_102, CPSC121_103],
   ]);
-  expect(solve_opti([CPSC121_101, CPSC121_102, CPSC110_101, CPSC210_101])).toEqual([
-    [CPSC210_101, CPSC110_101, CPSC121_101],
-    [CPSC210_101, CPSC110_101, CPSC121_102],
-  ])
 });
