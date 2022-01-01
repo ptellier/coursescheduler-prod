@@ -230,6 +230,7 @@ module.exports = {
   get_course_name: get_course_name,
   make_timeslot: make_timeslot,
   is_overlap_timeslots: is_overlap_timeslots,
+  is_overlap_schedules:is_overlap_schedules,
   is_overlap_sections: is_overlap_sections,
   filter_not_full: filter_not_full,
   crit1_not_same_time: crit1_not_same_time,

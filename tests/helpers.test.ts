@@ -1,6 +1,6 @@
 import { link } from "fs";
-import { Section,Timeslot } from "../src/data/DataDefinition/SectionDD";
-const fns = require("../src/index.ts");
+import { Schedule, Section,Timeslot } from "../src/data/DataDefinition/SectionDD";
+const fns = require("../src/helpers.ts");
 
 //CONSTANTS:
 
@@ -84,14 +84,60 @@ const CS5: Section = {
 };
 const CS5NAME: string = fns.get_course_name(CS5);
 
-const CS1_Full: Section = Object.assign({}, CS1)
-CS1_Full.status = "Full"
+const CS1_Full: Section = Object.assign({}, CS1);
+CS1_Full.status = "Full";
 
-const CS2_Full: Section = Object.assign({}, CS2)
-CS2_Full.status = "Full"
+const CS2_Full: Section = Object.assign({}, CS2);
+CS2_Full.status = "Full";
 
-const CS3_Restricted: Section = Object.assign({}, CS3)
-CS3_Restricted.status = "Restricted"
+const CS3_Restricted: Section = Object.assign({}, CS3);
+CS3_Restricted.status = "Restricted";
+
+const SCHD1_1: Schedule = [
+  {start_time:900, end_time:950, day:"Mon",term:"2"},
+  {start_time:800, end_time:850, day:"Wed",term:"2"},
+  {start_time:800, end_time:850, day:"Fri",term:"2"}
+];
+const SCHD1_2: Schedule = [
+  {start_time:800, end_time:850, day:"Mon",term:"2"},
+  {start_time:900, end_time:950, day:"Wed",term:"2"},
+  {start_time:800, end_time:850, day:"Fri",term:"2"}
+];
+const SCHD1_3: Schedule = [
+  {start_time:800, end_time:850, day:"Mon",term:"2"},
+  {start_time:800, end_time:850, day:"Wed",term:"2"},
+  {start_time:900, end_time:950, day:"Fri",term:"2"}
+];
+const SCHD2: Schedule = [
+  {start_time:900, end_time:950, day:"Mon",term:"2"},
+  {start_time:900, end_time:950, day:"Wed",term:"2"},
+  {start_time:900, end_time:950, day:"Fri",term:"2"}
+];
+const SCHD3: Schedule = [
+  {start_time:1000, end_time:1050, day:"Mon",term:"2"},
+  {start_time:1000, end_time:1050, day:"Wed",term:"2"},
+  {start_time:1000, end_time:1050, day:"Fri",term:"2"}
+];
+const SCHD4: Schedule = [
+  {start_time:1100, end_time:1150, day:"Mon",term:"2"},
+  {start_time:1100, end_time:1150, day:"Wed",term:"2"},
+  {start_time:1100, end_time:1150, day:"Fri",term:"2"}];
+
+const CS1_3TS_1: Section = Object.assign({}, CS1);
+CS1_3TS_1.schedule = SCHD1_1;
+const CS1_3TS_2: Section = Object.assign({}, CS1);
+CS1_3TS_2.schedule = SCHD1_2;
+const CS1_3TS_3: Section = Object.assign({}, CS1);
+CS1_3TS_3.schedule = SCHD1_3;
+const CS2_3TS: Section = Object.assign({}, CS2);
+CS2_3TS.schedule = SCHD2;
+const CS3_3TS: Section = Object.assign({}, CS3);
+CS3_3TS.schedule = SCHD3;
+const CS4_3TS: Section = Object.assign({}, CS4);
+CS4_3TS.schedule = SCHD4;
+  
+
+
 
 const TS2: Timeslot = 
 {start_time: 940,
@@ -188,12 +234,33 @@ test("overlap is false: different terms", () => {
   )).toBe(false)
 });
 
-test("overlap is true: Section1 ends after Section2 starts", () => {
-  expect(fns.is_overlap_courses(CS1, CS2)).toBe(true)
+test("overlap is false: schedules don't overlap", () => {
+  expect(fns.is_overlap_schedules(SCHD3, SCHD2)).toBe(false)
+  expect(fns.is_overlap_schedules(SCHD2, SCHD3)).toBe(false)
 });
-test("overlap is false: Section2 starts after Section1 ends", () => {
-  expect(fns.is_overlap_courses(CS1, CS3)).toBe(false)
+test("overlap is true: 1st timeslots of schedules overlap", () => {
+  expect(fns.is_overlap_schedules(SCHD1_1, SCHD2)).toBe(true)
+  expect(fns.is_overlap_schedules(SCHD2, SCHD1_1)).toBe(true)
 });
+test("overlap is true: 2nd timeslots of schedules overlap", () => {
+  expect(fns.is_overlap_schedules(SCHD1_2, SCHD2)).toBe(true)
+  expect(fns.is_overlap_schedules(SCHD2, SCHD1_2)).toBe(true)
+});
+test("overlap is true: 3rd timeslots of schedules overlap", () => {
+  expect(fns.is_overlap_schedules(SCHD1_3, SCHD2)).toBe(true)
+  expect(fns.is_overlap_schedules(SCHD2, SCHD1_3)).toBe(true)
+});
+
+test("overlap is false: sections don't overlap", () => {
+  expect(fns.is_overlap_sections(CS2_3TS, CS3_3TS)).toBe(false)
+  expect(fns.is_overlap_sections(CS3_3TS, CS2_3TS)).toBe(false)
+});
+test("overlap is true: sections overlap", () => {
+  expect(fns.is_overlap_sections(CS1_3TS_1, CS2_3TS)).toBe(true)
+  expect(fns.is_overlap_sections(CS2_3TS, CS1_3TS_1)).toBe(true)
+});
+
+
 
 test("empty courses returns empty", () =>{
   expect(fns.filter_not_full([])).toEqual([]);
