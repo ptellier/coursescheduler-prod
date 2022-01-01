@@ -5,26 +5,26 @@ import React from "react";
 /**
  * UBC Course section
  * @typedef  {Object}   Section
- * @property {String}   name        - "CPSC 221 101"
- * @property {String}   subject     - "CPSC"
- * @property {String}   section     - "101"
- * @property {String}   course      - "221"
+ * @property {string}   name        - "CPSC 221 101"
+ * @property {string}   subject     - "CPSC"
+ * @property {string}   section     - "101"
+ * @property {string}   course      - "221"
  * @property {Status}   status      - "Restricted", "Available", "Full"
  * @property {Activity} activity    - "Laboratory", "Lecture" "Tutorial", "Seminar"
  * @property {Term}     term        - "1", "2"
  * @property {Schedule} schedule    - "List of timeslots for all meetings of the section"  
- * @property {String}   link        - link to the UBC webpage for the section
+ * @property {string}   link        - link to the UBC webpage for the section
  */
 export interface Section {
-  name:     String;
-  subject:  String;
-  section:  String;
-  course:   String;
+  name:     string;
+  subject:  string;
+  section:  string;
+  course:   string;
   status:   Status;
-  activity: String;
+  activity: string;
   term:     Term;
   schedule: Schedule;
-  link:     String;
+  link:     string;
 }
 
 /**

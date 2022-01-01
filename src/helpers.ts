@@ -1,4 +1,5 @@
 import React from "react";
+import { Section,Schedule,Timeslot,Time,Day,Term } from "../src/data/DataDefinition/SectionDD";
 
 //CONSTANTS:
 const CRIT1: PredData = {pred: crit1_not_same_time, 
@@ -6,91 +7,17 @@ const CRIT1: PredData = {pred: crit1_not_same_time,
 const CRIT2: PredData = {pred: crit2_not_bad_time, 
   isKey:true, optKey:"badTimes"};
 const CRIT3: PredData = {pred: crit3_all_req, 
-  isKey:true, optKey:"coursesReq"};
+  isKey:true, optKey:"courseReq"};
 const CRIT4: PredData = {pred: crit4_number_req, 
   isKey:true, optKey:"numReq"};
-
-
-/**
- * Data for criteria of Solve() that solves schedule
- * @typedef {Object} SolveOptions
- * @property {Timeslot[]} [badTimes] - times that courses cannot be scheduled
- * @property {String[]} [coursesReq] - names of courses required
- * @property {number} [numReq] - number of courses required (numReqMin should be undefined)
- * @property {number} [numReqMin] - minimum number of courses required (numReq should be undefined)
- */
 
 /*---------------------------------------------------------------------------*/
 //DATA:
 
 /**
- * A particular course section
- * @typedef {Object} Course
- * @property {Timeslot} timeslot - time the course occurs
- * @property {string} subject - The subject code e.g. "CPSC" in CPSC 110
- * @property {string} courseNum - The course num e.g. "110" in CPSC 110
- * @property {Status} status - registration availability: "Available", "Full", or "Restricted"
- * @property {Term} term - Term the course occurs: "1", "2", or "summer"
- */
-interface Course {
-  subject: string,
-  courseNum: string,
-  activity: Activity,
-  timeslot: Timeslot,
-  status: Status,
-  term: Term
-}
-
-/**
- * A timeslot for a course with start and end time
- * @typedef {Object} Timeslot
- * @property {Time} start_time
- * @property {Time} end_time
- * @property {Day} day
- * @property {Term} term
- */
-interface Timeslot {
-  start_time: Time,
-  end_time: Time,
-  day: Day,
-  term: Term
-}
-
-/**
- * Type of course activity. e.g. "Laboratory", "Tutorial", "Lecture"
- * @typedef {string} Activity
- */
- type Activity = string
-
-/**
- * Term a course is offered: "1", "2", or "summer"
- * @typedef {string} Term 
- */
-type Term = ("1"|"2"|"summer")
-
-/**
- * Registration availability: "Available", "Full", or "Restricted"
- * @typedef {string} Status 
- */
-type Status = ("Available"|"Full"|"Restricted")
-
-/**
- * Number of minutes since midnight. In [0, 1440)
- * @typedef {number} Time
- */
-type Time = number 
-
-/**
- * Day of the week. "Mon", "Tues", "Wed", "Thur", or "Fri"
- * @typedef {number} Day
- * @todo
- */
- type Day = ("Mon"|"Tues"|"Wed"|"Thur"|"Fri") //is it "Thur" or "Thurs"?
-
-/**
  * Data for criteria of Solve() that solves schedule
  * @typedef {Object} SolveOptions
- * @property {Timeslot[]} [badTimes] - times that courses cannot be scheduled
+ * @property {Timeslot[]} [badTimes] - times that sections cannot be scheduled
  * @property {String[]} [coursesReq] - names of courses required
  * @property {number} [numReq] - number of courses required (numReqMin should be undefined)
  * @property {number} [numReqMin] - minimum number of courses required (numReq should be undefined)
@@ -105,13 +32,13 @@ interface SolveOptions {
 /**
  * Predicate function to test criteria. 
  * @callback Pred
- * @param {Course[]} courses to test if criteria is met
- * @param {any} [optdata] data to test courses against depending on predicate
+ * @param {Section[]} sections to test if criteria is met
+ * @param {any} [optdata] data to test sections against depending on predicate
  */
-type Pred = (arg1:Course[], arg2?:any) => boolean
+type Pred = (arg1:Section[], arg2?:any) => boolean
 
 /**
- * Criteria function and data to test against the courses. Passed to scheduling solver
+ * Criteria function and data to test against the sections. Passed to scheduling solver
  * @typedef {Object} PredData
  * @property {Pred} pred Predicate function to test criteria.
  * @property {boolean} isKey Specifies whether key is defined (which implies options data needed)
@@ -121,7 +48,7 @@ type Pred = (arg1:Course[], arg2?:any) => boolean
 interface PredData {
   pred: Pred
   isKey: boolean
-  optKey?: keyof typeof CRIT1
+  optKey?: keyof SolveOptions
 }
 
 /*----------------------------------------------------------*/
@@ -129,11 +56,11 @@ interface PredData {
 
 /**
  * make string of course subject, number, and activity e.g. "CPSC110Laboratory"
- * @param {Course} c
+ * @param {Section} c
  * @returns {string}
  */
-function get_course_name(c:Course): string {
-  return (c.subject + c.courseNum + c.activity);
+function get_course_name(c:Section): string {
+  return (c.subject + c.course + c.activity);
 }
 
 /**
@@ -166,35 +93,52 @@ function is_overlap_timeslots(ts1:Timeslot, ts2:Timeslot): boolean {
 }
 
 /**
- * return true if two courses have overlapping timeslots
- * @param {Course} c1
- * @param {Course} c2
+ * return true if two schedules overlap
+ * @param {Schedule} sch1
+ * @param {Schedule} sch2
  * @returns {boolean}
  */
- function is_overlap_courses(c1:Course, c2:Course): boolean {
-  return is_overlap_timeslots(c1.timeslot, c2.timeslot)
+ function is_overlap_schedules(sch1:Schedule, sch2:Schedule): boolean {
+  for(let i=0; i<sch1.length; i++) {
+    for(let j=i+1; j<sch2.length; j++) {
+      if(is_overlap_timeslots(sch1[i], sch2[j])) {
+        return false;
+      }
+    }
+  }
+  return true;
  }
+
+/**
+ * return true if two Sections have an overlapping timeslot in their schedules
+ * @param {Section} c1
+ * @param {Section} c2
+ * @returns {boolean}
+ */
+function is_overlap_sections(c1:Section, c2:Section): boolean {
+  return is_overlap_schedules(c1.schedule, c2.schedule)
+}
 
 
 /**
- * filter list of courses to only those available
- * @param {Course[]} courses - Array of courses to filter
- * @returns {Course[]} courses that are available
+ * filter list of sections to only those available
+ * @param {Section[]} sections - Array of sections to filter
+ * @returns {Section[]} sections that are available
  */
-function filter_not_full(courses:Course[]): Course[] {
-  return courses.filter((course) => 
-    (course.status !== "Full"));
+function filter_not_full(sections:Section[]): Section[] {
+  return sections.filter((sect) => 
+    (sect.status !== "Full"));
 }
 
 /**
- * return true if no courses are at the same time
- * @param {Course[]} courses - Array of courses to check
+ * return true if no sections are at the same time
+ * @param {Section[]} sections - Array of sections to check
  * @returns {boolean} 
 */
-function crit1_not_same_time(courses:Course[]): boolean {
-  for(let i=0; i<courses.length; i++) {
-    for(let j=i+1; j<courses.length; j++) {
-      if(is_overlap_courses(courses[i], courses[j])) {
+function crit1_not_same_time(sections:Section[]): boolean {
+  for(let i=0; i<sections.length; i++) {
+    for(let j=i+1; j<sections.length; j++) {
+      if(is_overlap_sections(sections[i], sections[j])) {
         return false;
       }
     }
@@ -203,17 +147,15 @@ function crit1_not_same_time(courses:Course[]): boolean {
 }
 
 /**
- * return true if courses are not at the given time
- * @param {Course[]} courses - Array of courses to check
+ * return true if sections are not at the given time
+ * @param {Section[]} sections - Array of sections to check
  * @param {Timeslot[]} badTimes - Array of times that don't work
  * @returns {boolean}
  */
- function crit2_not_bad_time(courses:Course[], badTimes:Timeslot[]): boolean {
-  for(let i=0; i<courses.length; i++) {
-    for(let j=0; j<badTimes.length; j++) {
-      if(is_overlap_timeslots(courses[i].timeslot, badTimes[j])) {
-        return false;
-      }
+ function crit2_not_bad_time(sections:Section[], badTimes:Timeslot[]): boolean {
+  for(let i=0; i<sections.length; i++) {
+    if(is_overlap_schedules(sections[i].schedule, badTimes)) {
+      return false;
     }
   }
   return true;
@@ -221,16 +163,16 @@ function crit1_not_same_time(courses:Course[]): boolean {
 
 /**
  * return true if all required classes are present
- * @param {Course[]} courses - Array of courses to check
+ * @param {Section[]} sections - Array of sections to check
  * @param {string[]} req - Names of required courses
  * @returns {boolean}
  */
- function crit3_all_req(courses:Course[], req: String[]): boolean {
+ function crit3_all_req(sections:Section[], req: String[]): boolean {
   for(let i=0; i<req.length; i++) {
     let wasFound: boolean = false
-    for(let j=0; j<courses.length; j++) {
-      let c: Course = courses[j];
-      let courseName:string = c.subject + c.courseNum + c.activity;
+    for(let j=0; j<sections.length; j++) {
+      let sect: Section = sections[j];
+      let courseName:string = sect.subject + sect.course + sect.activity;
       if(courseName === req[i]) {
         wasFound = true;
         break;
@@ -245,38 +187,39 @@ function crit1_not_same_time(courses:Course[]): boolean {
 
 /**
  * return true if there is the required number of courses
- * @param {Course[]} courses - Array of courses to check
+ * @param {Section[]} sections - Array of sections to check
  * @param {number} numReq - number of courses required
  * @returns {boolean}
  */
- function crit4_number_req(courses:Course[], numReq: number): boolean {
-  return courses.length === numReq;
+ function crit4_number_req(sections:Section[], numReq: number): boolean {
+  return sections.length === numReq;
 }
 
 /**
  * find the most optimized course based on criteria
- * @param {Course[]} courses - courses to schedule
+ * @param {Section[]} sections - sections to schedule
  * @param {PredData[]} predData - the schedule criteria in order of priority
  * @param {SolveOptions} opt - specifies data and details for criteria
  * @todo
  */
-// function solve(courses:Course[], predData:PredData[], opt:SolveOptions,) {
+function idea_for_solve(sections:Section[], predData:PredData[], opt:SolveOptions,) {
 
-//   let crits:Pred[] = predData.map((pd:PredData) => {
-//     if (typeof pd.optKey === "string"){
-//       let closure:Pred = (loc:Course[]) => {return pd.pred(loc, opt[pd.optKey])};
-//       return closure;
-//     } else {
-//       return pd.pred;
-//     }
-//   });
+  let crits:Pred[] = predData.map((pd:PredData) => {
+    if (typeof pd.optKey === "string"){
+      let key = pd.optKey as keyof SolveOptions
+      let closure:Pred = (loc:Section[]) => {return pd.pred(loc, opt[key])};
+      return closure;
+    } else {
+      return pd.pred;
+    }
+  });
 
-//   const fn_for_btree = (picked:Course[], left:Course[]) => {
+  const fn_for_btree = (picked:Section[], left:Section[]) => {
 
-//   };
+  };
 
-//   fn_for_btree(courses, []);
-// } 
+  fn_for_btree(sections, []);
+} 
 
 
 
@@ -287,7 +230,7 @@ module.exports = {
   get_course_name: get_course_name,
   make_timeslot: make_timeslot,
   is_overlap_timeslots: is_overlap_timeslots,
-  is_overlap_courses: is_overlap_courses,
+  is_overlap_sections: is_overlap_sections,
   filter_not_full: filter_not_full,
   crit1_not_same_time: crit1_not_same_time,
   crit2_not_bad_time: crit2_not_bad_time,
