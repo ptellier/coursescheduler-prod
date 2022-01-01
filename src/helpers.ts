@@ -100,13 +100,13 @@ function is_overlap_timeslots(ts1:Timeslot, ts2:Timeslot): boolean {
  */
  function is_overlap_schedules(sch1:Schedule, sch2:Schedule): boolean {
   for(let i=0; i<sch1.length; i++) {
-    for(let j=i+1; j<sch2.length; j++) {
+    for(let j=0; j<sch2.length; j++) {
       if(is_overlap_timeslots(sch1[i], sch2[j])) {
-        return false;
+        return true;
       }
     }
   }
-  return true;
+  return false;
  }
 
 /**

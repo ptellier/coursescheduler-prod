@@ -294,30 +294,30 @@ test("false when course overlaps a bad time", () => {
 });
 
 test("true when all empty", () => {
-  expect(fns.crit3_all_chosen([],[])).toBe(true)
+  expect(fns.crit3_all_req([],[])).toBe(true)
 });
 test("true when empty chosen", () => {
-  expect(fns.crit3_all_chosen([CS1, CS3, CS4], [])).toBe(true)
+  expect(fns.crit3_all_req([CS1, CS3, CS4], [])).toBe(true)
 });
 test("false when only empty courses", () => {
-  expect(fns.crit3_all_chosen([], [CS1NAME, CS3NAME])).toBe(false)
+  expect(fns.crit3_all_req([], [CS1NAME, CS3NAME])).toBe(false)
 });
 test("true when chosen courses match courses", () => {
-  expect(fns.crit3_all_chosen([CS1, CS3, CS4], [CS1NAME, CS3NAME, CS4NAME])).toBe(true)
+  expect(fns.crit3_all_req([CS1, CS3, CS4], [CS1NAME, CS3NAME, CS4NAME])).toBe(true)
 });
 test("true when chosen courses are present and more", () => {
-  expect(fns.crit3_all_chosen([CS1, CS3, CS4, CS5], [CS1NAME, CS3NAME, CS4NAME])).toBe(true)
+  expect(fns.crit3_all_req([CS1, CS3, CS4, CS5], [CS1NAME, CS3NAME, CS4NAME])).toBe(true)
 });
 test("false when a course is missing", () => {
-  expect(fns.crit3_all_chosen([CS1, CS4], [CS1NAME, CS3NAME, CS4NAME])).toBe(false)
+  expect(fns.crit3_all_req([CS1, CS4], [CS1NAME, CS3NAME, CS4NAME])).toBe(false)
 });
 
 test("false when empty and req number > 0", () => {
-  expect(fns.crit4_number_of([], 2)).toBe(false)
+  expect(fns.crit4_number_req([], 2)).toBe(false)
 });
 test("number of courses matches req number", () => {
-  expect(fns.crit4_number_of([CS1, CS2, CS3], 3)).toBe(true)
+  expect(fns.crit4_number_req([CS1, CS2, CS3], 3)).toBe(true)
 });
 test("false if not enough courses", () => {
-  expect(fns.crit4_number_of([CS1, CS2], 3)).toBe(false)
+  expect(fns.crit4_number_req([CS1, CS2], 3)).toBe(false)
 });
