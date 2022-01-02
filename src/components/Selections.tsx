@@ -20,6 +20,7 @@ const Selections = ({ losw }: Props) => {
   const formatSW = (sw:SearchWord): String => {
     return sw.replace(/\//g, "") 
   }
+  
   return (
     <div className="my-2">
       <h5>Selected Courses</h5>
