@@ -1,52 +1,43 @@
-import {ListOfSearchWord,
-} from "../data/DataDefinition/SearchWordDD";
-import { ListOfSection } from "../data/DataDefinition/SectionDD";
-import { fetchSection } from "../helpers/fetch";
-import { solve_opti } from "../helpers/solve";
+import { ListOfSearchWord } from "../data/DataDefinition/SearchWordDD";
+import { Section } from "../data/DataDefinition/SectionDD";
+import { fetchSections } from "../helpers/fetch";
+import { filter_term_avail_waitlist, filter_duplicate_schedules } from "../helpers/filter";
+import { solve } from "../helpers/solve_newengine";
+import { groupSections } from "../helpers/groupby";
 
 export interface Props {
   losw: ListOfSearchWord;
   set_los: Function;
-  userTerm: String;
+  userTerm: string;
   setUserTerm: Function;
 }
 
 export const TriggerAPI = ({ losw, set_los, userTerm, setUserTerm }: Props) => {
   /**
-   * fetch and filter for available sections
-   * @param {ListOfSearchWord} losw
-   * @returns {ListOfSection}
-   */
-  const fetchSections = async (losw: ListOfSearchWord): Promise<ListOfSection> => {
-    let acc: ListOfSection = [];
-    for (let sw of losw) {
-      const data = await fetchSection(sw);
-      const sections_avail = filterAvailSections(data.sections);
-      acc.push(...sections_avail);
-    }
-    return acc;
-  };
-
-  /** filter for sections that are not "full"
-   * @param {ListOfSection} los
-   * @returns {ListOfSection}
-   */
-  const filterAvailSections = (los: ListOfSection): ListOfSection => {
-    return los.filter((c) => c.term === userTerm && c.activity !== "Waiting List");
-  };
- 
-  /**
    * update los with fetched data when 
    * a user clicks Generate Schedule btn
    */
   const handleGenerate = async() => {
-    const data_from_api = await fetchSections(losw)
-    console.log(data_from_api)
-    const permutations = solve_opti(data_from_api)
-    console.log(permutations)
+
+    // 1) Fetch sections data from API
+    const sections_api = await fetchSections(losw)
+
+    // 2) Prepare sections data for solve
+    const prep = (sections: Section[]) => {
+      const prep1 = filter_term_avail_waitlist(sections, userTerm)
+      const prep2 = filter_duplicate_schedules(prep1)
+      const prep3 = groupSections(prep2)
+      return prep3
+    }
+    const sections_prepped = prep(sections_api)
     
-    
-    //set_los(solve_opti(await fetchSections(losw)));
+    // 3) Solve and return combinations
+    const sections_solved = solve(sections_prepped)
+
+    console.log(sections_solved)
+    // set_los(sections_solved);
+
+    // 4) 
   };
 
   return (
