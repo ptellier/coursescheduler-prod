@@ -167,7 +167,7 @@ function crit1_not_same_time(sections:Section[]): boolean {
  * @param {string[]} req - Names of required courses
  * @returns {boolean}
  */
- function crit3_all_req(sections:Section[], req: String[]): boolean {
+function crit3_all_req(sections:Section[], req: String[]): boolean {
   for(let i=0; i<req.length; i++) {
     let wasFound: boolean = false
     for(let j=0; j<sections.length; j++) {

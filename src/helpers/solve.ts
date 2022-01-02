@@ -142,7 +142,7 @@ export const solve = (los: ListOfSection): ListOfSection[] => {
         if (complete(node.assigned, og_los)) {//solution??
             rsf.push(node.assigned);
             if (node.remain.length > 0) {
-                n_wl.concat(next_nodes(node));
+                n_wl = n_wl.concat(next_nodes(node));
             }
         } else {
             if (node.remain.length > 0) {
@@ -151,7 +151,7 @@ export const solve = (los: ListOfSection): ListOfSection[] => {
         }
         //nii=+ ii;
     }
-    console.log(rsf);
+    //console.log(rsf);
     return rsf;
     
 }
