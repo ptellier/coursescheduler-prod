@@ -30,12 +30,10 @@ export type Pred = (arg1:Section[], arg2?:any) => boolean
  * Criteria function and data to test against the sections. Passed to scheduling solver
  * @typedef {Object} PredData
  * @property {Pred} pred Predicate function to test criteria.
- * @property {boolean} isKey Specifies whether key is defined (which implies options data needed)
  * @property {string} [optKey] key to access data in SolveOptions to create a closure 
  *                                (or false if none)
  */
 export interface PredData {
   pred: Pred
-  isKey: boolean
   optKey?: keyof SolveOptions
 }

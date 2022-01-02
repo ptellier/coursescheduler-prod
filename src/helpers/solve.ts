@@ -164,14 +164,18 @@ export const solve_opti = (los: ListOfSection): ListOfSection[] => {
 };
 
 let mySolveOptions:SolveOptions ={
+    courseReq: [myc1, myc2],
     badTimes: [myts1, myts2]
-    courseReq:
 
 }
 
-let myPrioritizedPredicates = {
-    
-}
+let myPrioritizedPredicates:PredData[] = [
+    {pred: crit1_all_req,
+    key: "courseReq"},
+
+    {pred: crit2_not_bad_times,
+    key: "badTimes"}
+]
 
 
 /**
@@ -186,7 +190,8 @@ function final_idea_for_solve(
   predData: PredData[],
   opt: SolveOptions
 ) {
-  let crits: Pred[] = predData.map((pd: PredData) => {
+
+  const crits: Pred[] = predData.map((pd: PredData) => {
     if (typeof pd.optKey === "string") {
       let key = pd.optKey as keyof SolveOptions;
       let closure: Pred = (loc: Section[]) => {
@@ -240,7 +245,7 @@ function final_idea_for_solve(
 
   while (n_wl.length > 0 /*&& ii<10000*/) {
     node = n_wl.pop() as Node;
-    if (predData.pred(node.assigned)) {
+    if (crits.every((predi:Pred) => predi(node.assigned))) {
       //solution??
       rsf.push(node.assigned);
       if (node.remain.length > 0) {
