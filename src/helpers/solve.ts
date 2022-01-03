@@ -163,20 +163,6 @@ export const solve_opti = (los: ListOfSection): ListOfSection[] => {
   return rsf;
 };
 
-let mySolveOptions:SolveOptions ={
-    courseReq: [myc1, myc2],
-    badTimes: [myts1, myts2]
-
-}
-
-let myPrioritizedPredicates:PredData[] = [
-    {pred: crit1_all_req,
-    key: "courseReq"},
-
-    {pred: crit2_not_bad_times,
-    key: "badTimes"}
-]
-
 
 /**
  * find the most optimized course schedule based on criteria
@@ -245,6 +231,7 @@ function final_idea_for_solve(
 
   while (n_wl.length > 0 /*&& ii<10000*/) {
     node = n_wl.pop() as Node;
+    
     if (crits.every((predi:Pred) => predi(node.assigned))) {
       //solution??
       rsf.push(node.assigned);

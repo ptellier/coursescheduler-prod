@@ -23,9 +23,6 @@ export const fetchSections = async (losw: SearchWord[]): Promise<Section[]> => {
   for (let sw of losw) {
     const data = await fetchSection(sw);
     acc.push(...data.sections);
-
-    // const sections_avail = filterAvailSections(data.sections);
-    // acc.push(...sections_avail);
   }
   return acc;
 };

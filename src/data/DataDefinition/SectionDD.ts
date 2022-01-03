@@ -49,10 +49,10 @@ export type Schedule = Timeslot[];
  * @property {Term} term
  */
 export interface Timeslot {
-  start_time: Time;
-  end_time: Time;
   day: Day;
   term: Term;
+  start_time: Time;
+  end_time: Time;
 }
 
 /**
@@ -63,16 +63,16 @@ export type Time = number;
 
 /**
  * Day of the week. "Mon", "Tues", "Wed", "Thur", or "Fri"
- * @typedef {number} Day
+ * @typedef {string} Day
  * @todo
  */
-export type Day = "Mon" | "Tues" | "Wed" | "Thur" | "Fri"; //is it "Thur" or "Thurs"?
+export type Day = "Mon" | "Tue" | "Wed" | "Thu" | "Fri"; //is it "Thur" or "Thurs"?
 
 /**
  * Term a course is offered: "1", "2", or "summer"
  * @typedef {string} Term
  */
-export type Term = "1" | "2" | "summer";
+export type Term = "1" | "2" | "1 - 2";
 
 /**
  * Registration availability: "Available", "Full", or "Restricted"

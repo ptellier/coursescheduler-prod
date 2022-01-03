@@ -16,7 +16,7 @@ import { Section } from "../data/DataDefinition/SectionDD";
  */
  export const groupSections = (los: Section[]): Section[][] => {
     const result = groupBy(los, function (section:Section) {
-        return [section.course, section.activity];
+        return [section.subject, section.course, section.activity];
     })
     return result
 }

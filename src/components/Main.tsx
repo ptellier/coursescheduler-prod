@@ -1,22 +1,24 @@
 import { useState, FC } from "react";
 import SearchBar from "./SearchBar";
 import Selections from "./Selections";
-import { ListOfSearchWord } from "../data/DataDefinition/SearchWordDD";
-import { ListOfSection } from "../data/DataDefinition/SectionDD";
+import { SearchWord } from "../data/DataDefinition/SearchWordDD";
+import { Section } from "../data/DataDefinition/SectionDD";
 import Schedules from "./Schedules";
 import TriggerAPI from "./TriggerAPI";
 
 const Main: FC = () => {
-  /**
-   * los: ListOfSchedule
-   * losw:ListOfSearchWord
-   * userInput: Raw input of course name a user typed in
-   * userTerm: academic term
-   */
-  const [los, set_los] = useState<ListOfSection[]>([]);
-  const [losw, set_losw] = useState<ListOfSearchWord>([]);
+  /** ??? Result that will be used after solve & optimize stage */
+  const [los, set_los] = useState<Section[][]>([]);
+
+  /** accumulated user search words history */
+  const [losw, set_losw] = useState<SearchWord[]>([]);
+
+  /** raw user input from search bar and term selection components */
   const [userInput, setUserInput] = useState<string>("");
   const [userTerm, setUserTerm] = useState<string>("1");
+
+  /** section data from API that are accumulated so far */
+  // const [all_sections, set_all_sections] = useState<Section[]>([])
 
   return (
     <div className="container p-4">
@@ -25,12 +27,17 @@ const Main: FC = () => {
                  setUserInput={setUserInput} 
                  losw={losw}
                  set_losw={set_losw}
+
+                 //  all_sections={all_sections}
+                 //  set_all_sections={set_all_sections}
                  />
-      <Selections losw={losw}/>
+      <Selections losw={losw} set_losw={set_losw}/>
       <TriggerAPI losw={losw} 
                   set_los={set_los}
                   userTerm={userTerm}
                   setUserTerm={setUserTerm}
+
+                  // all_sections={all_sections}
                   />
       <Schedules los={los}/>
     </div>

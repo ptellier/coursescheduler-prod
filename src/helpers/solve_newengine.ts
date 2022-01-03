@@ -1,6 +1,5 @@
 import React from "react";
 import { Section } from "../data/DataDefinition/SectionDD";
-import { complete } from "./solve_";
 
 /**
  * Sections chosen and sections remaining at each node in the search tree
@@ -29,7 +28,7 @@ import { complete } from "./solve_";
  * solve function for los
  * at each iteration,
  * 1. take node from n_wl
- * 2. add to rsf if completed
+ * 2. add to rsf if completed (empty? node.remain)
  * 3. otherwise generate next nodes and push to n_wl 
  * @param los 
  * @returns 
@@ -43,8 +42,10 @@ export const solve = (los: Section[][]): Section[][] => {
     //let ii:number = 0;     //keep track of total number of loops
     n_wl.push(root);
 
+
     while (n_wl.length > 0 /*&& ii<10000*/) {
         node = n_wl.pop() as Node;
+        
         if (node.remain.length === 0) {
             rsf.push(node.assigned)
         } else {
@@ -62,10 +63,16 @@ export const solve = (los: Section[][]): Section[][] => {
 const next_nodes = (node: Node): Node[] => {
     const assigned = node.assigned               // ["A"]
     const [f_remain, ...r_remain] = node.remain  // [[1,2] [3,4]]
-    const generated_nodes = f_remain.map(f_r => ({ assigned: [...assigned, f_r], remain: r_remain }))
+    const generated_nodes = f_remain.map(f_r => (
+        { assigned: [...assigned, f_r], remain: r_remain }
+        )
+    )
 
     //TODO: apply time conflicting filter here:
     //const filtered_nodes = ...filter_time_conflicted()
+
+    //TODO: implement optional courses choices
+    // 
 
     return generated_nodes
 };

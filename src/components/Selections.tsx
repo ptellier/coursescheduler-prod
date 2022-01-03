@@ -1,8 +1,9 @@
 import React from "react";
-import { ListOfSearchWord, SearchWord } from "../data/DataDefinition/SearchWordDD";
+import { SearchWord } from "../data/DataDefinition/SearchWordDD";
 
 export interface Props {
-  losw: ListOfSearchWord;
+  losw: SearchWord[];
+  set_losw: Function
 }
 
 /**
@@ -10,22 +11,38 @@ export interface Props {
  * Note: Each key for <li> is randomized
  */
 
-const Selections = ({ losw }: Props) => {
-
+const Selections = ({ losw, set_losw }: Props) => {
   /**
    * removes "/" from sw for better presentation
-   * @param {SearchWord} sw 
-   * @returns {String}
+   * @param {SearchWord} sw
+   * @returns {string}
    */
-  const formatSW = (sw:SearchWord): String => {
-    return sw.replace(/\//g, "") 
-  }
-  
+  const formatSW = (sw: SearchWord): string => {
+    return sw.replace(/\//g, "");
+  };
+
+  /**
+   * removes search word from losw
+   * @param sw
+   */
+  const removeSW = (sw: SearchWord) => {
+    set_losw(losw.filter(sw_ => sw_ !== sw))
+  };
+
   return (
     <div className="my-2">
       <h5>Selected Courses</h5>
-        {losw.map((sw: SearchWord) =>
-         <li key={Math.random().toString(36)}>{formatSW(sw)}</li>)}
+      <ul>
+        {losw.map((sw: SearchWord) => (
+          <div className="d-flex my-2" key={Math.random().toString(36)}>
+            <li>{formatSW(sw)}</li>
+            <i
+              className="fas fa-times btn btn-sm ml-auto"
+              onClick={() => removeSW(sw)}
+            ></i>
+          </div>
+        ))}
+      </ul>
     </div>
   );
 };
