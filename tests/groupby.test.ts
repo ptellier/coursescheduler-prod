@@ -96,6 +96,24 @@ const COMM388_101: Section = {
   status: "Restricted",
   term: "1",
 };
+const BIOL121_101: Section = {
+  course: "121",
+  section: "101",
+  subject: "BIOL",
+  activity: "Lecture",
+  link: "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-section&dept=COMM&course=388&section=101&campuscd=UBC",
+  name: "BIOL 121 101",
+  schedule: [
+    {
+      day: "Wed",
+      start_time: 870,
+      end_time: 1050,
+      term: "1",
+    },
+  ],
+  status: "Available",
+  term: "1",
+};
 
 test("groupSections", () => {
   expect(groupSections([])).toEqual([]);
@@ -107,4 +125,12 @@ test("groupSections", () => {
     [CPSC121_101, CPSC121_102],
     [CPSC110_101],
   ]);
+  expect(groupSections([CPSC121_101, CPSC121_102, CPSC110_101, COMM388_101, BIOL121_101])).toEqual(
+    [
+      [CPSC121_101, CPSC121_102],
+      [CPSC110_101],
+      [COMM388_101],
+      [BIOL121_101],
+    ]
+  );
 });
