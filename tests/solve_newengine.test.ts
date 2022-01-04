@@ -175,6 +175,7 @@ const cs_110_102: Section = {
   link: "",
 };
 
+
 const node1: Node = {
   assigned: [cs_121_101],
   remain: [[cs_110_101, cs_110_102]],
@@ -196,4 +197,6 @@ test("Next Nodes", () => {
       remain:   [[cs_110_101]],
     })
   ).toEqual([]);
+
+  
 });
