@@ -1,7 +1,7 @@
 import React from "react";
-import { ListOfSection, Section } from "../data/DataDefinition/SectionDD";
-import {SolveOptions, PredData, Pred} from "../data/DataDefinition/SolveOptionsDD";
-import {crit1_not_same_time} from "../helpers"
+import { ListOfSection, Section } from "../src/data/DataDefinition/SectionDD";
+import {SolveOptions, PredData, Pred} from "../src/data/DataDefinition/SolveOptionsDD";
+import {crit1_not_same_time} from "./optional"
 
 
 /**

@@ -11,8 +11,8 @@ import { Section } from "../data/DataDefinition/SectionDD";
  *  [121labs...], 
  *  [121tutorials...]
  * ]
- * @param los 
- * @returns 
+ * @param {Section[]} los 
+ * @returns {Section[][]}
  */
  export const groupSections = (los: Section[]): Section[][] => {
     const result = groupBy(los, function (section:Section) {
@@ -22,12 +22,12 @@ import { Section } from "../data/DataDefinition/SectionDD";
 }
 
 /**
- * group array into several sections by given conditions, fn
- * @param array 
- * @param f 
- * @returns 
+ * group sections in an array into an array several sections by given conditions, fn
+ * @param {Section[]} array 
+ * @param {(Section) => any} f
+ * @returns {Section[][]}
  */
-const groupBy = (array:Section[], f: Function) => {
+const groupBy = (array:Section[], f: Function): Section[][] => {
     let groups:any = {};
     array.forEach(function (o) {
         let group = JSON.stringify(f(o));

@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-, "tests"  ]
+, "tests", "unused/solve.ts", "unused/optional.ts", "unused/solve.test.ts"  ]
 }
