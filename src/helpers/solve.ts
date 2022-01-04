@@ -1,6 +1,8 @@
 import React from "react";
 import { ListOfSection, Section } from "../data/DataDefinition/SectionDD";
 import {SolveOptions, PredData, Pred} from "../data/DataDefinition/SolveOptionsDD";
+import {crit1_not_same_time} from "../helpers"
+
 
 /**
  * Sections chosen and sections remaining at each node in the search tree
@@ -22,90 +24,9 @@ interface Node {
  * @returns {ListOfSection[]}
  */
 export const solve = (los: ListOfSection): ListOfSection[] => {
-  const og_los = los;
-  const fn_for_node = (
-    node: Node,
-    node_wl: Node[],
-    rsf: ListOfSection[]
-  ): ListOfSection[] => {
-    if (finished(node)) {
-      if (complete(node.assigned, og_los)) {
-        return fn_for_lon(node_wl, [...rsf, node.assigned]);
-      } else {
-        return fn_for_lon(node_wl, rsf);
-      }
-    } else {
-      return fn_for_lon(node_wl.concat(next(node)), rsf);
-    }
-  };
-
-  const fn_for_lon = (
-    node_wl: Node[],
-    rsf: ListOfSection[]
-  ): ListOfSection[] => {
-    if (empty(node_wl)) {
-      return rsf;
-    } else {
-      const [first, ...rest] = node_wl;
-      return fn_for_node(first, rest, rsf);
-    }
-  };
-
-  /**
-   * produce true if given node's remain is empty
-   * @param {Node} node
-   * @returns {Boolean}
-   */
-  const finished = (node: Node): Boolean => {
-    return empty(node.remain);
-  };
-
-  const next = (node: Node): Node[] => {
-    return [pick(node), skip(node)].filter((x) => goodSchedule(x));
-  };
-  /**
-   * produce true if given' node's assigned satisfy conditions
-   * @param {Node} node
-   * @returns {Boolean}
-   */
-  const goodSchedule = (node: Node): Boolean => {
-    return !isDuplicateSection(node.assigned); // CPSC 121-lecture,  CPSC 121-Lab, CPSC 121-Lab ,_ filtered out
-    //complete(node.assigned, og_los)
-  };
-
-  /**
-   * pick the first section of remain and place it in assigned
-   * @param {Node} node
-   * @returns {Node}
-   */
-  const pick = (node: Node): Node => {
-    const [first, ...rest] = node.remain;
-    return { assigned: [first, ...node.assigned], remain: rest };
-  };
-  /**
-   * skip the first section of remain
-   * @param {Node} node
-   * @returns {Node}
-   */
-  const skip = (node: Node): Node => {
-    const [first, ...rest] = node.remain;
-    return { assigned: node.assigned, remain: rest };
-  };
-
-  return fn_for_node({ assigned: [], remain: los }, [], []);
-};
-
-/**
- * produce all of the valid (listof sections) that can be taken
- * valid schedule means:
- * 1. All sections in assigned are unique
- * 2. All sections in assinged satisfy user's required courses
- * @param {ListOfSection} los
- * @returns {ListOfSection[]}
- */
-export const solve_opti = (los: ListOfSection): ListOfSection[] => {
   const next_nodes = (node: Node): Node[] => {
-    return [pick(node), skip(node)].filter((x) => goodSchedule(x));
+    return [pick(node), skip(node)].filter((nd) => {
+      return goodSchedule(nd) && crit1_not_same_time(nd.assigned)});
   };
   /**
    * produce true if given' node's assigned satisfy conditions
@@ -190,7 +111,8 @@ function final_idea_for_solve(
   });
 
   const next_nodes = (node: Node): Node[] => {
-    return [pick(node), skip(node)].filter((x) => goodSchedule(x));
+    return [pick(node), skip(node)].filter((nd) => {
+      return goodSchedule(nd) && crit1_not_same_time(nd.assigned)});
   };
   /**
    * produce true if given' node's assigned satisfy conditions

@@ -216,14 +216,10 @@ function idea_for_solve(sections:Section[], predData:PredData[], opt:SolveOption
 
 
 
-module.exports = {
-  get_course_name: get_course_name,
-  make_timeslot: make_timeslot,
-  is_overlap_timeslots: is_overlap_timeslots,
-  is_overlap_schedules:is_overlap_schedules,
-  is_overlap_sections: is_overlap_sections,
-  crit1_not_same_time: crit1_not_same_time,
-  crit2_not_bad_time: crit2_not_bad_time,
-  crit3_all_req: crit3_all_req,
-  crit4_number_req: crit4_number_req,
-}
+// module.exports = {
+//   get_course_name: get_course_name,
+//   make_timeslot: make_timeslot,
+//   is_overlap_timeslots: is_overlap_timeslots,
+//   is_overlap_schedules:is_overlap_schedules,
+//   is_overlap_sections: is_overlap_sections,
+// }
