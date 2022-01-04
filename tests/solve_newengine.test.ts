@@ -1,5 +1,5 @@
 import { Section } from "../src/data/DataDefinition/SectionDD";
-import { solve } from "../src/helpers/solve_newengine";
+import { solve, next_nodes } from "../src/helpers/solve_newengine";
 
 const CPSC121_101: Section = {
   name: "CPSC 121 101",
@@ -96,6 +96,7 @@ const COMM388_101: Section = {
   status: "Restricted",
   term: "1",
 };
+
 const COURSES: Section[][] = [
   [CPSC121_101, CPSC121_102, CPSC121_103],
   [CPSC110_101, CPSC110_102],
@@ -129,3 +130,70 @@ test("solve", () => {
   ]);
 });
 
+/**
+ * Sections chosen and sections remaining at each node in the search tree
+ * @typedef {Object} Node
+ * @property {Section[]} assigned - listof Section that are assigned
+ * @property {Section[]} remain - listof Section remainng to be assigned
+ */
+interface Node {
+  assigned: Section[];
+  remain: Section[][];
+}
+
+const cs_121_101: Section = {
+  name: "CPSC 121 102",
+  subject: "CPSC",
+  section: "101",
+  course: "121",
+  status: "Available",
+  activity: "Lecture",
+  term: "2",
+  schedule: [{ day: "Mon", term: "1", start_time: 10 * 60, end_time: 11 * 60 }],
+  link: "",
+};
+const cs_110_101: Section = {
+  name: "CPSC 110 101",
+  subject: "CPSC",
+  section: "101",
+  course: "110",
+  status: "Available",
+  activity: "Lecture",
+  term: "2",
+  schedule: [{ day: "Mon", term: "1", start_time: 10 * 60, end_time: 11 * 60 }],
+  link: "",
+};
+const cs_110_102: Section = {
+  name: "CPSC 110 101",
+  subject: "CPSC",
+  section: "101",
+  course: "110",
+  status: "Available",
+  activity: "Lecture",
+  term: "2",
+  schedule: [{ day: "Mon", term: "1", start_time: 11 * 60, end_time: 12 * 60 }],
+  link: "",
+};
+
+const node1: Node = {
+  assigned: [cs_121_101],
+  remain: [[cs_110_101, cs_110_102]],
+};
+
+test("Next Nodes", () => {
+  expect(
+    next_nodes({
+      assigned: [cs_121_101],
+      remain:   [[cs_110_101, cs_110_102]],
+    })
+  ).toEqual([{
+    assigned: [cs_121_101, cs_110_102],
+    remain:   [],
+  }]);
+  expect(
+    next_nodes({
+      assigned: [cs_121_101],
+      remain:   [[cs_110_101]],
+    })
+  ).toEqual([]);
+});
