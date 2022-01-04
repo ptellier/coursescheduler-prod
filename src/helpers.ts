@@ -135,7 +135,7 @@ function filter_not_full(sections:Section[]): Section[] {
  * @param {Section[]} sections - Array of sections to check
  * @returns {boolean} 
 */
-function crit1_not_same_time(sections:Section[]): boolean {
+export const crit1_not_same_time = (sections:Section[]): boolean => {
   for(let i=0; i<sections.length; i++) {
     for(let j=i+1; j<sections.length; j++) {
       if(is_overlap_sections(sections[i], sections[j])) {
@@ -152,7 +152,7 @@ function crit1_not_same_time(sections:Section[]): boolean {
  * @param {Timeslot[]} badTimes - Array of times that don't work
  * @returns {boolean}
  */
- function crit2_not_bad_time(sections:Section[], badTimes:Timeslot[]): boolean {
+ export const crit2_not_bad_time = (sections:Section[], badTimes:Timeslot[]): boolean => {
   for(let i=0; i<sections.length; i++) {
     if(is_overlap_schedules(sections[i].schedule, badTimes)) {
       return false;
@@ -167,7 +167,7 @@ function crit1_not_same_time(sections:Section[]): boolean {
  * @param {string[]} req - Names of required courses
  * @returns {boolean}
  */
-function crit3_all_req(sections:Section[], req: String[]): boolean {
+export const crit3_all_req = (sections:Section[], req: String[]): boolean => {
   for(let i=0; i<req.length; i++) {
     let wasFound: boolean = false
     for(let j=0; j<sections.length; j++) {
@@ -191,7 +191,7 @@ function crit3_all_req(sections:Section[], req: String[]): boolean {
  * @param {number} numReq - number of courses required
  * @returns {boolean}
  */
- function crit4_number_req(sections:Section[], numReq: number): boolean {
+ export const crit4_number_req = (sections:Section[], numReq: number): boolean => {
   return sections.length === numReq;
 }
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { Section } from "../data/DataDefinition/SectionDD";
+import { crit1_not_same_time } from "../helpers" 
 
 /**
  * Sections chosen and sections remaining at each node in the search tree
@@ -63,15 +64,12 @@ export const solve = (los: Section[][]): Section[][] => {
  * @returns 
  */
 const next_nodes = (node: Node): Node[] => {
-    const assigned = node.assigned               // ["A"]
+    const assigned: Section[] = node.assigned;            // ["A"]
     const [f_remain, ...r_remain] = node.remain  // [[1,2] [3,4]]
-    const generated_nodes = f_remain.map(f_r => (
+    const generated_nodes: Node[] = f_remain.map(f_r => (
         { assigned: [...assigned, f_r], remain: r_remain }
         )
     )
-
-    //TODO: apply time conflicting filter here:
-    //const filtered_nodes = ...filter_time_conflicted()
-
-    return generated_nodes
+    
+    return generated_nodes.filter((nd:Node) => crit1_not_same_time(nd.assigned));
 };
