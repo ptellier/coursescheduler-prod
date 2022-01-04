@@ -40,7 +40,6 @@ export const TriggerAPI = ({ losw, set_los, userTerm, setUserTerm }: Props) => {
       return prep3;
     };
     const sections_prepped = prep(sections_api);    
-    // console.log(sections_prepped);
 
     // 3) Solve and return combinations
     const sections_solved = solve(sections_prepped)

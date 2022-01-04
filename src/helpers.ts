@@ -2,14 +2,14 @@ import React from "react";
 import { Section,Schedule,Timeslot,Time,Day,Term } from "../src/data/DataDefinition/SectionDD";
 
 //CONSTANTS:
-const CRIT1: PredData = {pred: crit1_not_same_time, 
-  isKey:false};
-const CRIT2: PredData = {pred: crit2_not_bad_time, 
-  isKey:true, optKey:"badTimes"};
-const CRIT3: PredData = {pred: crit3_all_req, 
-  isKey:true, optKey:"courseReq"};
-const CRIT4: PredData = {pred: crit4_number_req, 
-  isKey:true, optKey:"numReq"};
+// const CRIT1: PredData = {pred: crit1_not_same_time, 
+//   isKey:false};
+// const CRIT2: PredData = {pred: crit2_not_bad_time, 
+//   isKey:true, optKey:"badTimes"};
+// const CRIT3: PredData = {pred: crit3_all_req, 
+//   isKey:true, optKey:"courseReq"};
+// const CRIT4: PredData = {pred: crit4_number_req, 
+//   isKey:true, optKey:"numReq"};
 
 /*---------------------------------------------------------------------------*/
 //DATA:
@@ -120,15 +120,6 @@ function is_overlap_sections(c1:Section, c2:Section): boolean {
 }
 
 
-/**
- * filter list of sections to only those available
- * @param {Section[]} sections - Array of sections to filter
- * @returns {Section[]} sections that are available
- */
-function filter_not_full(sections:Section[]): Section[] {
-  return sections.filter((sect) => 
-    (sect.status !== "Full"));
-}
 
 /**
  * return true if no sections are at the same time
@@ -226,15 +217,3 @@ function idea_for_solve(sections:Section[], predData:PredData[], opt:SolveOption
 
 
 
-module.exports = {
-  get_course_name: get_course_name,
-  make_timeslot: make_timeslot,
-  is_overlap_timeslots: is_overlap_timeslots,
-  is_overlap_schedules:is_overlap_schedules,
-  is_overlap_sections: is_overlap_sections,
-  filter_not_full: filter_not_full,
-  crit1_not_same_time: crit1_not_same_time,
-  crit2_not_bad_time: crit2_not_bad_time,
-  crit3_all_req: crit3_all_req,
-  crit4_number_req: crit4_number_req,
-}

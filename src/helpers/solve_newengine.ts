@@ -1,4 +1,3 @@
-import React from "react";
 import { Section } from "../data/DataDefinition/SectionDD";
 import { crit1_not_same_time } from "../helpers" 
 
@@ -8,7 +7,7 @@ import { crit1_not_same_time } from "../helpers"
  * @property {Section[]} assigned - listof Section that are assigned
  * @property {Section[]} remain - listof Section remainng to be assigned
  */
- interface Node {
+interface Node {
     assigned: Section[]
     remain: Section[][]
 }
@@ -24,9 +23,6 @@ import { crit1_not_same_time } from "../helpers"
  *             ]
  */
 
-
-
-
 /**
  * solve function for los
  * at each iteration,
@@ -37,7 +33,6 @@ import { crit1_not_same_time } from "../helpers"
  * @returns 
  */
 export const solve = (los: Section[][]): Section[][] => {
-    // const og_los = los       /*keep track of original list of sections */ no longer needed
     let n_wl: Node[] = [];   //node worklist
     let node: Node;          //current node
     let rsf: Section[][] = [];
@@ -63,9 +58,9 @@ export const solve = (los: Section[][]): Section[][] => {
  * @param node 
  * @returns 
  */
-const next_nodes = (node: Node): Node[] => {
-    const assigned: Section[] = node.assigned;            // ["A"]
-    const [f_remain, ...r_remain] = node.remain  // [[1,2] [3,4]]
+export const next_nodes = (node: Node): Node[] => {
+    const assigned: Section[] = node.assigned;           
+    const [f_remain, ...r_remain] = node.remain           
     const generated_nodes: Node[] = f_remain.map(f_r => (
         { assigned: [...assigned, f_r], remain: r_remain }
         )
