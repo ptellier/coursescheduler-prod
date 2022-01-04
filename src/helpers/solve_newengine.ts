@@ -24,6 +24,8 @@ import { Section } from "../data/DataDefinition/SectionDD";
  */
 
 
+
+
 /**
  * solve function for los
  * at each iteration,
@@ -70,9 +72,6 @@ const next_nodes = (node: Node): Node[] => {
 
     //TODO: apply time conflicting filter here:
     //const filtered_nodes = ...filter_time_conflicted()
-
-    //TODO: implement optional courses choices
-    // 
 
     return generated_nodes
 };
