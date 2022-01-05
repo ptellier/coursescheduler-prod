@@ -44,7 +44,7 @@ test("find start variance", () => {
   expect(findStartVariance([ex.CS3_3TS])).toBe(0);
   expect(findStartVariance([ex.CS5_3TS])).toBe(218400);
   expect(findStartVariance([ex.CS5_3TS, ex.CS2_3TS])).toBe(106400);
-  expect(findStartVariance([ex.CS2_3TS, ex.CS3_3TS])).toBe(106400);
+  expect(findStartVariance([ex.CS2_3TS, ex.CS5_3TS])).toBe(106400);
 });
 
 test("return most consistent of two schedules (lowest variance of start times)", () => {
@@ -52,9 +52,9 @@ test("return most consistent of two schedules (lowest variance of start times)",
   expect(most_consistent([ex.CS3], [ex.CS3])).toEqual([ex.CS3]);
   expect(most_consistent([ex.CS3], [ex.CS5])).toEqual([ex.CS3]);
   expect(most_consistent([ex.CS5_3TS, ex.CS2_3TS], [ex.CS1_3TS_1, ex.CS3_3TS]))
-    .toEqual([ex.CS5_3TS, ex.CS2_3TS]);
+    .toEqual([ex.CS1_3TS_1, ex.CS3_3TS]);
   expect(most_consistent([ex.CS1_3TS_1, ex.CS3_3TS], [ex.CS5_3TS, ex.CS2_3TS]))
-    .toEqual([ex.CS5_3TS, ex.CS2_3TS]);
+    .toEqual([ex.CS1_3TS_1, ex.CS3_3TS]);
 });
 
 test("find latest start schedule", () => {
