@@ -1,5 +1,55 @@
 import { Section, Timeslot, Time, Schedule, Term, Day } from "../data/DataDefinition/SectionDD";
+import { groupDays } from "./groupby";
 
+/**
+ * return the variance of an array of numbers
+ * @param {number[]} arr
+ * @returns {number}
+ */
+export const findVariance = (arr:number[]):number => {
+  if(!arr.length){
+    throw new Error("cannot take variance of empty array");
+  };
+  const sum = arr.reduce((acc, val) => acc + val);
+  const mean = sum / arr.length;
+  let variance = 0;
+  arr.forEach(num => {
+    variance += ((num - mean) * (num - mean));
+  });
+  return variance / arr.length;
+};
+
+/**
+ * return the earliest start time out of all timeslots
+ * @param {Timeslot[]} lots 
+ */
+export const findEarliestStart = (lots:Timeslot[]): Time => {
+  return lots.reduce((min:number, ts:Timeslot) => {
+    return (ts.start_time < min) ? ts.start_time : min
+  },
+  Number.MAX_VALUE)
+}
+
+/**
+ * return the latest end time out of all timeslots
+ * @param {Timeslot[]} lots
+ */
+ export const findLatestEnd = (lots:Timeslot[]): Time => {
+  return lots.reduce((max:number, ts:Timeslot) => {
+    return (ts.end_time > max) ? ts.end_time :  max
+  },
+  Number.MIN_VALUE)
+}
+
+/**
+ * return the variance in start times for a schedule
+ * @param {Section[]} los - the schedule
+ * @returns {number}
+ */
+export const findStartVariance = (los:Section[]): number => {
+  const lolots:Timeslot[][] = groupDays(los.flatMap((sect) => sect.schedule));
+  return findVariance(lolots.map(findEarliestStart));
+}
 
 /**
  * compare two possible scheduling solutions:
@@ -9,7 +59,7 @@ import { Section, Timeslot, Time, Schedule, Term, Day } from "../data/DataDefini
  * @returns {Section[]} 
  */
 export const most_consistent = (los1: Section[], los2: Section[]): Section[] => {
-    return []
+  return (findStartVariance(los1) <= findStartVariance(los2)) ? los1 : los2;
 }
 
 /**
@@ -42,7 +92,9 @@ export const most_compact = (los1: Section[], los2: Section[]): Section[] => {
  * @returns {Section[]} 
  */
 export const most_early_start = (los1: Section[], los2: Section[]): Section[] => {
-    return []
+  const t1:Time = findEarliestStart(los1.flatMap(sect => sect.schedule));
+  const t2:Time = findEarliestStart(los2.flatMap(sect => sect.schedule));
+  return (t1 <= t2) ? los1 : los2;
 }
 
 /**
@@ -54,7 +106,9 @@ export const most_early_start = (los1: Section[], los2: Section[]): Section[] =>
  * @returns {Section[]} 
  */
 export const most_late_start = (los1: Section[], los2: Section[]): Section[] => {
-    return []
+  const t1:Time = findEarliestStart(los1.flatMap(sect => sect.schedule));
+  const t2:Time = findEarliestStart(los2.flatMap(sect => sect.schedule));
+  return (t1 >= t2) ? los1 : los2;
 }
 
 /**
@@ -66,7 +120,9 @@ export const most_late_start = (los1: Section[], los2: Section[]): Section[] => 
  * @returns {Section[]} 
  */
 export const most_early_end = (los1: Section[], los2: Section[]): Section[] => {
-    return []
+  const t1:Time = findLatestEnd(los1.flatMap(sect => sect.schedule));
+  const t2:Time = findLatestEnd(los2.flatMap(sect => sect.schedule));
+  return (t1 <= t2) ? los1 : los2;
 }
 
 /**
@@ -77,7 +133,9 @@ export const most_early_end = (los1: Section[], los2: Section[]): Section[] => {
  * @returns {Section[]} 
  */
 export const most_late_end = (los1: Section[], los2: Section[]): Section[] => {
-    return []
+  const t1:Time = findLatestEnd(los1.flatMap(sect => sect.schedule));
+  const t2:Time = findLatestEnd(los2.flatMap(sect => sect.schedule));
+  return (t1 >= t2) ? los1 : los2;
 }
 
 
@@ -86,6 +144,11 @@ export const most_late_end = (los1: Section[], los2: Section[]): Section[] => {
  * @param {Section[]} los
  * @returns {boolean} 
  */
-export const is_free_day = (los1: Section[], los2: Section[]): Section[] => {
-    return []
+export const is_free_day = (los: Section[]): boolean => {
+  const lots:Timeslot[] = los.flatMap(sect => sect.schedule);
+  let chk = {Mon:true,Tue:true,Wed:true,Thu:true,Fri:true};
+  for(let i=0; i<lots.length; i++) {
+    chk[lots[i].day] = false
+  }
+  return chk.Mon || chk.Tue || chk.Wed || chk.Thu || chk.Fri;
 }
