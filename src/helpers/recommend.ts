@@ -8,7 +8,9 @@ import { Section, Timeslot, Time, Schedule, Term, Day } from "../data/DataDefini
  * @param {Section[]} los2
  * @returns {Section[]} 
  */
-export const most_consistent = (los1: Section[], los2: Section[]): Section[] => {}
+export const most_consistent = (los1: Section[], los2: Section[]): Section[] => {
+    return []
+}
 
 /**
  * compare two possible scheduling solutions:
@@ -17,7 +19,9 @@ export const most_consistent = (los1: Section[], los2: Section[]): Section[] => 
  * @param {Section[]} los2
  * @returns {Section[]} 
  */
-export const most_compact = (los1: Section[], los2: Section[]): Section[] => {}
+export const most_compact = (los1: Section[], los2: Section[]): Section[] => {
+    return []
+}
 
 /**
  * compare two possible scheduling solutions:
@@ -26,7 +30,9 @@ export const most_compact = (los1: Section[], los2: Section[]): Section[] => {}
  * @param {Section[]} los2
  * @returns {Section[]} 
  */
- export const most_scatter = (los1: Section[], los2: Section[]): Section[] => {}
+ export const most_scatter = (los1: Section[], los2: Section[]): Section[] => {
+    return []
+ }
 
 /**
  * compare two possible scheduling solutions:
@@ -35,7 +41,9 @@ export const most_compact = (los1: Section[], los2: Section[]): Section[] => {}
  * @param {Section[]} los2
  * @returns {Section[]} 
  */
-export const most_early_start = (los1: Section[], los2: Section[]): Section[] => {}
+export const most_early_start = (los1: Section[], los2: Section[]): Section[] => {
+    return []
+}
 
 /**
  * compare two possible scheduling solutions:
@@ -45,7 +53,9 @@ export const most_early_start = (los1: Section[], los2: Section[]): Section[] =>
  * @param {Section[]} los2
  * @returns {Section[]} 
  */
-export const most_late_start = (los1: Section[], los2: Section[]): Section[] => {}
+export const most_late_start = (los1: Section[], los2: Section[]): Section[] => {
+    return []
+}
 
 /**
  * compare two possible scheduling solutions:
@@ -55,7 +65,9 @@ export const most_late_start = (los1: Section[], los2: Section[]): Section[] => 
  * @param {Section[]} los2
  * @returns {Section[]} 
  */
-export const most_early_end = (los1: Section[], los2: Section[]): Section[] => {}
+export const most_early_end = (los1: Section[], los2: Section[]): Section[] => {
+    return []
+}
 
 /**
  * compare two possible scheduling solutions:
@@ -64,7 +76,9 @@ export const most_early_end = (los1: Section[], los2: Section[]): Section[] => {
  * @param {Section[]} los2
  * @returns {Section[]} 
  */
-export const most_late_end = (los1: Section[], los2: Section[]): Section[] => {}
+export const most_late_end = (los1: Section[], los2: Section[]): Section[] => {
+    return []
+}
 
 
 /**
@@ -72,4 +86,6 @@ export const most_late_end = (los1: Section[], los2: Section[]): Section[] => {}
  * @param {Section[]} los
  * @returns {boolean} 
  */
-export const is_free_day = (los1: Section[], los2: Section[]): Section[] => {}
+export const is_free_day = (los1: Section[], los2: Section[]): Section[] => {
+    return []
+}
