@@ -1,5 +1,5 @@
 import React from "react";
-import { Section } from "../data/DataDefinition/SectionDD";
+import { Section, Timeslot } from "../data/DataDefinition/SectionDD";
 
 /**
  * create subgroups of sections by course and activity
@@ -22,17 +22,31 @@ import { Section } from "../data/DataDefinition/SectionDD";
 }
 
 /**
- * group sections in an array into an array several sections by given conditions, fn
- * @param {Section[]} array 
- * @param {(Section) => keyof Section} f
- * @returns {Section[][]}
+ * create subgroups of timeslots by day
+ * @param {Timteslot[]} lots 
+ * @returns {Timeslot[][]}
  */
-const groupBy = (los:Section[], f: Function): Section[][] => {
-    let groups:any = {};
-    los.forEach(function (sect) {
-        let group = JSON.stringify(f(sect));
-        groups[group] = groups[group] || [];
-        groups[group].push(sect);
+ export const groupDays = (lots: Timeslot[]): Timeslot[][] => {
+    const result = groupBy(lots, (timeslot: Timeslot) => {
+      return [timeslot.day];
     });
-    return Object.keys(groups).map(group => groups[group])
-}
+    return result
+  };
+
+
+/**
+ * group sections in an array into an array several arrays by given conditions, fn
+ * @param {any[]} array
+ * @param {(any) => any} f
+ * @returns {any[][]}
+ */
+ const groupBy = (array: any[], f: Function): any[][] => {
+    let groups: any = {};
+    array.forEach(function (o) {
+      let group = JSON.stringify(f(o));
+      groups[group] = groups[group] || [];
+      groups[group].push(o);
+    });
+    return Object.keys(groups).map((group) => groups[group]);
+  };
+  
