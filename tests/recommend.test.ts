@@ -12,7 +12,7 @@ import {findVariance,
   most_late_end,
   is_free_day } from "../src/helpers/recommend";
 
-const ex = require("constants");
+const ex = require("./constants");
 
 test("findVariance", () => {
   expect(() => findVariance([])).toThrow("cannot take variance of empty array");

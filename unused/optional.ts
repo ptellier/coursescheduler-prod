@@ -1,5 +1,5 @@
 import React from "react";
-import { Section,Schedule,Timeslot,Time,Day,Term } from "../src/data/DataDefinition/SectionDD";
+import { Section } from "../src/data/DataDefinition/SectionDD";
 
 //CONSTANTS:
 
@@ -20,7 +20,7 @@ import { Section,Schedule,Timeslot,Time,Day,Term } from "../src/data/DataDefinit
  * @param {Section} c
  * @returns {string}
  */
-function get_course_name(c:Section): string {
+const get_course_name = (c:Section): string => {
   return (c.subject + c.course + c.activity);
 }
 
@@ -30,7 +30,7 @@ function get_course_name(c:Section): string {
  * @param {string[]} req - Names of required courses
  * @returns {boolean}
  */
-export const crit3_all_req = (sections:Section[], req: String[]): boolean => {
+const crit3_all_req = (sections:Section[], req: String[]): boolean => {
   for(let i=0; i<req.length; i++) {
     let wasFound: boolean = false
     for(let j=0; j<sections.length; j++) {
@@ -54,15 +54,13 @@ export const crit3_all_req = (sections:Section[], req: String[]): boolean => {
  * @param {number} numReq - number of courses required
  * @returns {boolean}
  */
- export const crit4_number_req = (sections:Section[], numReq: number): boolean => {
+const crit4_number_req = (sections:Section[], numReq: number): boolean => {
   return sections.length === numReq;
 }
 
 
-// module.exports = {
-//   get_course_name: get_course_name,
-//   make_timeslot: make_timeslot,
-//   is_overlap_timeslots: is_overlap_timeslots,
-//   is_overlap_schedules:is_overlap_schedules,
-//   is_overlap_sections: is_overlap_sections,
-// }
+module.exports = {
+  get_course_name: get_course_name,
+  crit3_all_req: crit3_all_req,
+  crit4_number_req: crit4_number_req,
+}

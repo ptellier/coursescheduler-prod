@@ -24,7 +24,6 @@ export const findVariance = (arr:number[]):number => {
  * @param {Timeslot[]} lots 
  */
 export const findEarliestStart = (lots:Timeslot[]): Time => {
-  console.log(lots);
   if(!lots.length){
     throw new Error("cannot find earliest start of empty array");
   };
@@ -54,7 +53,9 @@ export const findEarliestStart = (lots:Timeslot[]): Time => {
  * @returns {number}
  */
 export const findStartVariance = (los:Section[]): number => {
+  console.log(los)
   const lolots:Timeslot[][] = groupDays(los.flatMap((sect) => sect.schedule));
+  console.log(lolots)
   return findVariance(lolots.map(findEarliestStart));
 }
 
