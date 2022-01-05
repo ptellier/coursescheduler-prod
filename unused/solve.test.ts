@@ -6,7 +6,7 @@ import {
   complete,
   solve,
   solve_opti,
-} from "../src/helpers/solve";
+} from "./solve";
 
 const CPSC121_101: Section = {
   name: "CPSC 121 101",

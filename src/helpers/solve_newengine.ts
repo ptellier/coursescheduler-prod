@@ -1,5 +1,5 @@
 import { Section } from "../data/DataDefinition/SectionDD";
-import { crit1_not_same_time } from "../helpers" 
+import { is_overlap_losections } from "./overlap" 
 
 /**
  * Sections chosen and sections remaining at each node in the search tree
@@ -15,11 +15,11 @@ interface Node {
  * @example a single node contains:
  * 1. assigned = [ COMM388-LectureA, ]
  * 2. remain = [
-*                  [CPSC121-LectureA, CPSC121-LectureB]
-*                  [CPSC121-LabA, CPSC121-LabB, CPSC121-LabC]
-*                  [CPSC121-TutorialA, CPSC121-TutorialB]
-*                  [CPSC110-LectureA, CPSC121-LectureB]
-*                  [CPSC110-LabA, CPSC121-LabB]
+ *                  [CPSC121-LectureA, CPSC121-LectureB]
+ *                  [CPSC121-LabA, CPSC121-LabB, CPSC121-LabC]
+ *                  [CPSC121-TutorialA, CPSC121-TutorialB]
+ *                  [CPSC110-LectureA, CPSC121-LectureB]
+ *                  [CPSC110-LabA, CPSC121-LabB]
  *             ]
  */
 
@@ -59,12 +59,12 @@ export const solve = (los: Section[][]): Section[][] => {
  * @returns 
  */
 export const next_nodes = (node: Node): Node[] => {
-    const assigned: Section[] = node.assigned;           
-    const [f_remain, ...r_remain] = node.remain           
+    const assigned: Section[] = node.assigned;            // ["A"]
+    const [f_remain, ...r_remain] = node.remain  // [[1,2] [3,4]]
     const generated_nodes: Node[] = f_remain.map(f_r => (
         { assigned: [...assigned, f_r], remain: r_remain }
         )
     )
     
-    return generated_nodes.filter((nd:Node) => crit1_not_same_time(nd.assigned));
+    return generated_nodes.filter((nd:Node) => is_overlap_losections(nd.assigned));
 };
