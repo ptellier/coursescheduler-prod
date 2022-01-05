@@ -1,4 +1,3 @@
-import React from "react";
 import { Section } from "../data/DataDefinition/SectionDD";
 import { is_overlap_losections } from "./overlap" 
 
@@ -8,7 +7,7 @@ import { is_overlap_losections } from "./overlap"
  * @property {Section[]} assigned - listof Section that are assigned
  * @property {Section[]} remain - listof Section remainng to be assigned
  */
- interface Node {
+interface Node {
     assigned: Section[]
     remain: Section[][]
 }
@@ -24,9 +23,6 @@ import { is_overlap_losections } from "./overlap"
  *             ]
  */
 
-
-
-
 /**
  * solve function for los
  * at each iteration,
@@ -37,7 +33,6 @@ import { is_overlap_losections } from "./overlap"
  * @returns 
  */
 export const solve = (los: Section[][]): Section[][] => {
-    // const og_los = los       /*keep track of original list of sections */ no longer needed
     let n_wl: Node[] = [];   //node worklist
     let node: Node;          //current node
     let rsf: Section[][] = [];
