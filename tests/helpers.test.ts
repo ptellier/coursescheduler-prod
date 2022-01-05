@@ -1,6 +1,7 @@
 import { link } from "fs";
 import { Schedule, Section,Timeslot } from "../src/data/DataDefinition/SectionDD";
-const fns = require("../src/helpers.ts");
+const fns = require("../src/helpers");
+const ex = require("../src/constants");
 
 //CONSTANTS:
 
