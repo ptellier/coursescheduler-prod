@@ -24,6 +24,10 @@ export const findVariance = (arr:number[]):number => {
  * @param {Timeslot[]} lots 
  */
 export const findEarliestStart = (lots:Timeslot[]): Time => {
+  console.log(lots);
+  if(!lots.length){
+    throw new Error("cannot find earliest start of empty array");
+  };
   return lots.reduce((min:number, ts:Timeslot) => {
     return (ts.start_time < min) ? ts.start_time : min
   },
@@ -35,6 +39,9 @@ export const findEarliestStart = (lots:Timeslot[]): Time => {
  * @param {Timeslot[]} lots
  */
  export const findLatestEnd = (lots:Timeslot[]): Time => {
+  if(!lots.length){
+    throw new Error("cannot find latest end of empty array");
+  };
   return lots.reduce((max:number, ts:Timeslot) => {
     return (ts.end_time > max) ? ts.end_time :  max
   },
