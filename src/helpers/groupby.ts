@@ -24,15 +24,15 @@ import { Section } from "../data/DataDefinition/SectionDD";
 /**
  * group sections in an array into an array several sections by given conditions, fn
  * @param {Section[]} array 
- * @param {(Section) => any} f
+ * @param {(Section) => keyof Section} f
  * @returns {Section[][]}
  */
-const groupBy = (array:Section[], f: Function): Section[][] => {
+const groupBy = (los:Section[], f: Function): Section[][] => {
     let groups:any = {};
-    array.forEach(function (o) {
-        let group = JSON.stringify(f(o));
+    los.forEach(function (sect) {
+        let group = JSON.stringify(f(sect));
         groups[group] = groups[group] || [];
-        groups[group].push(o);
+        groups[group].push(sect);
     });
     return Object.keys(groups).map(group => groups[group])
 }
