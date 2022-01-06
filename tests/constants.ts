@@ -233,6 +233,164 @@ const TS6: Timeslot =
   term: "2"
 }
 
+//Following constants are for most_compact & scatter
+const CPSC110: Section = {
+  name: "CPSC 110 101",
+  subject: "CPSC",
+  course: "110",
+  section: "101",
+  activity: "Lecture",
+  schedule: [
+    { start_time: 9*60, end_time: 10*60, day: "Mon", term: "2" },
+    { start_time: 9*60, end_time: 10*60, day: "Wed", term: "2" },
+    { start_time: 9*60, end_time: 10*60, day: "Fri", term: "2" }
+  ],
+  status: "Available",
+  term: "2",
+  link: "www.asdfghjkl.com",
+};
+const CPSC121: Section = {
+  name: "CPSC 121 101",
+  subject: "CPSC",
+  course: "121",
+  section: "101",
+  activity: "Lecture",
+  schedule: [
+    { start_time: 12*60, end_time: 13*60, day: "Mon", term: "2" },
+    { start_time: 12*60, end_time: 13*60, day: "Wed", term: "2" },
+    { start_time: 12*60, end_time: 13*60, day: "Fri", term: "2" }
+  ],
+  status: "Available",
+  term: "2",
+  link: "www.asdfghjkl.com",
+};
+const CPSC210: Section = {
+  name: "CPSC 210 101",
+  subject: "CPSC",
+  course: "210",
+  section: "101",
+  activity: "Lecture",
+  schedule: [
+    { start_time: 14*60, end_time: 17*60, day: "Mon", term: "2" },
+    { start_time: 14*60, end_time: 17*60, day: "Wed", term: "2" },
+    { start_time: 14*60, end_time: 17*60, day: "Fri", term: "2" }
+  ],
+  status: "Available",
+  term: "2",
+  link: "www.asdfghjkl.com",
+};
+const CPSC110_compact: Section = {
+  name: "CPSC 110 101",
+  subject: "CPSC",
+  course: "110",
+  section: "101",
+  activity: "Lecture",
+  schedule: [
+    { start_time: 9*60, end_time: 10*60, day: "Mon", term: "2" },
+    { start_time: 9*60, end_time: 10*60, day: "Wed", term: "2" },
+    { start_time: 9*60, end_time: 10*60, day: "Fri", term: "2" },
+  ],
+  status: "Available",
+  term: "2",
+  link: "www.asdfghjkl.com",
+};
+const CPSC121_compact: Section = {
+  name: "CPSC 121 101",
+  subject: "CPSC",
+  course: "121",
+  section: "101",
+  activity: "Lecture",
+  schedule: [
+    { start_time: 10*60, end_time: 11*60, day: "Mon", term: "2" },
+    { start_time: 10*60, end_time: 11*60, day: "Wed", term: "2" },
+    { start_time: 10*60, end_time: 11*60, day: "Fri", term: "2" },
+  ],
+  status: "Available",
+  term: "2",
+  link: "www.asdfghjkl.com",
+};
+const CPSC210_compact: Section = {
+  name: "CPSC 210 101",
+  subject: "CPSC",
+  course: "210",
+  section: "101",
+  activity: "Lecture",
+  schedule: [
+    { start_time: 11*60, end_time: 12*60, day: "Mon", term: "2" },
+    { start_time: 11*60, end_time: 12*60, day: "Wed", term: "2" },
+    { start_time: 11*60, end_time: 12*60, day: "Fri", term: "2" },
+  ],
+  status: "Available",
+  term: "2",
+  link: "www.asdfghjkl.com",
+};
+
+// ECONs are offered on tue, thu
+const ECON101: Section = {
+  name: "ECON 101 101",
+  subject: "ECON",
+  course: "101",
+  section: "101",
+  activity: "Lecture",
+  schedule: [
+    { start_time: 12*60, end_time: 14*60, day: "Tue", term: "2" },
+    { start_time: 12*60, end_time: 14*60, day: "Thu", term: "2" },
+  ],
+  status: "Available",
+  term: "2",
+  link: "www.asdfghjkl.com",
+};
+const ECON102: Section = {
+  name: "ECON 102 101",
+  subject: "ECON",
+  course: "102",
+  section: "101",
+  activity: "Lecture",
+  schedule: [
+    { start_time: 19*60, end_time: 21*60, day: "Tue", term: "2" },
+    { start_time: 19*60, end_time: 21*60, day: "Thu", term: "2" },
+  ],
+  status: "Available",
+  term: "2",
+  link: "www.asdfghjkl.com",
+};
+const ECON101_compact: Section = {
+  name: "ECON 101 101",
+  subject: "ECON",
+  course: "101",
+  section: "101",
+  activity: "Lecture",
+  schedule: [
+    { start_time: 12*60, end_time: 14*60, day: "Tue", term: "2" },
+    { start_time: 12*60, end_time: 14*60, day: "Thu", term: "2" },
+  ],
+  status: "Available",
+  term: "2",
+  link: "www.asdfghjkl.com",
+};
+const ECON102_compact: Section = {
+  name: "ECON 102 101",
+  subject: "ECON",
+  course: "102",
+  section: "101",
+  activity: "Lecture",
+  schedule: [
+    { start_time: 15*60, end_time: 17*60, day: "Tue", term: "2" },
+    { start_time: 15*60, end_time: 17*60, day: "Thu", term: "2" },
+  ],
+  status: "Available",
+  term: "2",
+  link: "www.asdfghjkl.com",
+};
+
+const MOSTCOMPACT: Section[] = [
+  CPSC110_compact,CPSC121_compact,CPSC210_compact, ECON101_compact, ECON102_compact,
+]
+
+const MOSTSCATTER: Section[] = [
+  CPSC110, CPSC121, CPSC210, ECON101, ECON102
+]
+
 module.exports = {
   CS1:CS1, CS2:CS2, CS3:CS3, CS4:CS4, CS5:CS5, CS6:CS6,
   CS1NAME:CS1NAME, CS2NAME:CS2NAME, CS3NAME:CS3NAME, CS4NAME:CS4NAME, CS5NAME:CS5NAME, CS6NAME:CS6NAME,
@@ -242,5 +400,9 @@ module.exports = {
 
   CS1_3TS_1:CS1_3TS_1, CS1_3TS_2:CS1_3TS_2, CS1_3TS_3:CS1_3TS_3, CS2_3TS:CS2_3TS, CS3_3TS:CS3_3TS, CS4_3TS:CS4_3TS, CS5_3TS:CS5_3TS, CS6_2TS:CS6_2TS,
   CS1_3TS_1EARLY:CS1_3TS_1EARLY, CS1_3TS_2EARLY:CS1_3TS_2EARLY, CS1_3TS_3EARLY:CS1_3TS_3EARLY, CS1_3TS_1LATE:CS1_3TS_1LATE, CS1_3TS_2LATE:CS1_3TS_2LATE, CS1_3TS_3LATE:CS1_3TS_3LATE,
-  TS2:TS2, TS5:TS5, TS6:TS6
+  TS2:TS2, TS5:TS5, TS6:TS6,
+
+  CPSC110:CPSC110, CPSC121:CPSC121, CPSC210:CPSC210, ECON101:ECON101, ECON102:ECON102,
+  CPSC110_compact:CPSC110_compact, CPSC121_compact:CPSC121_compact, CPSC210_compact:CPSC210_compact, ECON101_compact:ECON101_compact, ECON102_compact:ECON102_compact,
+  MOSTCOMPACT:MOSTCOMPACT, MOSTSCATTER:MOSTSCATTER,
 }

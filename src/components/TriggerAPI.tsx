@@ -35,7 +35,8 @@ export const TriggerAPI = ({ loc, set_los, userTerm, setUserTerm }: Props) => {
     setFectching(false)
     setGenerating(true)
 
-    // TODO: 1.1) if too much data, then raise warning
+    // TODO  1.1) take note of required sections (lecs, labs, tuts); are they all present?
+    // TODO: 1.2) if too much data, then raise warning
 
     // 2) Prepare sections data for solve
     const prep = (sections: Section[]) => {
@@ -50,12 +51,11 @@ export const TriggerAPI = ({ loc, set_los, userTerm, setUserTerm }: Props) => {
     const sections_solved = solve(sections_prepped);
     console.log(sections_solved);
 
-    // TODO: 3.1) Solve for optional courses
 
-    // TODO: 4) Categorize the schedules
+    // WORK: 4) Categorize the schedules
 
-    // set_los(sections_solved);  // pass data for recommendation
 
+    // set_los(sections_solved);  // pass recommended data for UI
     setGenerating(false)
     setLoading(false); // turns off loading icon
   };

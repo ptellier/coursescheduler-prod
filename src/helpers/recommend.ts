@@ -2,11 +2,20 @@ import {
   Section,
   Timeslot,
   Time,
-  Schedule,
-  Term,
-  Day,
 } from "../data/DataDefinition/SectionDD";
 import { groupDays } from "./groupby";
+
+
+/**
+ * recommends sections based on each of categories:
+ * consistency, compactness, early and late start and end times
+ * @param schedules 
+ * @returns 
+ */
+const recommend = (llos: Section[][]) => {
+  return []
+}
+
 
 /**
  * return the variance of an array of numbers
@@ -58,9 +67,7 @@ export const findLatestEnd = (lots: Timeslot[]): Time => {
  * @returns {number}
  */
 export const findStartVariance = (los: Section[]): number => {
-  console.log(los);
   const lolots: Timeslot[][] = groupDays(los.flatMap((sect) => sect.schedule));
-  console.log(lolots);
   return findVariance(lolots.map(findEarliestStart));
 };
 
@@ -86,7 +93,18 @@ export const most_consistent = (
  * @returns {Section[]}
  */
 export const most_compact = (los1: Section[], los2: Section[]): Section[] => {
-  //1. los = [CPSC121, CPSC110]
+  const time_gap1 = calculate_timegap(los1);
+  const time_gap2 = calculate_timegap(los2);
+  return time_gap1 <= time_gap2 ? los1 : los2;
+};
+/**
+ * compare two possible scheduling solutions:
+ * return the schedule with the highest sum of time gaps between sections every day (or the first if same)
+ * @param {Section[]} los1
+ * @param {Section[]} los2
+ * @returns {Section[]}
+ */
+ export const most_scatter = (los1: Section[], los2: Section[]): Section[] => {
   const time_gap1 = calculate_timegap(los1);
   const time_gap2 = calculate_timegap(los2);
   return time_gap1 >= time_gap2 ? los1 : los2;
@@ -98,53 +116,30 @@ export const most_compact = (los1: Section[], los2: Section[]): Section[] => {
  * @returns {number}
  */
 export const calculate_timegap = (los: Section[]): number => {
-  //2. schedules = [[mon-11~12, wed-11~12, fri-11~12], [mon-13~14, wed-13~14, fri-13~14]]
   const schedules = los.map((s: Section) => s.schedule);
-
-  //3. destructured_schedules = [mon-11~12, wed-11~12, fri-11~12, mon-13~14, wed-13~14, fri-13~14]
-  const schedules_deconstructed = schedules.reduce(
-    (sch, acc) => [...sch, ...acc],
-    []
-  );
-
-  //4. group_schedules_by_day = [[mon-11~12, mon-13~14], [wed-11~12, wed-13~14,], [fri-11~12, fri-13~14]]
+  const schedules_deconstructed = schedules.reduce((sch, acc) => [...sch, ...acc],[]);
   const schedules_grouped = groupDays(schedules_deconstructed);
 
-  //5. for each group, sort by start time ** test this
+  //5. for each group, sort by start time
   // CONSTRAINT: there are no overlaps
-  const schedules_sorted = schedules_grouped.map((ts_group) =>
-    sort_timeslots(ts_group)
-  );
+  const schedules_sorted = schedules_grouped.map((ts_group) => sort_timeslots(ts_group));
 
-  //6. get groups of start times
-  const start_times = schedules_sorted.map((ts_group) =>
-    ts_group.map((ts) => ts.start_time)
-  );
-  const end_times = schedules_sorted.map((ts_group) =>
-    ts_group.map((ts) => ts.end_time)
-  );
+  //6. get groups of start and end times
+  const start_times = schedules_sorted.map((ts_group) => ts_group.map((ts) => ts.start_time));
+  const end_times = schedules_sorted.map((ts_group) => ts_group.map((ts) => ts.end_time));
+
   //7. remove min for start_times, max for end_times
   const removed_min = start_times.map((starts) => starts.splice(1));
   const removed_max = end_times.map((ends) => ends.splice(0, ends.length - 1));
 
   //8. sum up the times
-  const sum_start = removed_min.map((starts) =>
-    starts.reduce((s, acc) => s + acc, 0)
-  );
-  const sum_end = removed_max.map((ends) =>
-    ends.reduce((e, acc) => e + acc, 0)
-  );
+  const sum_start = sum_times(removed_min);
+  const sum_end = sum_times(removed_max);
 
-  //9. subtract element wise substraction: sum_start - sum_end
-  //   calculates (e1 - s2) + (e2 - s3) + ...  = (e1 + e2 + ...) + (-s2 + s3 + ...)
-  const result = sum_start.map((n, i) => n - sum_end[i])
-
-  return result.reduce((x, acc) => x + acc, 0);
+  //9. sum_start - sum_end then get the sum
+  const result_minutes = subtract_lists(sum_start, sum_end).reduce((x, acc) => x + acc, 0);
+  return result_minutes / 60;
 };
-
-
-
-
 
 /**
  * sort given timeslots, lots (= schedule), by start_time
@@ -156,14 +151,21 @@ export const sort_timeslots = (lots: Timeslot[]) => {
 };
 
 /**
- * compare two possible scheduling solutions:
- * return the schedule with the highest sum of time gaps between sections every day (or the first if same)
- * @param {Section[]} los1
- * @param {Section[]} los2
- * @returns {Section[]}
+ * perform generic element wise subtraction 1ox1 - lox2
+ * @param {number[]} lox1 
+ * @param {number[]} lox2 
+ * @returns {number[]}
  */
-export const most_scatter = (los1: Section[], los2: Section[]): Section[] => {
-  return [];
+ const subtract_lists = (lox1: number[], lox2:number[]): number[] => {
+  return lox1.map((n, i) => n - lox2[i])
+};
+/**
+ * produce the sum for each list of time in llot, listof listof time
+ * @param {Time[][]} llot
+ * @returns {Time[]}
+ */
+const sum_times = (llot: Time[][]): Time[] => {
+  return llot.map((lot) => lot.reduce((t, acc) => t + acc, 0));
 };
 
 /**

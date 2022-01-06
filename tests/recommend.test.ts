@@ -122,96 +122,25 @@ test("is there a free day?", () => {
   expect(is_free_day([ex.CS2_3TS, ex.CS6_2TS])).toBe(false);
 });
 
-const CPSC110: Section = {
-  name: "CPSC 110 101",
-  subject: "CPSC",
-  course: "110",
-  section: "101",
-  activity: "Lecture",
-  schedule: [
-    { start_time: 9*60, end_time: 10*60, day: "Mon", term: "2" },
-    { start_time: 9*60, end_time: 10*60, day: "Wed", term: "2" },
-    { start_time: 9*60, end_time: 10*60, day: "Fri", term: "2" }
-  ],
-  status: "Available",
-  term: "2",
-  link: "www.asdfghjkl.com",
-};
-const CPSC121: Section = {
-  name: "CPSC 121 101",
-  subject: "CPSC",
-  course: "121",
-  section: "101",
-  activity: "Lecture",
-  schedule: [
-    { start_time: 12*60, end_time: 13*60, day: "Mon", term: "2" },
-    { start_time: 12*60, end_time: 13*60, day: "Wed", term: "2" },
-    { start_time: 12*60, end_time: 13*60, day: "Fri", term: "2" }
-  ],
-  status: "Available",
-  term: "2",
-  link: "www.asdfghjkl.com",
-};
-const CPSC210: Section = {
-  name: "CPSC 210 101",
-  subject: "CPSC",
-  course: "210",
-  section: "101",
-  activity: "Lecture",
-  schedule: [
-    { start_time: 14*60, end_time: 17*60, day: "Mon", term: "2" },
-    { start_time: 14*60, end_time: 17*60, day: "Wed", term: "2" },
-    { start_time: 14*60, end_time: 17*60, day: "Fri", term: "2" }
-  ],
-  status: "Available",
-  term: "2",
-  link: "www.asdfghjkl.com",
-};
-const CPSC110_compact: Section = {
-  name: "CPSC 110 101",
-  subject: "CPSC",
-  course: "110",
-  section: "101",
-  activity: "Lecture",
-  schedule: [
-    { start_time: 9*60, end_time: 10*60, day: "Mon", term: "2" },
-  ],
-  status: "Available",
-  term: "2",
-  link: "www.asdfghjkl.com",
-};
-const CPSC121_compact: Section = {
-  name: "CPSC 121 101",
-  subject: "CPSC",
-  course: "121",
-  section: "101",
-  activity: "Lecture",
-  schedule: [
-    { start_time: 10*60, end_time: 11*60, day: "Mon", term: "2" },
-  ],
-  status: "Available",
-  term: "2",
-  link: "www.asdfghjkl.com",
-};
-const CPSC210_compact: Section = {
-  name: "CPSC 210 101",
-  subject: "CPSC",
-  course: "210",
-  section: "101",
-  activity: "Lecture",
-  schedule: [
-    { start_time: 11*60, end_time: 12*60, day: "Mon", term: "2" },
-  ],
-  status: "Available",
-  term: "2",
-  link: "www.asdfghjkl.com",
-};
+test('most_scatter', () => {
+  expect(most_scatter([],[])).toEqual([])
+  expect(most_scatter(ex.MOSTSCATTER,ex.MOSTSCATTER)).toEqual(ex.MOSTSCATTER)
+  expect(most_scatter(ex.MOSTCOMPACT,ex.MOSTSCATTER)).toEqual(ex.MOSTSCATTER)
+})
+
+test('most_compact', () => {
+  expect(most_compact([],[])).toEqual([])
+  expect(most_compact(ex.MOSTCOMPACT,ex.MOSTCOMPACT)).toEqual(ex.MOSTCOMPACT)
+  expect(most_compact(ex.MOSTCOMPACT,ex.MOSTSCATTER)).toEqual(ex.MOSTCOMPACT)
+})
 
 test("calculate_timegap", () => {
   expect(calculate_timegap([])).toBe(0)
-  expect(calculate_timegap([CPSC110])).toBe(0)
-  expect(calculate_timegap([CPSC110, CPSC121, CPSC210])).toBe(9)
-  expect(calculate_timegap([CPSC110_compact, CPSC121_compact, CPSC210_compact])).toBe(0)
+  expect(calculate_timegap([ex.CPSC110])).toBe(0)
+  expect(calculate_timegap([ex.CPSC110, ex.CPSC121, ex.CPSC210])).toBe(9)
+  expect(calculate_timegap([ex.ECON101, ex.ECON102])).toBe(10)
+  expect(calculate_timegap([ex.ECON101_compact, ex.ECON102_compact])).toBe(2)
+  expect(calculate_timegap([ex.CPSC110_compact, ex.CPSC121_compact, ex.CPSC210_compact])).toBe(0)
 })
 
 test("sort_timeslots", () => {
