@@ -1,5 +1,10 @@
-import { Schedule, Section, Timeslot } from "../src/data/DataDefinition/SectionDD";
-import {findVariance,
+import {
+  Schedule,
+  Section,
+  Timeslot,
+} from "../src/data/DataDefinition/SectionDD";
+import {
+  findVariance,
   findLatestEnd,
   findEarliestStart,
   findStartVariance,
@@ -10,7 +15,9 @@ import {findVariance,
   most_late_start,
   most_early_end,
   most_late_end,
-  is_free_day } from "../src/helpers/recommend";
+  is_free_day,
+  sort_timeslots,
+} from "../src/helpers/recommend";
 
 const ex = require("./constants");
 
@@ -25,7 +32,6 @@ test("find the earliest start", () => {
   expect(findEarliestStart([ex.TS2])).toBe(ex.TS2.start_time);
   expect(findEarliestStart([ex.TS5, ex.TS2, ex.TS6])).toBe(ex.TS5.start_time);
   expect(findEarliestStart([ex.TS2, ex.TS5, ex.TS6])).toBe(ex.TS5.start_time);
-
 
   expect(findEarliestStart([ex.TS2, ex.TS6, ex.TS5])).toBe(ex.TS5.start_time);
 });
@@ -86,3 +92,37 @@ test("is there a free day?", () => {
   expect(is_free_day([ex.CS2_3TS, ex.CS3_3TS])).toBe(true);
   expect(is_free_day([ex.CS2_3TS, ex.CS6_2TS])).toBe(false);
 })
+
+
+
+
+// test("calculate_timegap", () => {
+
+// })
+
+test("sort_timeslots", () => {
+  expect(sort_timeslots([])).toEqual([]);
+  expect(sort_timeslots([
+    { start_time: 900, end_time: 1020, day: "Tue", term: "2" },
+    { start_time: 1030, end_time: 1090, day: "Tue", term: "2" },
+  ])).toEqual([
+    { start_time: 900, end_time: 1020, day: "Tue", term: "2" },
+    { start_time: 1030, end_time: 1090, day: "Tue", term: "2" },
+  ]);
+  expect(sort_timeslots([
+    { start_time: 1030, end_time: 1090, day: "Tue", term: "2" },
+    { start_time: 900, end_time: 1020, day: "Tue", term: "2" },
+  ])).toEqual([
+    { start_time: 900, end_time: 1020, day: "Tue", term: "2" },
+    { start_time: 1030, end_time: 1090, day: "Tue", term: "2" },
+  ]);
+  expect(sort_timeslots([
+    { start_time: 1030, end_time: 1090, day: "Tue", term: "2" },
+    { start_time: 1130, end_time: 1290, day: "Tue", term: "2" },
+    { start_time: 900, end_time: 1020, day: "Tue", term: "2" },
+  ])).toEqual([
+    { start_time: 900, end_time: 1020, day: "Tue", term: "2" },
+    { start_time: 1030, end_time: 1090, day: "Tue", term: "2" },
+    { start_time: 1130, end_time: 1290, day: "Tue", term: "2" },
+  ]);
+});
