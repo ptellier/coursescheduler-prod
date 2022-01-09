@@ -16,9 +16,10 @@ export const filter_term_avail_waitlist = (
   term: string
 ): Section[] => {
   return los.filter(
-    (c) =>
-      //c.status !== "Full" &&
-      c.term === term && c.activity !== "Waiting List"
+    (s) =>
+      s.status !== "Full" &&
+      s.term === term &&
+      s.activity !== "Waiting List"
   );
 };
 

@@ -1,6 +1,6 @@
 import { Course } from "../data/DataDefinition/SearchWordDD";
 import { Section } from "../data/DataDefinition/SectionDD";
-import { fetchSections } from "../helpers/fetch";
+import { fetchParallel, fetchSections } from "../helpers/fetch";
 import {
   filter_term_avail_waitlist,
   filter_duplicate_schedules,
@@ -29,8 +29,10 @@ export const TriggerAPI = ({ loc, set_los, userTerm, setUserTerm }: Props) => {
     setLoading(true); // turns on loading icon
     setFectching(true)
 
+    // fetchAll(['CPSC/121', 'CPSC/110'])
     // 1) Fetch sections data from API
-    const sections_api = await fetchSections(loc.map((c) => c.sw));
+    // const sections_api = await fetchSections(loc.map((c) => c.sw));
+    const sections_api = await fetchParallel(loc.map((c) => c.sw));
 
     setFectching(false)
     setGenerating(true)
@@ -50,7 +52,6 @@ export const TriggerAPI = ({ loc, set_los, userTerm, setUserTerm }: Props) => {
     // 3) Solve and return combinations
     const sections_solved = solve(sections_prepped);
     console.log(sections_solved);
-
 
     // WORK: 4) Categorize the schedules
 

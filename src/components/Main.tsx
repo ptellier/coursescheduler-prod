@@ -3,8 +3,8 @@ import SearchBar from "./SearchBar";
 import Selections from "./Selections";
 import { Course } from "../data/DataDefinition/SearchWordDD";
 import { Section } from "../data/DataDefinition/SectionDD";
-import Schedules from "./Schedules";
 import TriggerAPI from "./TriggerAPI";
+import Timetable from "./Timetable";
 
 const Main: FC = () => {
   /** List of Schedule: combinations of sections list that forms a schedule */
@@ -20,7 +20,7 @@ const Main: FC = () => {
     <div className="p-2 m-2" style={{height:500}}>
       <h1>UBC Course Scheduler</h1>
       <div className="row h-100">
-        <div className="col-sm-4 border p-3">
+        <div className="col-sm-3 border p-3">
           <SearchBar
             loc={loc}
             set_loc={set_loc}
@@ -33,10 +33,10 @@ const Main: FC = () => {
             setUserTerm={setUserTerm}
           />
         </div>
-        <div className="col-sm-2 border p-3">
+        <div className="col-sm-1 border">
         </div>
-        <div className="col-sm-6 border">
-          <Schedules los={los} />
+        <div className="col-sm-8 border">
+          <Timetable los={los}/>
         </div>
       </div>
     </div>

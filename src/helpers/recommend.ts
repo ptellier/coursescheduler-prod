@@ -9,11 +9,21 @@ import { groupDays } from "./groupby";
 /**
  * recommends sections based on each of categories:
  * consistency, compactness, early and late start and end times
- * @param schedules 
+ * @param {Section[][]} 
  * @returns 
  */
 const recommend = (llos: Section[][]) => {
-  return []
+  let rsf_compact: Section[] = []
+  let rsf_consistent: Section[] = [] // TODO: empty array
+  //...
+
+  for (const los of llos) {
+    rsf_compact = most_compact(los, rsf_compact)
+    rsf_consistent = most_consistent(los, rsf_consistent)
+  }
+
+  const result = {"compact":rsf_compact}
+  return result
 }
 
 
