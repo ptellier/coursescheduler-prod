@@ -1,8 +1,4 @@
 {
-<<<<<<< HEAD
-=======
-  "type": "module",
->>>>>>> 2de5c5feb3fcfa7433143e49519c6351db591833
   "name": "coursescheduler",
   "version": "0.1.0",
   "private": true,
