@@ -8,21 +8,41 @@ import { groupDays } from "./groupby";
 
 /**
  * recommends sections based on each of categories:
- * consistency, compactness, early and late start and end times
+ * consistency, compactness, early and late start and end times, and free day
  * @param {Section[][]} 
  * @returns 
  */
-const recommend = (llos: Section[][]) => {
-  let rsf_compact: Section[] = []
-  let rsf_consistent: Section[] = [] // TODO: empty array
+export const recommend = (lolos: Section[][]) => {
+  let rsf_compact: Section[] = [];
+  let rsf_consistent: Section[] = [];
+  let rsf_scatter: Section[] = []; 
+  let rsf_earlyStart: Section[] = [];
+  let rsf_lateStart: Section[] = [];
+  let rsf_earlyEnd: Section[] = [];
+  let rsf_lateEnd: Section[] = [];
+  let rsf_freeDay: Section[][] = [];
   //...
 
-  for (const los of llos) {
+  for (const los of lolos) {
     rsf_compact = most_compact(los, rsf_compact)
     rsf_consistent = most_consistent(los, rsf_consistent)
+    rsf_scatter = most_scatter(los, rsf_scatter)
+    rsf_earlyStart = most_early_start(los, rsf_earlyStart)
+    rsf_lateStart = most_late_start(los, rsf_lateStart)
+    rsf_earlyEnd = most_early_end(los, rsf_earlyEnd)
+    rsf_lateEnd = most_late_end(los, rsf_lateEnd)
+    if (is_free_day(los)) rsf_freeDay.push(los);
   }
 
-  const result = {"compact":rsf_compact}
+  const result = {
+    compact: rsf_compact,
+    consistent: rsf_consistent,
+    scatter: rsf_scatter,
+    earlyStart: rsf_earlyStart,
+    lateStart: rsf_lateStart,
+    earlyEnd: rsf_earlyEnd,
+    lateEnd: rsf_lateEnd,
+    freeDay: rsf_freeDay}
   return result
 }
 
@@ -84,14 +104,14 @@ export const findStartVariance = (los: Section[]): number => {
 /**
  * compare two possible scheduling solutions:
  * return the schedule with the lowest variance in start time (or first if same)
+ * if one array is empty return the other
  * @param {Section[]} los1
  * @param {Section[]} los2
  * @returns {Section[]}
  */
-export const most_consistent = (
-  los1: Section[],
-  los2: Section[]
-): Section[] => {
+export const most_consistent = (los1: Section[], los2: Section[]): Section[] => {
+  if (!los1) {return los2};
+  if (!los2) {return los1};
   return findStartVariance(los1) <= findStartVariance(los2) ? los1 : los2;
 };
 
@@ -107,6 +127,7 @@ export const most_compact = (los1: Section[], los2: Section[]): Section[] => {
   const time_gap2 = calculate_timegap(los2);
   return time_gap1 <= time_gap2 ? los1 : los2;
 };
+
 /**
  * compare two possible scheduling solutions:
  * return the schedule with the highest sum of time gaps between sections every day (or the first if same)
@@ -181,6 +202,7 @@ const sum_times = (llot: Time[][]): Time[] => {
 /**
  * compare two possible scheduling solutions:
  * return schedule with earliest start time out of all days (or the first if same).
+ * if one array is empty return the other
  * @param {Section[]} los1
  * @param {Section[]} los2
  * @returns {Section[]}
@@ -189,6 +211,8 @@ export const most_early_start = (
   los1: Section[],
   los2: Section[]
 ): Section[] => {
+  if (!los1) {return los2};
+  if (!los2) {return los1};
   const t1: Time = findEarliestStart(los1.flatMap((sect) => sect.schedule));
   const t2: Time = findEarliestStart(los2.flatMap((sect) => sect.schedule));
   return t1 <= t2 ? los1 : los2;
@@ -197,7 +221,8 @@ export const most_early_start = (
 /**
  * compare two possible scheduling solutions:
  * return schedule with latest start time (or the first if same). That is...
- * for each schedule choose the time such that it is the earliest start time out of all days to do the comparison
+ * for each schedule choose the time such that it is the earliest start time out of all days to do the comparison.
+ * if one array is empty return the other
  * @param {Section[]} los1
  * @param {Section[]} los2
  * @returns {Section[]}
@@ -206,6 +231,8 @@ export const most_late_start = (
   los1: Section[],
   los2: Section[]
 ): Section[] => {
+  if (!los1) {return los2};
+  if (!los2) {return los1};
   const t1: Time = findEarliestStart(los1.flatMap((sect) => sect.schedule));
   const t2: Time = findEarliestStart(los2.flatMap((sect) => sect.schedule));
   return t1 >= t2 ? los1 : los2;
@@ -214,12 +241,15 @@ export const most_late_start = (
 /**
  * compare two possible scheduling solutions:
  * return schedule with earliest end time (or the first if same). That is...
- * for each schedule choose the time such that it is the latest end time out of all days to do the comparison
+ * for each schedule choose the time such that it is the latest end time out of all days to do the comparison.
+ * if one array is empty return the other
  * @param {Section[]} los1
  * @param {Section[]} los2
  * @returns {Section[]}
  */
 export const most_early_end = (los1: Section[], los2: Section[]): Section[] => {
+  if (!los1) {return los2};
+  if (!los2) {return los1};
   const t1: Time = findLatestEnd(los1.flatMap((sect) => sect.schedule));
   const t2: Time = findLatestEnd(los2.flatMap((sect) => sect.schedule));
   return t1 <= t2 ? los1 : los2;
@@ -228,11 +258,14 @@ export const most_early_end = (los1: Section[], los2: Section[]): Section[] => {
 /**
  * compare two possible scheduling solutions:
  * return schedule with latest end time out of all days (or the first if same).
+ * if one array is empty return the other
  * @param {Section[]} los1
  * @param {Section[]} los2
  * @returns {Section[]}
  */
 export const most_late_end = (los1: Section[], los2: Section[]): Section[] => {
+  if (!los1) {return los2};
+  if (!los2) {return los1};
   const t1: Time = findLatestEnd(los1.flatMap((sect) => sect.schedule));
   const t2: Time = findLatestEnd(los2.flatMap((sect) => sect.schedule));
   return t1 >= t2 ? los1 : los2;
