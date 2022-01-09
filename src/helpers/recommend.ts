@@ -110,19 +110,22 @@ export const findStartVariance = (los: Section[]): number => {
  * @returns {Section[]}
  */
 export const most_consistent = (los1: Section[], los2: Section[]): Section[] => {
-  if (!los1) {return los2};
-  if (!los2) {return los1};
+  if (!los1.length) {return los2};
+  if (!los2.length) {return los1};
   return findStartVariance(los1) <= findStartVariance(los2) ? los1 : los2;
 };
 
 /**
  * compare two possible scheduling solutions:
  * return the schedule with the lowest sum of time gaps between sections every day (or the first if same)
+ * if one array is empty return the other
  * @param {Section[]} los1 ; Schedule
  * @param {Section[]} los2 ; Schedule
  * @returns {Section[]}
  */
 export const most_compact = (los1: Section[], los2: Section[]): Section[] => {
+  if (!los1.length) {return los2};
+  if (!los2.length) {return los1};
   const time_gap1 = calculate_timegap(los1);
   const time_gap2 = calculate_timegap(los2);
   return time_gap1 <= time_gap2 ? los1 : los2;
@@ -131,11 +134,14 @@ export const most_compact = (los1: Section[], los2: Section[]): Section[] => {
 /**
  * compare two possible scheduling solutions:
  * return the schedule with the highest sum of time gaps between sections every day (or the first if same)
+ * if one array is empty return the other
  * @param {Section[]} los1
  * @param {Section[]} los2
  * @returns {Section[]}
  */
  export const most_scatter = (los1: Section[], los2: Section[]): Section[] => {
+  if (!los1.length) {return los2};
+  if (!los2.length) {return los1};
   const time_gap1 = calculate_timegap(los1);
   const time_gap2 = calculate_timegap(los2);
   return time_gap1 >= time_gap2 ? los1 : los2;
@@ -211,8 +217,8 @@ export const most_early_start = (
   los1: Section[],
   los2: Section[]
 ): Section[] => {
-  if (!los1) {return los2};
-  if (!los2) {return los1};
+  if (!los1.length) {return los2};
+  if (!los2.length) {return los1};
   const t1: Time = findEarliestStart(los1.flatMap((sect) => sect.schedule));
   const t2: Time = findEarliestStart(los2.flatMap((sect) => sect.schedule));
   return t1 <= t2 ? los1 : los2;
@@ -231,8 +237,8 @@ export const most_late_start = (
   los1: Section[],
   los2: Section[]
 ): Section[] => {
-  if (!los1) {return los2};
-  if (!los2) {return los1};
+  if (!los1.length) {return los2};
+  if (!los2.length) {return los1};
   const t1: Time = findEarliestStart(los1.flatMap((sect) => sect.schedule));
   const t2: Time = findEarliestStart(los2.flatMap((sect) => sect.schedule));
   return t1 >= t2 ? los1 : los2;
@@ -248,8 +254,8 @@ export const most_late_start = (
  * @returns {Section[]}
  */
 export const most_early_end = (los1: Section[], los2: Section[]): Section[] => {
-  if (!los1) {return los2};
-  if (!los2) {return los1};
+  if (!los1.length) {return los2};
+  if (!los2.length) {return los1};
   const t1: Time = findLatestEnd(los1.flatMap((sect) => sect.schedule));
   const t2: Time = findLatestEnd(los2.flatMap((sect) => sect.schedule));
   return t1 <= t2 ? los1 : los2;
@@ -264,8 +270,8 @@ export const most_early_end = (los1: Section[], los2: Section[]): Section[] => {
  * @returns {Section[]}
  */
 export const most_late_end = (los1: Section[], los2: Section[]): Section[] => {
-  if (!los1) {return los2};
-  if (!los2) {return los1};
+  if (!los1.length) {return los2};
+  if (!los2.length) {return los1};
   const t1: Time = findLatestEnd(los1.flatMap((sect) => sect.schedule));
   const t2: Time = findLatestEnd(los2.flatMap((sect) => sect.schedule));
   return t1 >= t2 ? los1 : los2;

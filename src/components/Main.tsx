@@ -6,6 +6,12 @@ import { Section } from "../data/DataDefinition/SectionDD";
 import TriggerAPI from "./TriggerAPI";
 import Timetable from "./Timetable";
 
+//import WeekCalendar from 'react-week-calendar';
+
+//import 'react-week-calendar/dist/style.less';
+// or import css file
+// import 'react-week-calendar/dist/style.css';
+
 const Main: FC = () => {
   /** List of Schedule: combinations of sections list that forms a schedule */
   const [los, set_los] = useState<Section[][]>([]);
