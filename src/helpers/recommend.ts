@@ -22,7 +22,9 @@ const recommend = (llos: Section[][]) => {
     rsf_consistent = most_consistent(los, rsf_consistent)
   }
 
-  const result = {"compact":rsf_compact}
+  const result = {
+    "compact":rsf_compact
+  }
   return result
 }
 

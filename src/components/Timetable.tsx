@@ -30,7 +30,7 @@ const Timetable = ({ los }: Props) => {
         <div>
             <div id="900" className="border-top row" style={{position:'relative', height:30}} >
                 <span className="text-muted" style={{position: 'absolute', right:'102%', top:"-35%"}}>9:00AM</span>
-                <div className="col-2 border bg-primary" ></div>
+                <div className="col-2 border bg-primary" >CPSC121</div>
                 <div className="col-2 border" ></div>
                 <div className="col-2 border" ></div>
                 <div className="col-2 border" ></div>
