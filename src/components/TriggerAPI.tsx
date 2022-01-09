@@ -8,6 +8,7 @@ import {
 import { solve } from "../helpers/solve_newengine";
 import { groupSections } from "../helpers/groupby";
 import { useState } from "react";
+import { recommend } from "../helpers/recommend";
 
 export interface Props {
   loc: Course[];
@@ -54,7 +55,8 @@ export const TriggerAPI = ({ loc, set_los, userTerm, setUserTerm }: Props) => {
     console.log(sections_solved);
 
     // WORK: 4) Categorize the schedules
-
+    const most = recommend(sections_solved);
+    console.log(most);
 
     // set_los(sections_solved);  // pass recommended data for UI
     setGenerating(false)

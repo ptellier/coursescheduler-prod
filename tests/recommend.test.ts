@@ -59,9 +59,9 @@ test("find start variance", () => {
 });
 
 test("return most consistent of two schedules (lowest variance of start times)", () => {
-  expect(() => most_consistent([], [])).toThrow(
-    "cannot take variance of empty array"
-  );
+  expect(most_consistent([], [])).toEqual([]);
+  expect(most_consistent([ex.CS3], [])).toEqual([ex.CS3]);
+  expect(most_consistent([], [ex.CS3])).toEqual([ex.CS3]);
   expect(most_consistent([ex.CS3], [ex.CS3])).toEqual([ex.CS3]);
   expect(most_consistent([ex.CS3], [ex.CS5])).toEqual([ex.CS3]);
   expect(
@@ -73,6 +73,9 @@ test("return most consistent of two schedules (lowest variance of start times)",
 });
 
 test("find latest start schedule", () => {
+  expect(most_late_start([], [])).toEqual([]);
+  expect(most_late_start([ex.CS3], [])).toEqual([ex.CS3]);
+  expect(most_late_start([], [ex.CS3])).toEqual([ex.CS3]);
   expect(most_late_start([ex.CS1_3TS_1], [ex.CS1_3TS_1])).toEqual([
     ex.CS1_3TS_1,
   ]);
@@ -95,6 +98,9 @@ test("find latest start schedule", () => {
 });
 
 test("find earliest end schedule", () => {
+  expect(most_early_end([], [])).toEqual([]);
+  expect(most_early_end([ex.CS3], [])).toEqual([ex.CS3]);
+  expect(most_early_end([], [ex.CS3])).toEqual([ex.CS3]);
   expect(most_early_end([ex.CS1_3TS_1], [ex.CS1_3TS_1])).toEqual([
     ex.CS1_3TS_1,
   ]);
@@ -123,24 +129,28 @@ test("is there a free day?", () => {
 });
 
 test('most_scatter', () => {
-  expect(most_scatter([],[])).toEqual([])
-  expect(most_scatter(ex.MOSTSCATTER,ex.MOSTSCATTER)).toEqual(ex.MOSTSCATTER)
-  expect(most_scatter(ex.MOSTCOMPACT,ex.MOSTSCATTER)).toEqual(ex.MOSTSCATTER)
+  expect(most_scatter([], [])).toEqual([]);
+  expect(most_scatter([ex.CS3], [])).toEqual([ex.CS3]);
+  expect(most_scatter([], [ex.CS3])).toEqual([ex.CS3]);
+  expect(most_scatter(ex.MOSTSCATTER,ex.MOSTSCATTER)).toEqual(ex.MOSTSCATTER);
+  expect(most_scatter(ex.MOSTCOMPACT,ex.MOSTSCATTER)).toEqual(ex.MOSTSCATTER);
 })
 
 test('most_compact', () => {
-  expect(most_compact([],[])).toEqual([])
-  expect(most_compact(ex.MOSTCOMPACT,ex.MOSTCOMPACT)).toEqual(ex.MOSTCOMPACT)
-  expect(most_compact(ex.MOSTCOMPACT,ex.MOSTSCATTER)).toEqual(ex.MOSTCOMPACT)
+  expect(most_compact([],[])).toEqual([]);
+  expect(most_compact([ex.CS3], [])).toEqual([ex.CS3]);
+  expect(most_compact([], [ex.CS3])).toEqual([ex.CS3]);
+  expect(most_compact(ex.MOSTCOMPACT,ex.MOSTCOMPACT)).toEqual(ex.MOSTCOMPACT);
+  expect(most_compact(ex.MOSTCOMPACT,ex.MOSTSCATTER)).toEqual(ex.MOSTCOMPACT);
 })
 
 test("calculate_timegap", () => {
-  expect(calculate_timegap([])).toBe(0)
-  expect(calculate_timegap([ex.CPSC110])).toBe(0)
-  expect(calculate_timegap([ex.CPSC110, ex.CPSC121, ex.CPSC210])).toBe(9)
-  expect(calculate_timegap([ex.ECON101, ex.ECON102])).toBe(10)
-  expect(calculate_timegap([ex.ECON101_compact, ex.ECON102_compact])).toBe(2)
-  expect(calculate_timegap([ex.CPSC110_compact, ex.CPSC121_compact, ex.CPSC210_compact])).toBe(0)
+  expect(calculate_timegap([])).toBe(0);
+  expect(calculate_timegap([ex.CPSC110])).toBe(0);
+  expect(calculate_timegap([ex.CPSC110, ex.CPSC121, ex.CPSC210])).toBe(9);
+  expect(calculate_timegap([ex.ECON101, ex.ECON102])).toBe(10);
+  expect(calculate_timegap([ex.ECON101_compact, ex.ECON102_compact])).toBe(2);
+  expect(calculate_timegap([ex.CPSC110_compact, ex.CPSC121_compact, ex.CPSC210_compact])).toBe(0);
 })
 
 test("sort_timeslots", () => {
