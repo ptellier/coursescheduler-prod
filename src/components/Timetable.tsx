@@ -25,7 +25,6 @@ const Timetable = ({ los }: Props) => {
             <h4 style={{ width: `20%` }} className="col-2">Sat</h4>
         </div>
 
-        
         {/* Body */}
         <div>
             <div id="900" className="border-top row" style={{position:'relative', height:30}} >
