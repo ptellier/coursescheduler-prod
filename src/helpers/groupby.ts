@@ -42,9 +42,8 @@ export const groupDays = (lots: Timeslot[]): Timeslot[][] => {
  * @todo
  */
 export const splitSectionSchedule = (los:Section[]): Section[] => {
-  const mylos:Section[] = los
   let rsf:Section[][] = [];
-  for(const sect of mylos) {
+  for(const sect of los) {
     const nlos:Section[] = sect.schedule.map((ts:Timeslot) => {
       let nsect:Section = Object.assign({}, sect)
       nsect.schedule = [ts];
@@ -62,9 +61,18 @@ export const splitSectionSchedule = (los:Section[]): Section[] => {
  */
 export const group5Days = (los: Section[]): Section[][] => {
   const losSplit = splitSectionSchedule(los);
+  console.log(losSplit);
   let rsf:Section[][] = [];
-  for (const day in ALL_DAY_NAMES) {
-    rsf.push(losSplit.filter((sect:Section) => sect.schedule[0].day === day));
+  for (const day of ALL_DAY_NAMES) {
+    console.log(day);
+    const filtered:Section[] = losSplit.filter((sect:Section) => (sect.schedule[0].day === day));
+    console.log(filtered);
+    if(filtered.length) {
+    console.log("that day is: ", filtered[0].schedule[0].day, " ... ", filtered.length);
+    } else {
+      console.log("that day is not");
+    }
+    rsf.push(losSplit.filter((sect:Section) => (sect.schedule[0].day === day)));
   }
   return rsf;
 };

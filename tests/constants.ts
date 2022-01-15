@@ -106,6 +106,17 @@ CS2_Full.status = "Full";
 const CS3_Restricted: Section = Object.assign({}, CS3);
 CS3_Restricted.status = "Restricted";
 
+const CS1_MON = Object.assign({}, CS1);
+CS1_MON.schedule[0].day = "Mon"
+const CS2_TUE = Object.assign({}, CS2);
+CS2_TUE.schedule[0].day = "Tue"
+const CS3_WED = Object.assign({}, CS3);
+CS3_WED.schedule[0].day = "Wed"
+const CS4_THU = Object.assign({}, CS4);
+CS4_THU.schedule[0].day = "Thu"
+const CS5_FRI = Object.assign({}, CS5);
+CS5_FRI.schedule[0].day = "Fri"
+
 const SCHD1_1: Schedule = [
   {start_time:900, end_time:950, day:"Mon",term:"2"},
   {start_time:800, end_time:850, day:"Wed",term:"2"},

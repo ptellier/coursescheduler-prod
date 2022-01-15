@@ -1,6 +1,8 @@
 import React from "react";
-import { Section, Timeslot } from "../src/data/DataDefinition/SectionDD";
-import { groupDays, groupSections } from "../src/helpers/groupby";
+import { Section, Timeslot, Schedule } from "../src/data/DataDefinition/SectionDD";
+import { groupDays, groupSections, group5Days, splitSectionSchedule } from "../src/helpers/groupby";
+const ex = require("./constants");
+
 const CPSC121_101: Section = {
   name: "CPSC 121 101",
   subject: "CPSC",
@@ -151,5 +153,52 @@ test('groupDays', () => {
   expect(groupDays([TS2, TS5, TS6])).toEqual([[TS2, TS5, TS6]])
   expect(groupDays([TS_mon_1, TS_tue_1, TS_wed_1, TS_mon_2, TS_tue_2, TS_wed_2])).toEqual(
     [[TS_mon_1, TS_mon_2], [TS_tue_1, TS_tue_2], [TS_wed_1, TS_wed_2]]
+  )
+})
+
+test("splitSectionSchedule", () => {
+  const CS6_2TS_TUE:Section = Object.assign({}, ex.CS6_2TS); 
+  CS6_2TS_TUE.schedule = [ex.CS6_2TS.schedule[0]];
+  const CS6_2TS_THU:Section = Object.assign({}, ex.CS6_2TS); 
+  CS6_2TS_THU.schedule = [ex.CS6_2TS.schedule[1]];
+
+  expect(splitSectionSchedule([])).toEqual([]);
+  expect(splitSectionSchedule([ex.CS1])).toEqual([ex.CS1]);
+  expect(splitSectionSchedule([ex.CS6_2TS])).toEqual([CS6_2TS_TUE, CS6_2TS_THU]);
+  expect(splitSectionSchedule([ex.CS6_2TS, ex.CS1, ex.CS2])).toEqual([CS6_2TS_TUE, CS6_2TS_THU, ex.CS1, ex.CS2]);
+  expect(splitSectionSchedule([ex.CS1, ex.CS6_2TS, ex.CS2])).toEqual([ex.CS1, CS6_2TS_TUE, CS6_2TS_THU, ex.CS2]);
+  expect(splitSectionSchedule([ex.CS1, ex.CS2, ex.CS6_2TS,])).toEqual([ex.CS1, ex.CS2, CS6_2TS_TUE, CS6_2TS_THU]);
+})
+
+test('group5Days', () => {
+  //expect(group5Days([])).toEqual([[],[],[],[],[]])
+  expect(group5Days([ex.CS1])).toEqual([[],[],[ex.CS1],[],[]])
+  expect(group5Days([ex.CS1_MON, ex.CS2_TUE, ex.CS3_WED, ex.CS4_THU, ex.CS5_FRI])).toEqual(
+    [[ex.CS1_MON],[ex.CS2_TUE],[ex.CS3_WED],[ex.CS4_THU],[ex.CS5_FRI]]
+  )
+  expect(group5Days([ex.CS2_TUE, ex.CS3_WED, ex.CS4_THU, ex.CS1_MON, ex.CS5_FRI])).toEqual(
+    [[ex.CS1_MON],[ex.CS2_TUE],[ex.CS3_WED],[ex.CS4_THU],[ex.CS5_FRI]]
+  )
+  const CS3_3TS_MON:Section = Object.assign({}, ex.CS3_3TS); 
+  CS3_3TS_MON.schedule = [ex.CS3_3TS.schedule[0]];
+  const CS3_3TS_WED:Section = Object.assign({}, ex.CS3_3TS); 
+  CS3_3TS_WED.schedule = [ex.CS3_3TS.schedule[1]];
+  const CS3_3TS_FRI:Section = Object.assign({}, ex.CS3_3TS); 
+  CS3_3TS_FRI.schedule = [ex.CS3_3TS.schedule[2]];
+
+  const CS6_2TS_TUE:Section = Object.assign({}, ex.CS6_2TS); 
+  CS6_2TS_TUE.schedule = [ex.CS6_2TS.schedule[0]];
+  const CS6_2TS_THU:Section = Object.assign({}, ex.CS6_2TS); 
+  CS6_2TS_THU.schedule = [ex.CS6_2TS.schedule[1]];
+  
+
+  expect(group5Days([ex.CS2_TUE, ex.CS3_3TS, ex.CS4_THU, ex.CS1_MON, ex.CS6_2TS])).toEqual(
+    [
+      [CS3_3TS_MON, ex.CS1_MON],
+      [ex.CS2_TUE, CS6_2TS_TUE],
+      [CS3_3TS_WED, ex.CS3_WED],
+      [ex.CS4_THU, CS6_2TS_THU],
+      [CS3_3TS_FRI, ex.CS5_FRI]
+    ]
   )
 })
