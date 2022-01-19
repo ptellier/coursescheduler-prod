@@ -1,10 +1,6 @@
 import {
   Section,
-  Time,
-  Schedule,
   Timeslot,
-  Day,
-  Term,
 } from "../data/DataDefinition/SectionDD";
 
 /** filter out sections with !=term, waiting list, full - currently turned off for test

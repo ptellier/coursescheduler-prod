@@ -3,7 +3,7 @@ import {
   Timeslot,
   Time,
 } from "../data/DataDefinition/SectionDD";
-import { groupDays } from "./groupby";
+import { groupTimeSlotsByDays } from "./groupby";
 
 
 /**
@@ -97,7 +97,7 @@ export const findLatestEnd = (lots: Timeslot[]): Time => {
  * @returns {number}
  */
 export const findStartVariance = (los: Section[]): number => {
-  const lolots: Timeslot[][] = groupDays(los.flatMap((sect) => sect.schedule));
+  const lolots: Timeslot[][] = groupTimeSlotsByDays(los.flatMap((sect) => sect.schedule));
   return findVariance(lolots.map(findEarliestStart));
 };
 
@@ -155,7 +155,7 @@ export const most_compact = (los1: Section[], los2: Section[]): Section[] => {
 export const calculate_timegap = (los: Section[]): number => {
   const schedules = los.map((s: Section) => s.schedule);
   const schedules_deconstructed = schedules.reduce((sch, acc) => [...sch, ...acc],[]);
-  const schedules_grouped = groupDays(schedules_deconstructed);
+  const schedules_grouped = groupTimeSlotsByDays(schedules_deconstructed);
 
   //5. for each group, sort by start time
   // CONSTRAINT: there are no overlaps

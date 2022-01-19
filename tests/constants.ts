@@ -13,7 +13,6 @@ const CS1: Section = {
               term: "2"}],
   status: "Available",
   term: "2",
-  link:"www.asdfghjkl.com"
 };
 const CS1NAME: string = fns.get_course_name(CS1);
 
@@ -29,7 +28,6 @@ const CS2: Section = {
               term: "2"}],
   status: "Available",
   term: "2",
-  link:"www.asdfghjkl.com"
 };
 const CS2NAME: string = fns.get_course_name(CS2);
 
@@ -45,7 +43,6 @@ const CS3: Section = {
               term: "2"}],
   status: "Available",
   term: "2",
-  link:"www.asdfghjkl.com"
 };
 const CS3NAME: string = fns.get_course_name(CS3);
 
@@ -61,7 +58,6 @@ const CS4: Section = {
               term: "2"}],
   status: "Available",
   term: "2",
-  link:"www.asdfghjkl.com"
 };
 const CS4NAME: string = fns.get_course_name(CS4);
 
@@ -77,7 +73,6 @@ const CS5: Section = {
               term: "2"}],
   status: "Available",
   term: "2",
-  link:"www.asdfghjkl.com"
 };
 const CS5NAME: string = fns.get_course_name(CS5);
 
@@ -93,7 +88,6 @@ const CS6: Section = {
               term: "2"}],
   status: "Available",
   term: "2",
-  link:"www.asdfghjkl.com"
 };
 const CS6NAME: string = fns.get_course_name(CS6);
 
@@ -247,7 +241,6 @@ const CPSC110: Section = {
   ],
   status: "Available",
   term: "2",
-  link: "www.asdfghjkl.com",
 };
 const CPSC121: Section = {
   name: "CPSC 121 101",
@@ -262,7 +255,6 @@ const CPSC121: Section = {
   ],
   status: "Available",
   term: "2",
-  link: "www.asdfghjkl.com",
 };
 const CPSC210: Section = {
   name: "CPSC 210 101",
@@ -277,7 +269,6 @@ const CPSC210: Section = {
   ],
   status: "Available",
   term: "2",
-  link: "www.asdfghjkl.com",
 };
 const CPSC110_compact: Section = {
   name: "CPSC 110 101",
@@ -292,7 +283,6 @@ const CPSC110_compact: Section = {
   ],
   status: "Available",
   term: "2",
-  link: "www.asdfghjkl.com",
 };
 const CPSC121_compact: Section = {
   name: "CPSC 121 101",
@@ -307,7 +297,6 @@ const CPSC121_compact: Section = {
   ],
   status: "Available",
   term: "2",
-  link: "www.asdfghjkl.com",
 };
 const CPSC210_compact: Section = {
   name: "CPSC 210 101",
@@ -322,7 +311,6 @@ const CPSC210_compact: Section = {
   ],
   status: "Available",
   term: "2",
-  link: "www.asdfghjkl.com",
 };
 
 // ECONs are offered on tue, thu
@@ -338,7 +326,6 @@ const ECON101: Section = {
   ],
   status: "Available",
   term: "2",
-  link: "www.asdfghjkl.com",
 };
 const ECON102: Section = {
   name: "ECON 102 101",
@@ -352,7 +339,6 @@ const ECON102: Section = {
   ],
   status: "Available",
   term: "2",
-  link: "www.asdfghjkl.com",
 };
 const ECON101_compact: Section = {
   name: "ECON 101 101",
@@ -366,7 +352,6 @@ const ECON101_compact: Section = {
   ],
   status: "Available",
   term: "2",
-  link: "www.asdfghjkl.com",
 };
 const ECON102_compact: Section = {
   name: "ECON 102 101",
@@ -380,7 +365,6 @@ const ECON102_compact: Section = {
   ],
   status: "Available",
   term: "2",
-  link: "www.asdfghjkl.com",
 };
 
 const MOSTCOMPACT: Section[] = [

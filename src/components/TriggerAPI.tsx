@@ -1,6 +1,6 @@
 import { Course } from "../data/DataDefinition/SearchWordDD";
 import { Section } from "../data/DataDefinition/SectionDD";
-import { fetchParallel, fetchSections } from "../helpers/fetch";
+import { fetchParallel } from "../helpers/fetch";
 import {
   filter_term_avail_waitlist,
   filter_duplicate_schedules,
@@ -30,7 +30,6 @@ export const TriggerAPI = ({ loc, set_los, userTerm, setUserTerm }: Props) => {
     setLoading(true); // turns on loading icon
     setFectching(true)
 
-    // fetchAll(['CPSC/121', 'CPSC/110'])
     // 1) Fetch sections data from API
     // const sections_api = await fetchSections(loc.map((c) => c.sw));
     const sections_api = await fetchParallel(loc.map((c) => c.sw));
@@ -39,7 +38,6 @@ export const TriggerAPI = ({ loc, set_los, userTerm, setUserTerm }: Props) => {
     setGenerating(true)
 
     // TODO  1.1) take note of required sections (lecs, labs, tuts); are they all present?
-    // TODO: 1.2) if too much data, then raise warning
 
     // 2) Prepare sections data for solve
     const prep = (sections: Section[]) => {
@@ -52,13 +50,13 @@ export const TriggerAPI = ({ loc, set_los, userTerm, setUserTerm }: Props) => {
 
     // 3) Solve and return combinations
     const sections_solved = solve(sections_prepped);
-    console.log(sections_solved);
+    console.log("solved: ", sections_solved);
 
-    // WORK: 4) Categorize the schedules
-    const most = recommend(sections_solved);
-    console.log(most);
+    // 4) Categorize the schedules
+    const sections_recommended = recommend(sections_solved);
+    console.log("recommendations: ", sections_recommended);
 
-    // set_los(sections_solved);  // pass recommended data for UI
+    set_los(sections_recommended);  // pass recommended data for UI
     setGenerating(false)
     setLoading(false); // turns off loading icon
   };

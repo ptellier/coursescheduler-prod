@@ -4,7 +4,7 @@ import Selections from "./Selections";
 import { Course } from "../data/DataDefinition/SearchWordDD";
 import { Section } from "../data/DataDefinition/SectionDD";
 import TriggerAPI from "./TriggerAPI";
-import Timetable from "./Timetable";
+import Timetable from "./Timetable/Timetable";
 
 const Main: FC = () => {
   /** List of Schedule: combinations of sections list that forms a schedule */
@@ -36,7 +36,8 @@ const Main: FC = () => {
         <div className="col-sm-1 border">
         </div>
         <div className="col-sm-8 border">
-          <Timetable los={los}/>
+          {/* <Timetable los={los}/> */}
+          <Timetable></Timetable>
         </div>
       </div>
     </div>

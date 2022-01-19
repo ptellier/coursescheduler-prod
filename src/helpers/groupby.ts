@@ -1,8 +1,9 @@
 import React from "react";
 import { Section, Timeslot } from "../data/DataDefinition/SectionDD";
+import { Cell } from "./time";
 
 /**
- * create subgroups of sections by course and activity
+ * group sections by course and activity
  * @example
  * [
  *  [110Lectures], 
@@ -21,12 +22,25 @@ import { Section, Timeslot } from "../data/DataDefinition/SectionDD";
     return result
 }
 
+
 /**
- * create subgroups of timeslots by day
+ * group cells by name
+ * @param {Cell[]} loc 
+ * @returns {Cell[][]}
+ */
+export const groupCellsByName = (loc: Cell[]): Cell[][] => {
+  const result = groupBy(loc, function (cell:Cell) {
+    return [cell.name];
+})
+  return result
+}
+
+/**
+ * group timeslots by day
  * @param {Timteslot[]} lots 
  * @returns {Timeslot[][]}
  */
- export const groupDays = (lots: Timeslot[]): Timeslot[][] => {
+ export const groupTimeSlotsByDays = (lots: Timeslot[]): Timeslot[][] => {
     const result = groupBy(lots, (timeslot: Timeslot) => {
       return [timeslot.day];
     });

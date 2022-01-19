@@ -13,7 +13,6 @@ import React from "react";
  * @property {Activity} activity    - "Laboratory", "Lecture" "Tutorial", "Seminar"
  * @property {Term}     term        - "1", "2"
  * @property {Schedule} schedule    - "List of timeslots for all meetings of the section"  
- * @property {string}   link        - link to the UBC webpage for the section
  */
 export interface Section {
   name:     string;
@@ -24,7 +23,6 @@ export interface Section {
   activity: string;
   term:     Term;
   schedule: Schedule;
-  link:     string;
 }
 
 /**
