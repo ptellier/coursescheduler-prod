@@ -1,7 +1,10 @@
 import React from "react";
 import { Section, Timeslot, Schedule } from "../src/data/DataDefinition/SectionDD";
 import { groupDays, groupSections, group5Days, splitSectionSchedule } from "../src/helpers/groupby";
+import { getCourseString, getLOCourseString } from "./checkhelp";
+
 const ex = require("./constants");
+const cloneDeep = require('lodash/clonedeep');
 
 const CPSC121_101: Section = {
   name: "CPSC 121 101",
@@ -157,9 +160,9 @@ test('groupDays', () => {
 })
 
 test("splitSectionSchedule", () => {
-  const CS6_2TS_TUE:Section = Object.assign({}, ex.CS6_2TS); 
+  const CS6_2TS_TUE:Section = cloneDeep(ex.CS6_2TS); 
   CS6_2TS_TUE.schedule = [ex.CS6_2TS.schedule[0]];
-  const CS6_2TS_THU:Section = Object.assign({}, ex.CS6_2TS); 
+  const CS6_2TS_THU:Section = cloneDeep(ex.CS6_2TS); 
   CS6_2TS_THU.schedule = [ex.CS6_2TS.schedule[1]];
 
   expect(splitSectionSchedule([])).toEqual([]);
@@ -179,26 +182,27 @@ test('group5Days', () => {
   expect(group5Days([ex.CS2_TUE, ex.CS3_WED, ex.CS4_THU, ex.CS1_MON, ex.CS5_FRI])).toEqual(
     [[ex.CS1_MON],[ex.CS2_TUE],[ex.CS3_WED],[ex.CS4_THU],[ex.CS5_FRI]]
   )
-  const CS3_3TS_MON:Section = Object.assign({}, ex.CS3_3TS); 
+  const CS3_3TS_MON:Section = cloneDeep(ex.CS3_3TS); 
   CS3_3TS_MON.schedule = [ex.CS3_3TS.schedule[0]];
-  const CS3_3TS_WED:Section = Object.assign({}, ex.CS3_3TS); 
+  const CS3_3TS_WED:Section = cloneDeep(ex.CS3_3TS); 
   CS3_3TS_WED.schedule = [ex.CS3_3TS.schedule[1]];
-  const CS3_3TS_FRI:Section = Object.assign({}, ex.CS3_3TS); 
+  const CS3_3TS_FRI:Section = cloneDeep(ex.CS3_3TS); 
   CS3_3TS_FRI.schedule = [ex.CS3_3TS.schedule[2]];
 
-  const CS6_2TS_TUE:Section = Object.assign({}, ex.CS6_2TS); 
+  const CS6_2TS_TUE:Section = cloneDeep(ex.CS6_2TS); 
   CS6_2TS_TUE.schedule = [ex.CS6_2TS.schedule[0]];
-  const CS6_2TS_THU:Section = Object.assign({}, ex.CS6_2TS); 
+  const CS6_2TS_THU:Section = cloneDeep(ex.CS6_2TS); 
   CS6_2TS_THU.schedule = [ex.CS6_2TS.schedule[1]];
   
 
-  expect(group5Days([ex.CS2_TUE, ex.CS3_3TS, ex.CS4_THU, ex.CS1_MON, ex.CS6_2TS])).toEqual(
+  expect(group5Days([ex.CS2_TUE, ex.CS3_3TS, ex.CS4_THU, ex.CS1_MON, ex.CS6_2TS]).map(getLOCourseString)).toEqual(
     [
       [CS3_3TS_MON, ex.CS1_MON],
       [ex.CS2_TUE, CS6_2TS_TUE],
-      [CS3_3TS_WED, ex.CS3_WED],
+      [CS3_3TS_WED],
       [ex.CS4_THU, CS6_2TS_THU],
-      [CS3_3TS_FRI, ex.CS5_FRI]
-    ]
+      [CS3_3TS_FRI]
+    ].map(getLOCourseString)
   )
 })
+

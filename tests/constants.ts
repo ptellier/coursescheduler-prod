@@ -1,4 +1,6 @@
 import { Schedule, Section, Timeslot } from "../src/data/DataDefinition/SectionDD";
+
+const cloneDeep = require('lodash/clonedeep');
 const fns = require("../unused/optional");
 
 const CS1: Section = {
@@ -97,24 +99,26 @@ const CS6: Section = {
 };
 const CS6NAME: string = fns.get_course_name(CS6);
 
-const CS1_Full: Section = Object.assign({}, CS1);
+const CS1_Full: Section = cloneDeep(CS1);
 CS1_Full.status = "Full";
 
-const CS2_Full: Section = Object.assign({}, CS2);
+const CS2_Full: Section = cloneDeep(CS2);
 CS2_Full.status = "Full";
 
-const CS3_Restricted: Section = Object.assign({}, CS3);
+const CS3_Restricted: Section = cloneDeep(CS3);
 CS3_Restricted.status = "Restricted";
 
-const CS1_MON = Object.assign({}, CS1);
+
+
+const CS1_MON = cloneDeep(CS1);
 CS1_MON.schedule[0].day = "Mon"
-const CS2_TUE = Object.assign({}, CS2);
+const CS2_TUE = cloneDeep(CS2);
 CS2_TUE.schedule[0].day = "Tue"
-const CS3_WED = Object.assign({}, CS3);
+const CS3_WED = cloneDeep(CS3);
 CS3_WED.schedule[0].day = "Wed"
-const CS4_THU = Object.assign({}, CS4);
+const CS4_THU = cloneDeep(CS4);
 CS4_THU.schedule[0].day = "Thu"
-const CS5_FRI = Object.assign({}, CS5);
+const CS5_FRI = cloneDeep(CS5);
 CS5_FRI.schedule[0].day = "Fri"
 
 const SCHD1_1: Schedule = [
@@ -188,36 +192,36 @@ const SCHD6: Schedule = [
 ];
   
 
-const CS1_3TS_1: Section = Object.assign({}, CS1);
+const CS1_3TS_1: Section = cloneDeep(CS1);
 CS1_3TS_1.schedule = SCHD1_1;
-const CS1_3TS_2: Section = Object.assign({}, CS1);
+const CS1_3TS_2: Section = cloneDeep(CS1);
 CS1_3TS_2.schedule = SCHD1_2;
-const CS1_3TS_3: Section = Object.assign({}, CS1);
+const CS1_3TS_3: Section = cloneDeep(CS1);
 CS1_3TS_3.schedule = SCHD1_3;
 
-const CS1_3TS_1EARLY: Section = Object.assign({}, CS1);
+const CS1_3TS_1EARLY: Section = cloneDeep(CS1);
 CS1_3TS_1EARLY.schedule = SCHD1_1EARLY;
-const CS1_3TS_2EARLY: Section = Object.assign({}, CS1);
+const CS1_3TS_2EARLY: Section = cloneDeep(CS1);
 CS1_3TS_2EARLY.schedule = SCHD1_2EARLY;
-const CS1_3TS_3EARLY: Section = Object.assign({}, CS1);
+const CS1_3TS_3EARLY: Section = cloneDeep(CS1);
 CS1_3TS_3EARLY.schedule = SCHD1_3EARLY;
 
-const CS1_3TS_1LATE: Section = Object.assign({}, CS1);
+const CS1_3TS_1LATE: Section = cloneDeep(CS1);
 CS1_3TS_1LATE.schedule = SCHD1_1LATE;
-const CS1_3TS_2LATE: Section = Object.assign({}, CS1);
+const CS1_3TS_2LATE: Section = cloneDeep(CS1);
 CS1_3TS_2LATE.schedule = SCHD1_2LATE;
-const CS1_3TS_3LATE: Section = Object.assign({}, CS1);
+const CS1_3TS_3LATE: Section = cloneDeep(CS1);
 CS1_3TS_3LATE.schedule = SCHD1_3LATE;
 
-const CS2_3TS: Section = Object.assign({}, CS2);
+const CS2_3TS: Section = cloneDeep(CS2);
 CS2_3TS.schedule = SCHD2;
-const CS3_3TS: Section = Object.assign({}, CS3);
+const CS3_3TS: Section = cloneDeep(CS3);
 CS3_3TS.schedule = SCHD3;
-const CS4_3TS: Section = Object.assign({}, CS4);
+const CS4_3TS: Section = cloneDeep(CS4);
 CS4_3TS.schedule = SCHD4;
-const CS5_3TS: Section = Object.assign({}, CS5);
+const CS5_3TS: Section = cloneDeep(CS5);
 CS5_3TS.schedule = SCHD5;
-const CS6_2TS: Section = Object.assign({}, CS6);
+const CS6_2TS: Section = cloneDeep(CS6);
 CS6_2TS.schedule = SCHD6;
   
 
@@ -406,6 +410,7 @@ module.exports = {
   CS1:CS1, CS2:CS2, CS3:CS3, CS4:CS4, CS5:CS5, CS6:CS6,
   CS1NAME:CS1NAME, CS2NAME:CS2NAME, CS3NAME:CS3NAME, CS4NAME:CS4NAME, CS5NAME:CS5NAME, CS6NAME:CS6NAME,
   CS1_Full:CS1_Full, CS2_Full:CS2_Full, CS3_Restricted:CS3_Restricted,
+  CS1_MON:CS1_MON, CS2_TUE:CS2_TUE, CS3_WED:CS3_WED, CS4_THU:CS4_THU, CS5_FRI:CS5_FRI,
   SCHD1_1:SCHD1_1, SCHD1_2:SCHD1_2, SCHD1_3:SCHD1_3, SCHD2:SCHD2, SCHD3:SCHD3, SCHD4:SCHD4, SCHD5:SCHD5, SCHD6:SCHD6,
   SCHD1_1EARLY:SCHD1_1EARLY, SCHD1_2EARLY:SCHD1_2EARLY, SCHD1_3EARLY:SCHD1_3EARLY, SCHD1_1LATE:SCHD1_1LATE, SCHD1_2LATE:SCHD1_2LATE, SCHD1_3LATE:SCHD1_3LATE,
 
