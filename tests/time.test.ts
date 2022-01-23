@@ -1,5 +1,6 @@
 import { Section, Time } from "../src/data/DataDefinition/SectionDD";
 import {
+  createCells,
   getOccupiedCells,
   fillTimes,
   cellHeight,
@@ -9,6 +10,7 @@ import {
   getGapCells,
   mergeCells,
   sortCellsByTime,
+  generateTimes,
 } from "../src/helpers/time";
 
 const TIMES: Time[] = [
@@ -98,6 +100,15 @@ const los_unordered_times: Section[] = [
   },
 ];
 
+//TODO: Finish testing
+test("createCells", () => {
+  expect(createCells([])).toEqual([])
+  // expect(createCells(los_ordered_times)).toEqual([])
+})
+
+
+
+
 test("interpolateTimes", () => {
   expect(interpolateTimes([])).toEqual([]);
   expect(
@@ -108,7 +119,7 @@ test("interpolateTimes", () => {
   ).toEqual([
     { time: 8 * 60 + 30, name: "CPSC 110 L11", is_occupied: true },
     { time: 9 * 60 + 0, name: "CPSC 110 L11", is_occupied: true },
-    { time: 9 * 60 + 30, name: "CPSC 110 L11", is_occupied: true },
+    // { time: 9 * 60 + 30, name: "CPSC 110 L11", is_occupied: true },
   ]);
   expect(
     interpolateTimes([
@@ -120,7 +131,7 @@ test("interpolateTimes", () => {
     { time: 12 * 60 + 30, name: "CPSC 110 L11", is_occupied: true },
     { time: 13 * 60 + 0, name: "CPSC 110 L11", is_occupied: true },
     { time: 13 * 60 + 30, name: "CPSC 110 L11", is_occupied: true },
-    { time: 14 * 60 + 0, name: "CPSC 110 L11", is_occupied: true },
+    // { time: 14 * 60 + 0, name: "CPSC 110 L11", is_occupied: true },
   ]);
 });
 
@@ -321,3 +332,15 @@ test("sortCellsByTime", () => {
     { time: 14 * 60 + 30, name: "CPSC 121 L11", is_occupied: true },
   ]);
 });
+
+test("generateTimes", () => {
+  expect(generateTimes(9*60, 10*60, 30)).toEqual([
+    9*60, 9*60+30 , 10*60
+  ]) 
+  expect(generateTimes(9*60, 12*60, 30)).toEqual([
+    9*60, 9*60+30 , 10*60, 10*60+30, 11*60, 11*60+30, 12*60
+  ]) 
+  expect(generateTimes(9*60, 12*60+30, 30)).toEqual([
+    9*60, 9*60+30 , 10*60, 10*60+30, 11*60, 11*60+30, 12*60, 12*60+30
+  ]) 
+})

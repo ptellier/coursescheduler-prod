@@ -10,7 +10,7 @@ const CPSC121_101: Section = {
   activity: "Lecture",
   term: "2",
   schedule: [],
-  link: "",
+  
 };
 const CPSC121_102: Section = {
   name: "CPSC 121 102",
@@ -21,7 +21,7 @@ const CPSC121_102: Section = {
   activity: "Lecture",
   term: "2",
   schedule: [],
-  link: "",
+  
 };
 const CPSC121_103: Section = {
   name: "CPSC 121 103",
@@ -32,7 +32,7 @@ const CPSC121_103: Section = {
   activity: "Lecture",
   term: "2",
   schedule: [],
-  link: "",
+  
 };
 const CPSC110_101: Section = {
   name: "CPSC 110 101",
@@ -43,7 +43,7 @@ const CPSC110_101: Section = {
   activity: "Lecture",
   term: "2",
   schedule: [],
-  link: "",
+  
 };
 const CPSC110_102: Section = {
   name: "CPSC 110 102",
@@ -54,7 +54,7 @@ const CPSC110_102: Section = {
   activity: "Lecture",
   term: "2",
   schedule: [],
-  link: "",
+  
 };
 const CPSC210_101: Section = {
   name: "CPSC 210 101",
@@ -65,7 +65,7 @@ const CPSC210_101: Section = {
   activity: "Lecture",
   term: "2",
   schedule: [],
-  link: "",
+  
 };
 const CPSC210_102: Section = {
   name: "CPSC 210 102",
@@ -76,14 +76,13 @@ const CPSC210_102: Section = {
   activity: "Lecture",
   term: "2",
   schedule: [],
-  link: "",
+  
 };
 const COMM388_101: Section = {
   course: "388",
   section: "101",
   subject: "COMM",
   activity: "Lecture",
-  link: "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-section&dept=COMM&course=388&section=101&campuscd=UBC",
   name: "COMM 388 101",
   schedule: [
     {
@@ -150,7 +149,7 @@ const cs_121_101: Section = {
   activity: "Lecture",
   term: "2",
   schedule: [{ day: "Mon", term: "1", start_time: 10 * 60, end_time: 11 * 60 }],
-  link: "",
+  
 };
 const cs_110_101: Section = {
   name: "CPSC 110 101",
@@ -161,7 +160,7 @@ const cs_110_101: Section = {
   activity: "Lecture",
   term: "2",
   schedule: [{ day: "Mon", term: "1", start_time: 10 * 60, end_time: 11 * 60 }],
-  link: "",
+  
 };
 const cs_110_102: Section = {
   name: "CPSC 110 101",
@@ -172,7 +171,7 @@ const cs_110_102: Section = {
   activity: "Lecture",
   term: "2",
   schedule: [{ day: "Mon", term: "1", start_time: 11 * 60, end_time: 12 * 60 }],
-  link: "",
+  
 };
 
 

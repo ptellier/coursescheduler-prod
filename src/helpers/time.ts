@@ -1,9 +1,21 @@
 import { Section, Time } from "../data/DataDefinition/SectionDD";
+import { groupCellsByName } from "./groupby";
+import { make_timeslot } from "./overlap";
 
-/**
- * cell can be either occupied or gap
- * time: time that the cell takes presence
- * name: name of cell, course name if class (note: gap's name is gap_time)
+/**Constants */
+
+const START = 7*60
+const END = 21*60
+const INTERVAL = 30;
+const CELL_HEIGHT = 1.5;
+
+/**Data Definitions */
+
+/** Cell data
+ * @property {number} time time that the cell takes presence
+ * @property {number} name name of cell, course name if class (note: gap's name is gap_time)
+ * @property {number} is_occupied whether cell occupies certain time
+ *  * cell can be either occupied or gap
  */
 export interface Cell {
   time: number;
@@ -11,22 +23,45 @@ export interface Cell {
   is_occupied: boolean;
 }
 
-/**Constants */
+/** Cells ready for display on UI
+ * @property {number} height
+ * @property {number} start
+ * @property {number} end
+ * @property {number} type
+ */
+export interface Cell_display {
+    name: string;
+    height: number;
+    start: number;
+    end: number;
+    is_occupied: boolean;
+}
 
-const CELL_HEIGHT = 1.5;
-const TIME_INTERVAL = 30;
 
 /**Functions */
 
-export const main = (los: Section[]) => {
-  // 1.create occupied cells
-  // 2.interpolate occupied cells then defuse the array
-  // 3.extract times from 2 then defuse the array
-  // 4.remove result of 3 from TIMES
-  // 5.convert result of 4 to listof gaps
-  // 6.merge 2(occupied cells) and 5(gap cells)
-  // 7.sort 6
-  // 8.group cells by name
+export const createCells = (los: Section[]):Cell_display[]=> {
+  // 1.create, interpolate occupied cells then defuse the array
+  const occupied_cells = defuseArray(getOccupiedCells(los).map(loc => interpolateTimes(loc)))
+  // 2.extract times from 1.
+  const occupied_times = extractTimes(occupied_cells)
+  // 3.remove result of 2 from TIMES
+  const gap_cells = getGapCells(occupied_times, generateTimes(START, END, INTERVAL))
+  // 4.merge 2(occupied cells) and 5(gap cells)
+  const sorted_merged_cells = sortCellsByTime(mergeCells(occupied_cells, gap_cells))
+  // 5.group cells by name
+  const grouped_cells = groupCellsByName(sorted_merged_cells)
+//   console.log(grouped_cells)
+  // 6.process cells for display
+  const cells_display = grouped_cells.map(loc => ({
+      name: loc[0].name,
+      height: loc.length * CELL_HEIGHT,
+      start:  loc[0].time,
+      end:    loc.length === 0 ? loc[0].time : loc[(loc.length - 1)].time,
+      is_occupied:   loc[0].is_occupied,
+  }))
+//   console.log(cells_display)
+  return cells_display
 };
 
 /**
@@ -37,8 +72,7 @@ export const main = (los: Section[]) => {
  * i.e lloc = [[{8:30, "CPSC 121 101"} ...] ...]
  */
 export const getOccupiedCells = (los: Section[]): Cell[][] => {
-//   if (los.length === 0) return []
-
+  if (los.length === 0) return []
   let lloc: Cell[][] = [];
   for (const sec of los) {
     const sch = sec.schedule;
@@ -64,8 +98,9 @@ export const interpolateTimes = (loc: Cell[]): Cell[] => {
   const name = loc[0].name;
   const start = loc[0].time;
   const end = loc[1].time;
-  const times = fillTimes(start, end, TIME_INTERVAL);
-  return times.map((t) => ({ time: t, name: name, is_occupied: true }));
+  const times = fillTimes(start, end, INTERVAL);
+  const all = times.map((t) => ({ time: t, name: name, is_occupied: true }));
+  return all.slice(0,-1)
 };
 
 /**
@@ -110,9 +145,9 @@ export const extractTimes = (loc: Cell[]): Time[] => {
  * produce array of cells with times that are gap
  * 1. remove elements of times that correspond to elements of occupied
  * 2. convert 1. to gap cells
- * @param {Cell[]} loc
- * @param {Time[]} lot
- * @returns {Time[]}
+ * @param {Time[]} occupied
+ * @param {Time[]} times
+ * @returns {Cell[]}
  */
 export const getGapCells = (occupied: Time[], times: Time[]): Cell[] => {
   const gap_times = times.filter((time) => !occupied.includes(time));
@@ -152,3 +187,36 @@ export const sortCellsByTime = (loc: Cell[]): Cell[] => {
 export const cellHeight = (loc: Cell[], port_h: number): number => {
   return loc.length * port_h;
 };
+
+
+/**
+ * generates times from start to end, by given interval
+ * @param {number} start 
+ * @param {number} end 
+ * @param {number} interval 
+ * @return {Time[]}
+ */
+export const generateTimes = (start:number, end:number, interval:number): Time[] => {
+    let result = []
+    let t = start
+    while (t < end) {
+        t = t + interval
+        result.push(t)
+    }
+    return [start, ...result]
+}
+
+
+export const convertToTimeSlot = (los: Section[]): Section[] => {
+  return los.map(section => {
+    const schedule = section.schedule[0]
+    const start = schedule.start_time
+    const end = schedule.end_time
+    const day = schedule.day
+    const term = schedule.term
+
+    const obj = Object.assign({}, section)
+    obj.schedule = [make_timeslot(`${start}`, `${end}`, day, term)]
+    return obj
+  })
+}

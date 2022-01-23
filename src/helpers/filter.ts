@@ -13,7 +13,7 @@ export const filter_term_avail_waitlist = (
 ): Section[] => {
   return los.filter(
     (s) =>
-      s.status !== "Full" &&
+      // s.status !== "Full" &&
       s.term === term &&
       s.activity !== "Waiting List"
   );

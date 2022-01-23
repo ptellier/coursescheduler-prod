@@ -100,6 +100,17 @@ CS2_Full.status = "Full";
 const CS3_Restricted: Section = Object.assign({}, CS3);
 CS3_Restricted.status = "Restricted";
 
+const CS1_MON = Object.assign({}, CS1);
+CS1_MON.schedule[0].day = "Mon"
+const CS2_TUE = Object.assign({}, CS2);
+CS2_TUE.schedule[0].day = "Tue"
+const CS3_WED = Object.assign({}, CS3);
+CS3_WED.schedule[0].day = "Wed"
+const CS4_THU = Object.assign({}, CS4);
+CS4_THU.schedule[0].day = "Thu"
+const CS5_FRI = Object.assign({}, CS5);
+CS5_FRI.schedule[0].day = "Fri"
+
 const SCHD1_1: Schedule = [
   {start_time:900, end_time:950, day:"Mon",term:"2"},
   {start_time:800, end_time:850, day:"Wed",term:"2"},
@@ -226,6 +237,46 @@ const TS6: Timeslot =
   day: "Wed",
   term: "2"
 }
+
+
+const TS_mon_1: Timeslot = 
+{start_time: 250,
+  end_time: 310,
+  day: "Mon",
+  term: "2"
+}
+const TS_tue_1: Timeslot = 
+{start_time: 250,
+  end_time: 310,
+  day: "Tue",
+  term: "2"
+}
+const TS_wed_1: Timeslot = 
+{start_time: 250,
+  end_time: 310,
+  day: "Wed",
+  term: "2"
+}
+
+const TS_mon_2: Timeslot = 
+{start_time: 350,
+  end_time: 410,
+  day: "Mon",
+  term: "2"
+}
+const TS_tue_2: Timeslot = 
+{start_time: 350,
+  end_time: 420,
+  day: "Tue",
+  term: "2"
+}
+const TS_wed_2: Timeslot = 
+{start_time: 500,
+  end_time: 580,
+  day: "Wed",
+  term: "2"
+}
+
 
 //Following constants are for most_compact & scatter
 const CPSC110: Section = {
@@ -385,6 +436,8 @@ module.exports = {
   CS1_3TS_1:CS1_3TS_1, CS1_3TS_2:CS1_3TS_2, CS1_3TS_3:CS1_3TS_3, CS2_3TS:CS2_3TS, CS3_3TS:CS3_3TS, CS4_3TS:CS4_3TS, CS5_3TS:CS5_3TS, CS6_2TS:CS6_2TS,
   CS1_3TS_1EARLY:CS1_3TS_1EARLY, CS1_3TS_2EARLY:CS1_3TS_2EARLY, CS1_3TS_3EARLY:CS1_3TS_3EARLY, CS1_3TS_1LATE:CS1_3TS_1LATE, CS1_3TS_2LATE:CS1_3TS_2LATE, CS1_3TS_3LATE:CS1_3TS_3LATE,
   TS2:TS2, TS5:TS5, TS6:TS6,
+  TS_mon_1: TS_mon_1, TS_tue_1: TS_tue_1, TS_wed_1: TS_wed_1,
+  TS_mon_2: TS_mon_2, TS_tue_2: TS_tue_2, TS_wed_2: TS_wed_2, 
 
   CPSC110:CPSC110, CPSC121:CPSC121, CPSC210:CPSC210, ECON101:ECON101, ECON102:ECON102,
   CPSC110_compact:CPSC110_compact, CPSC121_compact:CPSC121_compact, CPSC210_compact:CPSC210_compact, ECON101_compact:ECON101_compact, ECON102_compact:ECON102_compact,

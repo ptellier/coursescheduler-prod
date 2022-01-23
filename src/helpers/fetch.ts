@@ -10,7 +10,6 @@ export const fetchParallel = async (losw: SearchWord[]) => {
   let acc: Section[] = []
   await Promise.all(losw.map(async(sw) => { 
       const data = await fetchSection(sw)
-      // console.log(data)
       acc.push(...data.sections);
   }))
   return acc
@@ -36,9 +35,9 @@ export const fetchParallel = async (losw: SearchWord[]) => {
  * @param sw; i.e CPSC/110
  */
 export const fetchSection = async (sw: SearchWord) => {
+  const [subject, number] = sw.split("/")
   // const url = `https://api.ubccourses.com/section/${sw}/?realtime=1`; 
   // const url = `https://api.ubccourses.com/section/${sw}/`;
-  const [subject, number] = sw.split("/")
   const url = `https://puppeteer-test-sl.herokuapp.com/api/sections?subject=${subject}&number=${number}`
   const res = await fetch(url);
   const data = await res.json();

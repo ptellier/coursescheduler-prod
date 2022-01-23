@@ -19,7 +19,7 @@ const CPSC110_101:Section = {
     { day: "Tue", term: "1", start_time: 11*60, end_time: (12*60+30) },
     { day: "Thu", term: "1", start_time: 11*60, end_time: (12*60+30) },
   ],
-  link: "",
+
 };
 const CPSC110_102:Section = {
   name: "CPSC 110 102",
@@ -33,7 +33,7 @@ const CPSC110_102:Section = {
     { day: "Tue", term: "1", start_time: 14*60, end_time: (15*60+30) },
     { day: "Thu", term: "1", start_time: 14*60, end_time: (15*60+30) },
   ],
-  link: "",
+
 };
 
 const CPSC110_L12:Section = {
@@ -45,7 +45,7 @@ const CPSC110_L12:Section = {
   activity: "Laboratory",
   term: "1",
   schedule: [{ day: "Mon", term: "1", start_time: 9*60, end_time: 12*60 }],
-  link: "",
+
 };
 const CPSC110_L1A:Section = {
   name: "CPSC 110 L1A",
@@ -56,7 +56,7 @@ const CPSC110_L1A:Section = {
   activity: "Laboratory",
   term: "1",
   schedule: [{ day: "Mon", term: "1", start_time: 9*60, end_time: 12*60 }],
-  link: "",
+
 };
 const CPSC110_L1G:Section = {
     name: "CPSC 110 L1G",
@@ -67,7 +67,7 @@ const CPSC110_L1G:Section = {
     activity: "Laboratory",
     term: "1",
     schedule: [{ day: "Wed", term: "1", start_time: 540, end_time: 12*60 }],
-    link: "",
+  
   };
 
 test("filter_term_avail_waitlist", () => {

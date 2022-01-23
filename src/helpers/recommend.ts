@@ -4,6 +4,7 @@ import {
   Time,
 } from "../data/DataDefinition/SectionDD";
 import { groupTimeSlotsByDays } from "./groupby";
+import { convertToTimeSlot } from "./time";
 
 
 /**
@@ -23,15 +24,16 @@ export const recommend = (lolos: Section[][]) => {
   let rsf_freeDay: Section[][] = [];
   //...
 
-  for (const los of lolos) {
-    rsf_compact = most_compact(los, rsf_compact)
-    rsf_consistent = most_consistent(los, rsf_consistent)
-    rsf_scatter = most_scatter(los, rsf_scatter)
-    rsf_earlyStart = most_early_start(los, rsf_earlyStart)
-    rsf_lateStart = most_late_start(los, rsf_lateStart)
-    rsf_earlyEnd = most_early_end(los, rsf_earlyEnd)
-    rsf_lateEnd = most_late_end(los, rsf_lateEnd)
-    if (is_free_day(los)) rsf_freeDay.push(los);
+
+  for (let i = 0; i < lolos.length; i ++) {
+    rsf_scatter    = most_scatter(lolos[i], rsf_scatter)
+    rsf_compact    = most_compact(lolos[i], rsf_compact)
+    rsf_consistent = most_consistent(lolos[i], rsf_consistent)
+    rsf_earlyStart = most_early_start(lolos[i], rsf_earlyStart)
+    rsf_lateStart  = most_late_start(lolos[i], rsf_lateStart)
+    rsf_earlyEnd   = most_early_end(lolos[i], rsf_earlyEnd)
+    rsf_lateEnd    = most_late_end(lolos[i], rsf_lateEnd)
+    if (is_free_day(lolos[i])) rsf_freeDay.push(lolos[i]);
   }
 
   const result = {
@@ -126,8 +128,12 @@ export const most_consistent = (los1: Section[], los2: Section[]): Section[] => 
 export const most_compact = (los1: Section[], los2: Section[]): Section[] => {
   if (!los1.length) {return los2};
   if (!los2.length) {return los1};
-  const time_gap1 = calculate_timegap(los1);
-  const time_gap2 = calculate_timegap(los2);
+
+  const los1_processed = convertToTimeSlot(los1)
+  const los2_processed = convertToTimeSlot(los2)
+
+  const time_gap1 = calculate_timegap(los1_processed);
+  const time_gap2 = calculate_timegap(los2_processed);
   return time_gap1 <= time_gap2 ? los1 : los2;
 };
 
@@ -142,8 +148,12 @@ export const most_compact = (los1: Section[], los2: Section[]): Section[] => {
  export const most_scatter = (los1: Section[], los2: Section[]): Section[] => {
   if (!los1.length) {return los2};
   if (!los2.length) {return los1};
-  const time_gap1 = calculate_timegap(los1);
-  const time_gap2 = calculate_timegap(los2);
+
+  const los1_processed = convertToTimeSlot(los1)
+  const los2_processed = convertToTimeSlot(los2)
+
+  const time_gap1 = calculate_timegap(los1_processed);
+  const time_gap2 = calculate_timegap(los2_processed);
   return time_gap1 >= time_gap2 ? los1 : los2;
 };
 
@@ -290,3 +300,6 @@ export const is_free_day = (los: Section[]): boolean => {
   }
   return chk.Mon || chk.Tue || chk.Wed || chk.Thu || chk.Fri;
 };
+
+
+

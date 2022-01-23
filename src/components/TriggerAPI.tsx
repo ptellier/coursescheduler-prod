@@ -1,6 +1,6 @@
 import { Course } from "../data/DataDefinition/SearchWordDD";
 import { Section } from "../data/DataDefinition/SectionDD";
-import { fetchParallel } from "../helpers/fetch";
+import { fetchParallel,fetchSections } from "../helpers/fetch";
 import {
   filter_term_avail_waitlist,
   filter_duplicate_schedules,
@@ -12,14 +12,17 @@ import { recommend } from "../helpers/recommend";
 
 export interface Props {
   loc: Course[];
-  set_los: Function;
+  set_recommended: Function;
   userTerm: string;
   setUserTerm: Function;
 }
 
-export const TriggerAPI = ({ loc, set_los, userTerm, setUserTerm }: Props) => {
+export const TriggerAPI = ({ loc, set_recommended, userTerm, setUserTerm}: Props) => {
   /** If true, show loading icon (pulse) on the generate schedule btn */
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState("Run")
+
+
   const [fetching, setFectching] = useState(false);
   const [generating, setGenerating] = useState(false);
 
@@ -28,14 +31,18 @@ export const TriggerAPI = ({ loc, set_los, userTerm, setUserTerm }: Props) => {
    */
   const handleGenerate = async () => {
     setLoading(true); // turns on loading icon
-    setFectching(true)
+    // setFectching(true)
 
+
+    setStatus("Fetching")
+    console.log("fetching")
     // 1) Fetch sections data from API
-    // const sections_api = await fetchSections(loc.map((c) => c.sw));
-    const sections_api = await fetchParallel(loc.map((c) => c.sw));
+    const sections_api = await fetchSections(loc.map((c) => c.sw));
+    // Warning:fast, but too much load on the server
+    // const sections_api = await fetchParallel(loc.map((c) => c.sw)); 
 
-    setFectching(false)
-    setGenerating(true)
+    // setFectching(false)
+    // setGenerating(true)
 
     // TODO  1.1) take note of required sections (lecs, labs, tuts); are they all present?
 
@@ -48,16 +55,21 @@ export const TriggerAPI = ({ loc, set_los, userTerm, setUserTerm }: Props) => {
     };
     const sections_prepped = prep(sections_api);
 
+    setStatus("Solving")
+    console.log("solving")
     // 3) Solve and return combinations
     const sections_solved = solve(sections_prepped);
     console.log("solved: ", sections_solved);
 
+    setStatus("Recommending")
+    console.log("recommending")
     // 4) Categorize the schedules
     const sections_recommended = recommend(sections_solved);
-    console.log("recommendations: ", sections_recommended);
+    console.log(sections_recommended)
 
-    set_los(sections_recommended);  // pass recommended data for UI
-    setGenerating(false)
+    set_recommended(sections_recommended);  // pass recommended data for UI
+    
+    setStatus("Run")
     setLoading(false); // turns off loading icon
   };
 
@@ -76,9 +88,7 @@ export const TriggerAPI = ({ loc, set_los, userTerm, setUserTerm }: Props) => {
         className="form-control btn btn-large btn-primary"
         onClick={handleGenerate}
       >
-        {!fetching && !generating && <span>Run</span>}
-        {fetching && <span>Fetching Data</span> }
-        {generating && <span>Generating Schedules</span>}
+        <span> {status} </span> 
         {loading && <i className="ml-2 fas fa-spinner fa-pulse" />}
       </button>
     </div>
