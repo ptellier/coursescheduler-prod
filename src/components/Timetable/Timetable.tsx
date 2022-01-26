@@ -8,14 +8,14 @@ import DaysRow from "./DaysRow";
 import Layout from "./Layout";
 import TimeColumn from "./TimeColumn";
 
-
 export interface Props {
   recommended: Recommendation;
 }
 
+
+
 const Timetable = ({ recommended }: Props) => {
   const [currentData, setCurrentData] = useState<Section[][]>([[],[],[],[],[],[]]);
-
   useEffect(() => {
     const default_opt = "compact"
     selectRecommendation(default_opt)
@@ -94,7 +94,7 @@ const Timetable = ({ recommended }: Props) => {
             <div className="glass row" style={{ position: "absolute", width: "100%" }}>
               {/* Column from Monday to Saturday */}
               {currentData.map(d => 
-                <DayColumn data={d} />
+                <DayColumn key={Math.random()} data={d} />
                 )}
             </div>
           </div>

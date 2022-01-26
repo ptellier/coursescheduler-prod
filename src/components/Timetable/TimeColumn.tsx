@@ -15,8 +15,8 @@ const TimeColumn = () => {
         <div className="time" style={{ height: height }}></div>
         {generateTimes(start, end, interval).map((time) => (
             (time/60) % 1 === 0
-            ? <div className="time text-left border-top" style={{ height: height }}>{time/60}:00</div>
-            : <div className="time text-left" style={{ height: height }}></div>
+            ? <div key={Math.random()} className="time text-left border-top" style={{ height: height }}>{time/60}:00</div>
+            : <div key={Math.random()} className="time text-left" style={{ height: height }}></div>
         ))}
       </div>
     )

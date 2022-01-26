@@ -128,17 +128,8 @@ export const splitSectionSchedule = (los:Section[]): Section[] => {
 export const group5Days = (los: Section[]): Section[][] => {
   const ALL_DAY_NAMES:string[] = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const losSplit = splitSectionSchedule(los);
-  // console.log(losSplit);
   let rsf:Section[][] = [];
   for (const day of ALL_DAY_NAMES) {
-    // console.log(day);
-    const filtered:Section[] = losSplit.filter((sect:Section) => (sect.schedule[0].day === day));
-    // console.log(filtered);
-    if(filtered.length) {
-    // console.log("that day is: ", filtered[0].schedule[0].day, " ... ", filtered.length);
-    } else {
-      // console.log("that day is not");
-    }
     rsf.push(losSplit.filter((sect:Section) => (sect.schedule[0].day === day)));
   }
   return rsf;

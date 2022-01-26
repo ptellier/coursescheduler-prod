@@ -24,11 +24,21 @@ export const recommend = (lolos: Section[][]) => {
   let rsf_freeDay: Section[][] = [];
   //...
 
+  // Introduce different way to represent data structure
+  // lazy eval = Don't evaluate until you need it! one at a time
+  // find which one is really slow
+    // Time the methods to figure out where is the delay
+    // (where is our bottle neck) -> fix
+
+
+  // 
 
   for (let i = 0; i < lolos.length; i ++) {
     rsf_scatter    = most_scatter(lolos[i], rsf_scatter)
     rsf_compact    = most_compact(lolos[i], rsf_compact)
     rsf_consistent = most_consistent(lolos[i], rsf_consistent)
+
+    
     rsf_earlyStart = most_early_start(lolos[i], rsf_earlyStart)
     rsf_lateStart  = most_late_start(lolos[i], rsf_lateStart)
     rsf_earlyEnd   = most_early_end(lolos[i], rsf_earlyEnd)
@@ -133,7 +143,7 @@ export const most_compact = (los1: Section[], los2: Section[]): Section[] => {
   const los2_processed = convertToTimeSlot(los2)
 
   const time_gap1 = calculate_timegap(los1_processed);
-  const time_gap2 = calculate_timegap(los2_processed);
+  const time_gap2 = calculate_timegap(los2_processed); // You don't need this
   return time_gap1 <= time_gap2 ? los1 : los2;
 };
 

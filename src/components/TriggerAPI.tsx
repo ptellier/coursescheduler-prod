@@ -31,18 +31,13 @@ export const TriggerAPI = ({ loc, set_recommended, userTerm, setUserTerm}: Props
    */
   const handleGenerate = async () => {
     setLoading(true); // turns on loading icon
-    // setFectching(true)
-
-
     setStatus("Fetching")
     console.log("fetching")
+    
     // 1) Fetch sections data from API
     const sections_api = await fetchSections(loc.map((c) => c.sw));
     // Warning:fast, but too much load on the server
     // const sections_api = await fetchParallel(loc.map((c) => c.sw)); 
-
-    // setFectching(false)
-    // setGenerating(true)
 
     // TODO  1.1) take note of required sections (lecs, labs, tuts); are they all present?
 

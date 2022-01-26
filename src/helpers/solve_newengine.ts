@@ -1,5 +1,6 @@
 import { Section } from "../data/DataDefinition/SectionDD";
 import { is_overlap_losections } from "./overlap" 
+import { most_compact } from "./recommend";
 
 /**
  * Sections chosen and sections remaining at each node in the search tree
@@ -39,12 +40,12 @@ export const solve = (los: Section[][]): Section[][] => {
     let root:Node = { assigned: [], remain: los }
     //let ii:number = 0;     //keep track of total number of loops
     n_wl.push(root);
-
-
+    
     while (n_wl.length > 0 /*&& ii<10000*/) {
         node = n_wl.pop() as Node;
         
         if (node.remain.length === 0) {
+            // Potential Idea: Categorize recommendation here
             rsf.push(node.assigned)
         } else {
             n_wl = n_wl.concat(next_nodes(node));
