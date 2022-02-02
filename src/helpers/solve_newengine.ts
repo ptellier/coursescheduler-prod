@@ -1,7 +1,7 @@
 import { Schedule } from "../data/DataDefinition/ScheduleDD";
 import { Section } from "../data/DataDefinition/SectionDD";
-import { is_overlap_losections } from "./overlap" 
-import { calculateTimeGap, most_compact } from "./recommend";
+import { is_overlap_losections } from "./overlap";
+import { calculateTimeGap, findStartVariance, most_compact } from "./recommend";
 import { convertToTimeSlot } from "./time";
 
 /**
@@ -11,8 +11,8 @@ import { convertToTimeSlot } from "./time";
  * @property {Section[]} remain - listof Section remainng to be assigned
  */
 interface Node {
-    assigned: Section[]
-    remain: Section[][]
+  assigned: Section[];
+  remain: Section[][];
 }
 /**
  * @example a single node contains:
@@ -31,46 +31,55 @@ interface Node {
  * at each iteration,
  * 1. take node from n_wl
  * 2. add to rsf if completed (empty? node.remain)
- * 3. otherwise generate next nodes and push to n_wl 
- * @param los 
- * @returns 
+ * 3. otherwise generate next nodes and push to n_wl
+ * @param los
+ * @returns
  */
 export const solve = (los: Section[][]): Schedule[] => {
-    let n_wl: Node[] = [];   //node worklist
-    let node: Node;          //current node
-    let rsf: Schedule[] = [];
-    let root:Node = { assigned: [], remain: los }
-    //let ii:number = 0;     //keep track of total number of loops
-    n_wl.push(root);
-    
-    while (n_wl.length > 0 /*&& ii<10000*/) {
-        node = n_wl.pop() as Node;
-        
-        if (node.remain.length === 0) {
-            // TODO: add all recommendation requirements here:
-            const los = convertToTimeSlot(node.assigned)
-            const timeGap = calculateTimeGap(los)
-            
-            rsf.push({sections: node.assigned, timeGap:timeGap})
-        } else {
-            n_wl = n_wl.concat(next_nodes(node));
-        }
-    };
-    return rsf.reverse();
-}
+  let n_wl: Node[] = []; //node worklist
+  let node: Node; //current node
+  let rsf: Schedule[] = [];
+  let root: Node = { assigned: [], remain: los };
+  //let ii:number = 0;     //keep track of total number of loops
+  n_wl.push(root);
+
+  while (n_wl.length > 0 /*&& ii<10000*/) {
+    node = n_wl.pop() as Node;
+
+    if (node.remain.length === 0) {
+      // TODO: add all recommendation requirements here:
+      const los = convertToTimeSlot(node.assigned);
+      const timeGap = calculateTimeGap(los);
+      const startVariance = findStartVariance(los);
+      // TODO: Build start time
+      // TODO: Build end time
+
+      rsf.push({
+        sections: node.assigned,
+        timeGap: timeGap,
+        startVariance: startVariance,
+      });
+    } else {
+      n_wl = n_wl.concat(next_nodes(node));
+    }
+  }
+  return rsf.reverse();
+};
 
 /**
  * generates next nodes and filter out nodes with time-conflicted sections
- * @param node 
- * @returns 
+ * @param node
+ * @returns
  */
 export const next_nodes = (node: Node): Node[] => {
-    const assigned: Section[] = node.assigned;          
-    const [f_remain, ...r_remain] = node.remain  
-    const generated_nodes: Node[] = f_remain.map(f_r => (
-        { assigned: [...assigned, f_r], remain: r_remain }
-        )
-    )
-    
-    return generated_nodes.filter((nd:Node) => is_overlap_losections(nd.assigned));
+  const assigned: Section[] = node.assigned;
+  const [f_remain, ...r_remain] = node.remain;
+  const generated_nodes: Node[] = f_remain.map((f_r) => ({
+    assigned: [...assigned, f_r],
+    remain: r_remain,
+  }));
+
+  return generated_nodes.filter((nd: Node) =>
+    is_overlap_losections(nd.assigned)
+  );
 };

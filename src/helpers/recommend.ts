@@ -1,3 +1,4 @@
+import { Schedule } from "../data/DataDefinition/ScheduleDD";
 import {
   Section,
   Timeslot,
@@ -10,55 +11,22 @@ import { convertToTimeSlot } from "./time";
 /**
  * recommends sections based on each of categories:
  * consistency, compactness, early and late start and end times, and free day
- * @param {Section[][]} 
+ * @param {Schedule[]} 
  * @returns 
  */
-export const recommend = (lolos: Section[][]) => {
-  let rsf_compact: Section[] = [];
-  let rsf_consistent: Section[] = [];
-  let rsf_scatter: Section[] = []; 
-  let rsf_earlyStart: Section[] = [];
-  let rsf_lateStart: Section[] = [];
-  let rsf_earlyEnd: Section[] = [];
-  let rsf_lateEnd: Section[] = [];
-  let rsf_freeDay: Section[][] = [];
-  //...
-
-  // Introduce different way to represent data structure
-  // lazy eval = Don't evaluate until you need it! one at a time
-  // find which one is really slow
-    // Time the methods to figure out where is the delay
-    // (where is our bottle neck) -> fix
-
-
-  // 
-
-  for (let i = 0; i < lolos.length; i ++) {
-    rsf_scatter    = most_scatter(lolos[i], rsf_scatter)
-    rsf_compact    = most_compact(lolos[i], rsf_compact)
-
-
-    rsf_consistent = most_consistent(lolos[i], rsf_consistent)
-    rsf_earlyStart = most_early_start(lolos[i], rsf_earlyStart)
-    rsf_lateStart  = most_late_start(lolos[i], rsf_lateStart)
-    rsf_earlyEnd   = most_early_end(lolos[i], rsf_earlyEnd)
-    rsf_lateEnd    = most_late_end(lolos[i], rsf_lateEnd)
-    if (is_free_day(lolos[i])) rsf_freeDay.push(lolos[i]);
-  }
-
+ export const recommend = (schedules: Schedule[]) => {
   const result = {
-    compact: rsf_compact,
-    consistent: rsf_consistent,
-    scatter: rsf_scatter,
-    earlyStart: rsf_earlyStart,
-    lateStart: rsf_lateStart,
-    earlyEnd: rsf_earlyEnd,
-    lateEnd: rsf_lateEnd,
-    freeDay: rsf_freeDay
+    compact: schedules.sort((sch1, sch2) => sch1.timeGap > sch2.timeGap ? 1 : -1)[0].sections,
+    scatter: schedules.sort((sch1, sch2) => sch1.timeGap < sch2.timeGap ? 1 : -1)[0].sections,
+    consistent: schedules.sort((sch1, sch2) => sch1.startVariance > sch2.startVariance ? 1 : -1)[0].sections,
+    freeDay: [],
+    earlyStart: [],
+    lateStart: [],
+    earlyEnd: [],
+    lateEnd: [],
   }
   return result
 }
-
 
 /**
  * return the variance of an array of numbers

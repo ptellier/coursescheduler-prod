@@ -9,7 +9,7 @@ import { solve } from "../helpers/solve_newengine";
 import { groupSections } from "../helpers/groupby";
 import { useState } from "react";
 import { recommend } from "../helpers/recommend";
-import { Schedule } from "../data/DataDefinition/ScheduleDD";
+
 
 export interface TriggerAPIProps {
   loc: Course[];
@@ -32,9 +32,9 @@ export const TriggerAPI = ({ loc, set_recommended, userTerm, setUserTerm}: Trigg
     console.log("fetching")
     
     // 1) Fetch sections data from API
-    // const sections_api = await fetchSections(loc.map((c) => c.sw));
+    const sections_api = await fetchSections(loc.map((c) => c.sw));
     // Warning:fast, but too much load on the server
-    const sections_api = await fetchParallel(loc.map((c) => c.sw)); 
+    // const sections_api = await fetchParallel(loc.map((c) => c.sw)); 
 
     // TODO  1.1) take note of required sections (lecs, labs, tuts); are they all present?
 
@@ -47,35 +47,15 @@ export const TriggerAPI = ({ loc, set_recommended, userTerm, setUserTerm}: Trigg
     };
     const sections_prepped = prep(sections_api);
 
-    setStatus("Solving")
-    console.log("solving")
     // 3) Solve and return combinations
     const sections_solved = solve(sections_prepped);
     console.log("solved: ", sections_solved);
 
-    setStatus("Recommending")
-    console.log("recommending")
-
     // 4) Categorize the schedules
-    const newRecommend = (schedules: Schedule[]) => {
-      const result = {
-        compact: schedules.sort((sch1, sch2) => sch1.timeGap > sch2.timeGap ? 1 : -1)[0].sections,
-        scatter: schedules.sort((sch1, sch2) => sch1.timeGap < sch2.timeGap ? 1 : -1)[0].sections,
-        consistent: [],
-        freeDay: [],
-        earlyStart: [],
-        lateStart: [],
-        earlyEnd: [],
-        lateEnd: [],
-
-      }
-      return result
-    }
-    const sections_recommended = newRecommend(sections_solved);
-    console.log(sections_recommended)
+    const sections_recommended = recommend(sections_solved);
+    console.log("Recommended: ", sections_recommended)
 
     set_recommended(sections_recommended);  // pass recommended data for UI
-    
     setStatus("Run")
     setLoading(false); // turns off loading icon
   };

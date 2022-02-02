@@ -10,4 +10,5 @@ import { Section } from "./SectionDD";
  export interface Schedule {
     sections: Section[];
     timeGap: number;
+    startVariance:number;
   }
