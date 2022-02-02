@@ -1,4 +1,4 @@
-import { Section, Schedule, Timeslot } from "../src/data/DataDefinition/SectionDD";
+import { Section } from "../src/data/DataDefinition/SectionDD";
 
 /**
  * make string of course subject, number, activity, and days e.g. "CPSC 110 Laboratory Mon,Wed,Fri"

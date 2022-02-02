@@ -80,7 +80,7 @@ export const expandSectionsByDay = (los: Section[]): Section[] => {
     })
     
     return acc
-  }
+}
 
 
 /**

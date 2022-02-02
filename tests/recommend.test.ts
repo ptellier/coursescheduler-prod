@@ -1,5 +1,4 @@
 import {
-  Schedule,
   Section,
   Timeslot,
 } from "../src/data/DataDefinition/SectionDD";
@@ -17,7 +16,7 @@ import {
   most_late_end,
   is_free_day,
   sort_timeslots,
-  calculate_timegap,
+  calculateTimeGap,
 } from "../src/helpers/recommend";
 
 const ex = require("./constants");
@@ -145,12 +144,12 @@ test('most_compact', () => {
 })
 
 test("calculate_timegap", () => {
-  expect(calculate_timegap([])).toBe(0);
-  expect(calculate_timegap([ex.CPSC110])).toBe(0);
-  expect(calculate_timegap([ex.CPSC110, ex.CPSC121, ex.CPSC210])).toBe(9);
-  expect(calculate_timegap([ex.ECON101, ex.ECON102])).toBe(10);
-  expect(calculate_timegap([ex.ECON101_compact, ex.ECON102_compact])).toBe(2);
-  expect(calculate_timegap([ex.CPSC110_compact, ex.CPSC121_compact, ex.CPSC210_compact])).toBe(0);
+  expect(calculateTimeGap([])).toBe(0);
+  expect(calculateTimeGap([ex.CPSC110])).toBe(0);
+  expect(calculateTimeGap([ex.CPSC110, ex.CPSC121, ex.CPSC210])).toBe(9);
+  expect(calculateTimeGap([ex.ECON101, ex.ECON102])).toBe(10);
+  expect(calculateTimeGap([ex.ECON101_compact, ex.ECON102_compact])).toBe(2);
+  expect(calculateTimeGap([ex.CPSC110_compact, ex.CPSC121_compact, ex.CPSC210_compact])).toBe(0);
 })
 
 test("sort_timeslots", () => {

@@ -36,9 +36,9 @@ export const recommend = (lolos: Section[][]) => {
   for (let i = 0; i < lolos.length; i ++) {
     rsf_scatter    = most_scatter(lolos[i], rsf_scatter)
     rsf_compact    = most_compact(lolos[i], rsf_compact)
-    rsf_consistent = most_consistent(lolos[i], rsf_consistent)
 
-    
+
+    rsf_consistent = most_consistent(lolos[i], rsf_consistent)
     rsf_earlyStart = most_early_start(lolos[i], rsf_earlyStart)
     rsf_lateStart  = most_late_start(lolos[i], rsf_lateStart)
     rsf_earlyEnd   = most_early_end(lolos[i], rsf_earlyEnd)
@@ -54,7 +54,8 @@ export const recommend = (lolos: Section[][]) => {
     lateStart: rsf_lateStart,
     earlyEnd: rsf_earlyEnd,
     lateEnd: rsf_lateEnd,
-    freeDay: rsf_freeDay}
+    freeDay: rsf_freeDay
+  }
   return result
 }
 
@@ -142,8 +143,8 @@ export const most_compact = (los1: Section[], los2: Section[]): Section[] => {
   const los1_processed = convertToTimeSlot(los1)
   const los2_processed = convertToTimeSlot(los2)
 
-  const time_gap1 = calculate_timegap(los1_processed);
-  const time_gap2 = calculate_timegap(los2_processed); // You don't need this
+  const time_gap1 = calculateTimeGap(los1_processed);
+  const time_gap2 = calculateTimeGap(los2_processed); // You don't need this
   return time_gap1 <= time_gap2 ? los1 : los2;
 };
 
@@ -162,8 +163,8 @@ export const most_compact = (los1: Section[], los2: Section[]): Section[] => {
   const los1_processed = convertToTimeSlot(los1)
   const los2_processed = convertToTimeSlot(los2)
 
-  const time_gap1 = calculate_timegap(los1_processed);
-  const time_gap2 = calculate_timegap(los2_processed);
+  const time_gap1 = calculateTimeGap(los1_processed);
+  const time_gap2 = calculateTimeGap(los2_processed);
   return time_gap1 >= time_gap2 ? los1 : los2;
 };
 
@@ -172,9 +173,10 @@ export const most_compact = (los1: Section[], los2: Section[]): Section[] => {
  * @param {Section[]} los
  * @returns {number}
  */
-export const calculate_timegap = (los: Section[]): number => {
+export const calculateTimeGap = (los: Section[]): number => {
   const schedules = los.map((s: Section) => s.schedule);
-  const schedules_deconstructed = schedules.reduce((sch, acc) => [...sch, ...acc],[]);
+  // const schedules_deconstructed = schedules.reduce((sch, acc) => [...sch, ...acc],[]);
+  const schedules_deconstructed = schedules.flatMap(sch => sch);
   const schedules_grouped = groupTimeSlotsByDays(schedules_deconstructed);
 
   //5. for each group, sort by start time

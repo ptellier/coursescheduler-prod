@@ -3,12 +3,12 @@ import { Course, SearchWord } from "../data/DataDefinition/SearchWordDD";
 import AsyncSelect from "react-select/async";
 import { fetchCourseDesc } from "../helpers/fetch";
 
-export interface Props {
+export interface SearchBarProps {
   loc: Course[];
   set_loc: Function;
 }
 
-export const SearchBar = ({ loc, set_loc }: Props) => {
+export const SearchBar = ({ loc, set_loc }: SearchBarProps) => {
   /** Keeps track of total credits limitation */
   const [total_credits, set_total_credits] = useState(0);
 

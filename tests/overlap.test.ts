@@ -1,7 +1,7 @@
 import { link } from "fs";
 import { make_timeslot, is_overlap_timeslots, is_overlap_schedules,
    is_overlap_sections, is_overlap_losections, is_overlap_bad_times } from "../src/helpers/overlap";
-import { Schedule, Section,Timeslot } from "../src/data/DataDefinition/SectionDD";
+import { Section,Timeslot } from "../src/data/DataDefinition/SectionDD";
 const ex = require("./constants");
 
 /*------------------------------------------------*/

@@ -1,4 +1,4 @@
-import { Schedule, Section, Timeslot } from "../src/data/DataDefinition/SectionDD";
+import { Section, Timeslot } from "../src/data/DataDefinition/SectionDD";
 
 const cloneDeep = require('lodash/clonedeep');
 const fns = require("../unused/optional");
@@ -115,72 +115,72 @@ CS4_THU.schedule[0].day = "Thu"
 const CS5_FRI = cloneDeep(CS5);
 CS5_FRI.schedule[0].day = "Fri"
 
-const SCHD1_1: Schedule = [
+const SCHD1_1: Timeslot[] = [
   {start_time:900, end_time:950, day:"Mon",term:"2"},
   {start_time:800, end_time:850, day:"Wed",term:"2"},
   {start_time:800, end_time:850, day:"Fri",term:"2"}
 ];
-const SCHD1_2: Schedule = [
+const SCHD1_2: Timeslot[] = [
   {start_time:800, end_time:850, day:"Mon",term:"2"},
   {start_time:900, end_time:950, day:"Wed",term:"2"},
   {start_time:800, end_time:850, day:"Fri",term:"2"}
 ];
-const SCHD1_3: Schedule = [
+const SCHD1_3: Timeslot[] = [
   {start_time:800, end_time:850, day:"Mon",term:"2"},
   {start_time:800, end_time:850, day:"Wed",term:"2"},
   {start_time:900, end_time:950, day:"Fri",term:"2"}
 ];
-const SCHD1_1EARLY: Schedule = [
+const SCHD1_1EARLY: Timeslot[] = [
   {start_time:300, end_time:350, day:"Mon",term:"2"},
   {start_time:1200, end_time:1230, day:"Wed",term:"2"},
   {start_time:1230, end_time:1260, day:"Fri",term:"2"}
 ];
-const SCHD1_2EARLY: Schedule = [
+const SCHD1_2EARLY: Timeslot[] = [
   {start_time:1200, end_time:1230, day:"Mon",term:"2"},
   {start_time:300, end_time:350, day:"Wed",term:"2"},
   {start_time:1230, end_time:1260, day:"Fri",term:"2"}
 ];
-const SCHD1_3EARLY: Schedule = [
+const SCHD1_3EARLY: Timeslot[] = [
   {start_time:1200, end_time:1230, day:"Mon",term:"2"},
   {start_time:1230, end_time:1260, day:"Wed",term:"2"},
   {start_time:300, end_time:350, day:"Fri",term:"2"}
 ];
-const SCHD1_1LATE: Schedule = [
+const SCHD1_1LATE: Timeslot[] = [
   {start_time:1200, end_time:1230, day:"Mon",term:"2"},
   {start_time:300, end_time:350, day:"Wed",term:"2"},
   {start_time:350, end_time:380, day:"Fri",term:"2"}
 ];
-const SCHD1_2LATE: Schedule = [
+const SCHD1_2LATE: Timeslot[] = [
   {start_time:300, end_time:350, day:"Mon",term:"2"},
   {start_time:1200, end_time:1230, day:"Wed",term:"2"},
   {start_time:350, end_time:380, day:"Fri",term:"2"}
 ];
-const SCHD1_3LATE: Schedule = [
+const SCHD1_3LATE: Timeslot[] = [
   {start_time:300, end_time:350, day:"Mon",term:"2"},
   {start_time:350, end_time:380, day:"Wed",term:"2"},
   {start_time:1200, end_time:1230, day:"Fri",term:"2"}
 ];
-const SCHD2: Schedule = [
+const SCHD2: Timeslot[] = [
   {start_time:900, end_time:950, day:"Mon",term:"2"},
   {start_time:900, end_time:950, day:"Wed",term:"2"},
   {start_time:900, end_time:950, day:"Fri",term:"2"}
 ];
-const SCHD3: Schedule = [
+const SCHD3: Timeslot[] = [
   {start_time:1000, end_time:1050, day:"Mon",term:"2"},
   {start_time:1000, end_time:1050, day:"Wed",term:"2"},
   {start_time:1000, end_time:1050, day:"Fri",term:"2"}
 ];
-const SCHD4: Schedule = [
+const SCHD4: Timeslot[] = [
   {start_time:1100, end_time:1150, day:"Mon",term:"2"},
   {start_time:1100, end_time:1150, day:"Wed",term:"2"},
   {start_time:1100, end_time:1150, day:"Fri",term:"2"}
 ];
-const SCHD5: Schedule = [
+const SCHD5: Timeslot[] = [
   {start_time:180, end_time:1150, day:"Mon",term:"2"},
   {start_time:240, end_time:1150, day:"Wed",term:"2"},
   {start_time:1200, end_time:1150, day:"Fri",term:"2"}
 ];
-const SCHD6: Schedule = [
+const SCHD6: Timeslot[] = [
   {start_time:900, end_time:930, day:"Tue",term:"2"},
   {start_time:930, end_time:960, day:"Thu",term:"2"}
 ];

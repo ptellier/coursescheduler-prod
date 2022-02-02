@@ -1,4 +1,4 @@
-import { Section, Timeslot, Time, Schedule, Term, Day } from "../data/DataDefinition/SectionDD";
+import { Section, Timeslot, Time, Term, Day } from "../data/DataDefinition/SectionDD";
 
 /**
  * make Timeslot from start and end times in 24 hour time
@@ -31,11 +31,11 @@ export const is_overlap_timeslots = (ts1:Timeslot, ts2:Timeslot): boolean => {
 
 /**
  * return true if two schedules overlap
- * @param {Schedule} sch1
- * @param {Schedule} sch2
+ * @param {TImeslot[]} sch1
+ * @param {TImeslot[]} sch2
  * @returns {boolean}
  */
-export const is_overlap_schedules = (sch1:Schedule, sch2:Schedule): boolean => {
+export const is_overlap_schedules = (sch1:Timeslot[], sch2:Timeslot[]): boolean => {
   for(let i=0; i<sch1.length; i++) {
     for(let j=0; j<sch2.length; j++) {
       if(is_overlap_timeslots(sch1[i], sch2[j])) {

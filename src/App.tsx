@@ -1,11 +1,15 @@
-import React from 'react';
-import './App.css';
-import Main from './components/Main';
+import React from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import "./App.css";
+import Main from "./components/Main";
 
 function App() {
   return (
     <div className="App">
-      <Main />
+      <DndProvider backend={HTML5Backend}>
+        <Main />
+      </DndProvider>
     </div>
   );
 }

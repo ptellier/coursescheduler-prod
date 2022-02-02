@@ -1,7 +1,7 @@
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { Course, SearchWord } from "../data/DataDefinition/SearchWordDD";
 
-export interface Props {
+export interface SelectionsProps {
   loc: Course[];
   set_loc: Function;
 }
@@ -11,7 +11,7 @@ export interface Props {
  * Note: Each key for <li> is randomized
  */
 
-const Selections = ({ loc, set_loc }: Props) => {
+const Selections = ({ loc, set_loc }: SelectionsProps) => {
   /**
    * removes "/" from sw for better presentation
    * @param {SearchWord} sw

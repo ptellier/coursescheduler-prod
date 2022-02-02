@@ -9,22 +9,19 @@ import { solve } from "../helpers/solve_newengine";
 import { groupSections } from "../helpers/groupby";
 import { useState } from "react";
 import { recommend } from "../helpers/recommend";
+import { Schedule } from "../data/DataDefinition/ScheduleDD";
 
-export interface Props {
+export interface TriggerAPIProps {
   loc: Course[];
   set_recommended: Function;
   userTerm: string;
   setUserTerm: Function;
 }
 
-export const TriggerAPI = ({ loc, set_recommended, userTerm, setUserTerm}: Props) => {
+export const TriggerAPI = ({ loc, set_recommended, userTerm, setUserTerm}: TriggerAPIProps) => {
   /** If true, show loading icon (pulse) on the generate schedule btn */
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("Run")
-
-
-  const [fetching, setFectching] = useState(false);
-  const [generating, setGenerating] = useState(false);
 
   /**
    * update los with fetched data when a user clicks Generate Schedule btn
@@ -35,9 +32,9 @@ export const TriggerAPI = ({ loc, set_recommended, userTerm, setUserTerm}: Props
     console.log("fetching")
     
     // 1) Fetch sections data from API
-    const sections_api = await fetchSections(loc.map((c) => c.sw));
+    // const sections_api = await fetchSections(loc.map((c) => c.sw));
     // Warning:fast, but too much load on the server
-    // const sections_api = await fetchParallel(loc.map((c) => c.sw)); 
+    const sections_api = await fetchParallel(loc.map((c) => c.sw)); 
 
     // TODO  1.1) take note of required sections (lecs, labs, tuts); are they all present?
 
@@ -58,8 +55,23 @@ export const TriggerAPI = ({ loc, set_recommended, userTerm, setUserTerm}: Props
 
     setStatus("Recommending")
     console.log("recommending")
+
     // 4) Categorize the schedules
-    const sections_recommended = recommend(sections_solved);
+    const newRecommend = (schedules: Schedule[]) => {
+      const result = {
+        compact: schedules.sort((sch1, sch2) => sch1.timeGap > sch2.timeGap ? 1 : -1)[0].sections,
+        scatter: schedules.sort((sch1, sch2) => sch1.timeGap < sch2.timeGap ? 1 : -1)[0].sections,
+        consistent: [],
+        freeDay: [],
+        earlyStart: [],
+        lateStart: [],
+        earlyEnd: [],
+        lateEnd: [],
+
+      }
+      return result
+    }
+    const sections_recommended = newRecommend(sections_solved);
     console.log(sections_recommended)
 
     set_recommended(sections_recommended);  // pass recommended data for UI

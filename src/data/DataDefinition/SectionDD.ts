@@ -12,9 +12,10 @@ import React from "react";
  * @property {Status}   status      - "Restricted", "Available", "Full"
  * @property {Activity} activity    - "Laboratory", "Lecture" "Tutorial", "Seminar"
  * @property {Term}     term        - "1", "2"
- * @property {Schedule} schedule    - "List of timeslots for all meetings of the section"  
+ * @property {Timeslot[]} schedule    - "List of timeslots for all meetings of the section"  
  */
 export interface Section {
+  id:       string;
   name:     string;
   subject:  string;
   section:  string;
@@ -22,7 +23,8 @@ export interface Section {
   status:   Status;
   activity: string;
   term:     Term;
-  schedule: Schedule;
+  schedule: Timeslot[];
+  isNextMove?: boolean;
 }
 
 /**
@@ -30,13 +32,6 @@ export interface Section {
  * @typedef {Section[]} ListOfSection
  */
  export type ListOfSection = Section[];
-
-
-/**
- * a list of timeslot for one section
- * @typedef {Timeslot[]} Schedule
- */
-export type Schedule = Timeslot[];
 
 /**
  * A timeslot for a course with start and end time
@@ -64,7 +59,7 @@ export type Time = number;
  * @typedef {string} Day
  * @todo
  */
-export type Day = "Mon" | "Tue" | "Wed" | "Thu" | "Fri"; //is it "Thur" or "Thurs"?
+export type Day = "Mon" | "Tue" | "Wed" | "Thu" | "Fri" //is it "Thur" or "Thurs"?
 
 /**
  * Term a course is offered: "1", "2", or "summer"

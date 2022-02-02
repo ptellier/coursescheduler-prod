@@ -1,6 +1,8 @@
+import { Schedule } from "../data/DataDefinition/ScheduleDD";
 import { Section } from "../data/DataDefinition/SectionDD";
 import { is_overlap_losections } from "./overlap" 
-import { most_compact } from "./recommend";
+import { calculateTimeGap, most_compact } from "./recommend";
+import { convertToTimeSlot } from "./time";
 
 /**
  * Sections chosen and sections remaining at each node in the search tree
@@ -33,10 +35,10 @@ interface Node {
  * @param los 
  * @returns 
  */
-export const solve = (los: Section[][]): Section[][] => {
+export const solve = (los: Section[][]): Schedule[] => {
     let n_wl: Node[] = [];   //node worklist
     let node: Node;          //current node
-    let rsf: Section[][] = [];
+    let rsf: Schedule[] = [];
     let root:Node = { assigned: [], remain: los }
     //let ii:number = 0;     //keep track of total number of loops
     n_wl.push(root);
@@ -45,8 +47,11 @@ export const solve = (los: Section[][]): Section[][] => {
         node = n_wl.pop() as Node;
         
         if (node.remain.length === 0) {
-            // Potential Idea: Categorize recommendation here
-            rsf.push(node.assigned)
+            // TODO: add all recommendation requirements here:
+            const los = convertToTimeSlot(node.assigned)
+            const timeGap = calculateTimeGap(los)
+            
+            rsf.push({sections: node.assigned, timeGap:timeGap})
         } else {
             n_wl = n_wl.concat(next_nodes(node));
         }
@@ -60,8 +65,8 @@ export const solve = (los: Section[][]): Section[][] => {
  * @returns 
  */
 export const next_nodes = (node: Node): Node[] => {
-    const assigned: Section[] = node.assigned;            // ["A"]
-    const [f_remain, ...r_remain] = node.remain  // [[1,2] [3,4]]
+    const assigned: Section[] = node.assigned;          
+    const [f_remain, ...r_remain] = node.remain  
     const generated_nodes: Node[] = f_remain.map(f_r => (
         { assigned: [...assigned, f_r], remain: r_remain }
         )
