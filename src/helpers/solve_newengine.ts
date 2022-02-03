@@ -43,10 +43,11 @@ export const solve = (los: Section[][]): Schedule[] => {
     assigned: [],
     remain: los,
   };
-  //let ii:number = 0;     //keep track of total number of loops
+  //let ii:number = 0;     
   n_wl.push(root);
 
   while (n_wl.length > 0 /*&& ii<10000*/) {
+    if(rsf.length >= 2000000){return rsf} //keep track of total number of loops
     node = n_wl.pop() as Node;
 
     if (node.remain.length === 0) {
