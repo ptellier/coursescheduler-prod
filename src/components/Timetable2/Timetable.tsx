@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { Section, Status, Term } from "../../data/DataDefinition/SectionDD";
+import { Section } from "../../data/DataDefinition/SectionDD";
 import { groupSectionsByWeek } from "../../helpers/groupby";
-import { make_timeslot } from "../../helpers/overlap";
-import { Cell, Cell_display, convertToTimeSlot } from "../../helpers/time";
+import { Cell_display, } from "../../helpers/time";
 import { Recommendation } from "../Main";
 import DayColumn from "./DayColumn";
 import DaysRow from "./DaysRow";

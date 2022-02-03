@@ -29,16 +29,15 @@ export const TriggerAPI = ({ loc, set_recommended, userTerm, setUserTerm}: Trigg
   const handleGenerate = async () => {
     setLoading(true); // turns on loading icon
     setStatus("Fetching")
-    console.log("fetching")
     
     // 1) Fetch sections data from API
     const sections_api = await fetchSections(loc.map((c) => c.sw));
+    console.log("fetched: ", sections_api)
     // Warning:fast, but too much load on the server
     // const sections_api = await fetchParallel(loc.map((c) => c.sw)); 
 
     // TODO  1.1) take note of required sections (lecs, labs, tuts); are they all present?
 
-    console.log("Solving")
     // 2) Prepare sections data for solve
     const prep = (sections: Section[]) => {
       const prep1 = filter_term_avail_waitlist(sections, userTerm);
@@ -50,7 +49,7 @@ export const TriggerAPI = ({ loc, set_recommended, userTerm, setUserTerm}: Trigg
 
     // 3) Solve and return combinations
     const sections_solved = solve(sections_prepped);
-    console.log("solved: ", sections_solved);
+    console.log("Solved: ", sections_solved);
 
     // 4) Categorize the schedules
     const sections_recommended = recommend(sections_solved);

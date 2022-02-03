@@ -272,7 +272,7 @@ export const convertToTimeSlot = (los: Section[]): Section[] => {
     const day = schedule.day;
     const term = schedule.term;
 
-    const obj = Object.assign({}, section);
+    const obj = Object.assign({}, section)
     obj.schedule = [make_timeslot(`${start}`, `${end}`, day, term)];
     return obj;
   });

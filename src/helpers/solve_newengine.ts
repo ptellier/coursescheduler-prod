@@ -47,11 +47,10 @@ export const solve = (los: Section[][]): Schedule[] => {
   n_wl.push(root);
 
   while (n_wl.length > 0 /*&& ii<10000*/) {
-    if(rsf.length >= 2000000){return rsf} //keep track of total number of loops
+    if(rsf.length >= 3000000){return rsf} //keep track of total number of loops
     node = n_wl.pop() as Node;
 
     if (node.remain.length === 0) {
-      // TODO: add all recommendation requirements here:
       const timeGap = calculateTimeGap(node.assigned);
       const startVariance = findStartVariance(node.assigned);
       // TODO: Build start time
