@@ -24,21 +24,21 @@ const Timetable = ({ recommended }: Props) => {
 
   const selectRecommendation = (opt: string) => {
     if (opt === "compact") {
-      setCurrentData(groupSectionsByWeek(recommended.compact).map(x => convertToTimeSlot(x)))
+      setCurrentData(groupSectionsByWeek(recommended.compact))
     } else if (opt === "consistent") {
-      setCurrentData(groupSectionsByWeek(recommended.consistent).map(x => convertToTimeSlot(x)))
+      setCurrentData(groupSectionsByWeek(recommended.consistent))
     } else if (opt === "scatter") {
-      setCurrentData(groupSectionsByWeek(recommended.scatter).map(x => convertToTimeSlot(x)))
+      setCurrentData(groupSectionsByWeek(recommended.scatter))
     } else if (opt === "freeDay") {
-      setCurrentData(groupSectionsByWeek(recommended.freeDay).map(x => convertToTimeSlot(x)))
+      setCurrentData(groupSectionsByWeek(recommended.freeDay))
     } else if (opt === "earlyEnd") {
-      setCurrentData(groupSectionsByWeek(recommended.earlyEnd).map(x => convertToTimeSlot(x)))
+      setCurrentData(groupSectionsByWeek(recommended.earlyEnd))
     } else if (opt === "earlyStart") {
-      setCurrentData(groupSectionsByWeek(recommended.earlyStart).map(x => convertToTimeSlot(x)))
+      setCurrentData(groupSectionsByWeek(recommended.earlyStart))
     } else if (opt === "lateEnd") {
-      setCurrentData(groupSectionsByWeek(recommended.lateEnd).map(x => convertToTimeSlot(x)))
+      setCurrentData(groupSectionsByWeek(recommended.lateEnd))
     } else if (opt === "lateStart") {
-      setCurrentData(groupSectionsByWeek(recommended.lateStart).map(x => convertToTimeSlot(x)))
+      setCurrentData(groupSectionsByWeek(recommended.lateStart))
     }
   }
 

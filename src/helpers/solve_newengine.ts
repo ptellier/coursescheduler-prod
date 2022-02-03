@@ -39,7 +39,10 @@ export const solve = (los: Section[][]): Schedule[] => {
   let n_wl: Node[] = []; //node worklist
   let node: Node; //current node
   let rsf: Schedule[] = [];
-  let root: Node = { assigned: [], remain: los };
+  let root: Node = {
+    assigned: [],
+    remain: los,
+  };
   //let ii:number = 0;     //keep track of total number of loops
   n_wl.push(root);
 
@@ -48,9 +51,8 @@ export const solve = (los: Section[][]): Schedule[] => {
 
     if (node.remain.length === 0) {
       // TODO: add all recommendation requirements here:
-      const los = convertToTimeSlot(node.assigned);
-      const timeGap = calculateTimeGap(los);
-      const startVariance = findStartVariance(los);
+      const timeGap = calculateTimeGap(node.assigned);
+      const startVariance = findStartVariance(node.assigned);
       // TODO: Build start time
       // TODO: Build end time
 

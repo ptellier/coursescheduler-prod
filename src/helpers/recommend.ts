@@ -143,8 +143,8 @@ export const most_compact = (los1: Section[], los2: Section[]): Section[] => {
  */
 export const calculateTimeGap = (los: Section[]): number => {
   const schedules = los.map((s: Section) => s.schedule);
-  // const schedules_deconstructed = schedules.reduce((sch, acc) => [...sch, ...acc],[]);
-  const schedules_deconstructed = schedules.flatMap(sch => sch);
+  const schedules_deconstructed = schedules.reduce((sch, acc) => [...sch, ...acc],[]);
+  // const schedules_deconstructed = schedules.flatMap(sch => sch);
   const schedules_grouped = groupTimeSlotsByDays(schedules_deconstructed);
 
   //5. for each group, sort by start time

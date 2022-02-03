@@ -38,6 +38,7 @@ export const TriggerAPI = ({ loc, set_recommended, userTerm, setUserTerm}: Trigg
 
     // TODO  1.1) take note of required sections (lecs, labs, tuts); are they all present?
 
+    console.log("Solving")
     // 2) Prepare sections data for solve
     const prep = (sections: Section[]) => {
       const prep1 = filter_term_avail_waitlist(sections, userTerm);
