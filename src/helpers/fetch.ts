@@ -8,6 +8,9 @@ import { Section } from "../data/DataDefinition/SectionDD";
  */
 export const fetchParallel = async (losw: SearchWord[]) => {
   let acc: Section[] = []
+  
+  // TODO: split losw in half then loop the subgroups
+
   await Promise.all(losw.map(async(sw) => { 
       const data = await fetchSection(sw)
       acc.push(...data.sections);

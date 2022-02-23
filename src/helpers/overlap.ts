@@ -1,4 +1,5 @@
 import { Section, Timeslot, Time, Term, Day } from "../data/DataDefinition/SectionDD";
+import { groupTimeSlotsByDays } from "./groupby";
 
 /**
  * make Timeslot from start and end times in 24 hour time
@@ -86,4 +87,56 @@ export const is_overlap_losections = (sections:Section[]): boolean => {
     }
   }
   return true;
+}
+
+
+
+
+
+
+
+
+// TODO: Following stratgy is not working; you can't compare
+//       sequentially.
+export const sectionsOverlap = (los: Section[]):boolean => {
+  let prev = los[0];
+  for (let i = 1; i < los.length; i++) {
+      if (schedulesOverlap(prev.schedule, los[i].schedule)) {
+        return true;
+      }
+      prev = los[i];
+  }
+  return false;
+}
+
+export const schedulesOverlap = (sch1: Timeslot[], sch2:Timeslot[]):boolean => {
+  const merged = sch1.concat(sch2)
+  let prev = merged[0];
+  for (let i = 1; i < merged.length; i++) {
+    if (is_overlap_timeslots(prev, merged[i])) {
+      return true;
+    }
+    prev = merged[i];
+  }
+  return false;
+}
+
+
+export const overlaps = (los: Section[]):boolean => {
+  // 1.Extract timeslots from los
+  let acc:Timeslot[] = [];
+  los.forEach(sec => {
+    acc.concat(sec.schedule)
+  })
+
+  // 2.GroupbyDay from 1.
+  const grouped = groupTimeSlotsByDays(acc);
+
+  // 3.Loop each day in 2. and apply schoverlap
+  // [ [M], [T], [W], [Th], [F] ]. => 5
+  // [{} {} {} {} {} ...].  => n
+
+  // 5*n vs 5^n
+
+  return false;
 }

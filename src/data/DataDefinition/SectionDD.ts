@@ -25,6 +25,7 @@ export interface Section {
   term:     Term;
   schedule: Timeslot[];
   isNextMove?: boolean;
+  isOnTarget?: boolean;
 }
 
 /**

@@ -1,20 +1,40 @@
 import { useEffect, useState } from "react";
 import { Section } from "../../data/DataDefinition/SectionDD";
 import { groupSectionsByWeek } from "../../helpers/groupby";
-import { Cell_display, } from "../../helpers/time";
+import { Cell_display } from "../../helpers/time";
 import { Recommendation } from "../Main";
 import DayColumn from "./DayColumn";
 import DaysRow from "./DaysRow";
 import Layout from "./Layout";
 import TimeColumn from "./TimeColumn";
 
-export interface Props {
+export interface TimetableProps {
   recommended: Recommendation;
+  sections:Section[];
 }
 
-
 const data: Section[][] = [
-  [],
+  [
+    {
+      id: Math.floor(Math.random() * 10000).toString(),
+      status: "Full",
+      name: "CPSC 110 105",
+      subject: "CPSC",
+      course: "110",
+      section: "105",
+      activity: "Lecture",
+      term: "1",
+      schedule: [
+        {
+          start_time: 8*60,
+          end_time: 10*60,
+          day: "Mon",
+          term: "1",
+        },
+      ],
+      isNextMove: false,
+    },
+  ],
   [
     {
       id: Math.floor(Math.random() * 10000).toString(),
@@ -33,7 +53,7 @@ const data: Section[][] = [
           term: "1",
         },
       ],
-      isNextMove:false,
+      isNextMove: false,
     },
     {
       id: Math.floor(Math.random() * 10000).toString(),
@@ -52,7 +72,7 @@ const data: Section[][] = [
           term: "1",
         },
       ],
-      isNextMove:false,
+      isNextMove: false,
     },
   ],
   [
@@ -73,7 +93,7 @@ const data: Section[][] = [
           term: "1",
         },
       ],
-      isNextMove:false,
+      isNextMove: false,
     },
   ],
   [
@@ -94,7 +114,45 @@ const data: Section[][] = [
           term: "1",
         },
       ],
-      isNextMove:false,
+      isNextMove: false,
+    },
+    {
+      id: Math.floor(Math.random() * 10000).toString(),
+      status: "Full",
+      name: "CPSC 210 101",
+      subject: "CPSC",
+      course: "210",
+      section: "101",
+      activity: "Lecture",
+      term: "1",
+      schedule: [
+        {
+          start_time: 14 * 60 + 30,
+          end_time: 16 * 60 + 30,
+          day: "Thu",
+          term: "1",
+        },
+      ],
+      isNextMove: false,
+    },
+    {
+      id: Math.floor(Math.random() * 10000).toString(),
+      status: "Restricted",
+      name: "ECON 101 101",
+      subject: "ECON",
+      course: "101",
+      section: "101",
+      activity: "Lecture",
+      term: "1",
+      schedule: [
+        {
+          start_time: 14 * 60,
+          end_time: 17 * 60,
+          day: "Thu",
+          term: "1",
+        },
+      ],
+      isNextMove: false,
     },
   ],
   [],
@@ -118,7 +176,7 @@ const additional: Section[] = [
         term: "1",
       },
     ],
-    isNextMove:true,
+    isNextMove: true,
   },
   {
     id: Math.floor(Math.random() * 10000).toString(),
@@ -137,7 +195,7 @@ const additional: Section[] = [
         term: "1",
       },
     ],
-    isNextMove:true,
+    isNextMove: true,
   },
   {
     id: Math.floor(Math.random() * 10000).toString(),
@@ -150,109 +208,111 @@ const additional: Section[] = [
     term: "1",
     schedule: [
       {
-        start_time: 8*60,
-        end_time: 10*60,
+        start_time: 8 * 60,
+        end_time: 10 * 60,
         day: "Mon",
         term: "1",
       },
       {
-        start_time: 8*60,
-        end_time: 10*60,
+        start_time: 8 * 60,
+        end_time: 10 * 60,
         day: "Wed",
         term: "1",
       },
       {
-        start_time: 8*60,
-        end_time: 10*60,
+        start_time: 8 * 60,
+        end_time: 10 * 60,
         day: "Fri",
         term: "1",
       },
     ],
-    isNextMove:true,
+    isNextMove: true,
   },
 ];
 
-const Timetable = ({ recommended }: Props) => {
+const Timetable = ({ recommended, sections }: TimetableProps) => {
   const [currentData, setCurrentData] = useState<Section[][]>(data);
-  const [prevData, setPrevData] = useState<Section[][]>([
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-  ]);
+  const [prevData, setPrevData] = useState<Section[][]>([[],[],[],[],[],[]]);
+  const [markId, setMarkId] = useState<string>("default");
+
   useEffect(() => {
     const default_opt = "compact"
     selectRecommendation(default_opt)
   }, [recommended])
+
   const selectRecommendation = (opt: string) => {
     if (opt === "compact") {
-      setCurrentData(
-        groupSectionsByWeek(recommended.compact)
-      );
-      setCurrentData(
-        groupSectionsByWeek(recommended.compact)
-      );
+      setCurrentData(groupSectionsByWeek(recommended.compact));
     } else if (opt === "consistent") {
-      setCurrentData(
-        groupSectionsByWeek(recommended.consistent)
-      );
+      setCurrentData(groupSectionsByWeek(recommended.consistent));
     } else if (opt === "scatter") {
-      setCurrentData(
-        groupSectionsByWeek(recommended.scatter)
-      );
+      setCurrentData(groupSectionsByWeek(recommended.scatter));
     } else if (opt === "freeDay") {
-      setCurrentData(
-        groupSectionsByWeek(recommended.freeDay)
-      );
+      setCurrentData(groupSectionsByWeek(recommended.freeDay));
     } else if (opt === "earlyEnd") {
-      setCurrentData(
-        groupSectionsByWeek(recommended.earlyEnd)
-      );
+      setCurrentData(groupSectionsByWeek(recommended.earlyEnd));
     } else if (opt === "earlyStart") {
-      setCurrentData(
-        groupSectionsByWeek(recommended.earlyStart)
-      );
+      setCurrentData(groupSectionsByWeek(recommended.earlyStart));
     } else if (opt === "lateEnd") {
-      setCurrentData(
-        groupSectionsByWeek(recommended.lateEnd)
-      );
+      setCurrentData(groupSectionsByWeek(recommended.lateEnd));
     } else if (opt === "lateStart") {
-      setCurrentData(
-        groupSectionsByWeek(recommended.lateStart)
-      );
+      setCurrentData(groupSectionsByWeek(recommended.lateStart));
     }
   };
 
-
-  const onDragStart = (c:Cell_display) => {
-    stashPrevData(currentData)
-    displayPossibleMoves(currentData, c)
+  const onDragStart = (c: Cell_display) => {
+    stashPrevData(currentData);
+    displayPossibleMoves(currentData, c);
   };
 
-  const stashPrevData = (currentData:Section[][]) => {
+  const stashPrevData = (currentData: Section[][]) => {
     setPrevData([...currentData]);
+  };
+
+  const displayPossibleMoves = (currentData: Section[][], c: Cell_display) => {
+    let filtered = sections.filter(
+      (a) =>
+        a.subject === c.subject &&
+        a.course === c.course &&
+        a.activity === c.activity
+    );
+    filtered = filtered.filter(f => f.name != c.name)
+    const sectionsNextMove = markNextMove(filtered);
+    const unpacked = [...currentData.flatMap((d) => d), ...sectionsNextMove];
+    const packed = groupSectionsByWeek(unpacked);
+    setCurrentData(packed);
+  };
+
+  const markNextMove = (sections: Section[]) => {
+    for (let s of sections) {
+      s.isNextMove = true;
+    }
+    return sections
   }
-  const displayPossibleMoves = (currentData:Section[][], c:Cell_display) => {
-    // TODO: filter from additional for matching courses given c
-    const filtered = additional.filter(a => 
-      a.subject === c.subject &&
-      a.course === c.course &&
-      a.activity === c.activity
-    )
-    const unpacked = [... currentData.flatMap(d => d), ... filtered]
-    const packed = groupSectionsByWeek(unpacked)
-    setCurrentData([...packed]);
+  const unmarkNextMove = (sections: Section[]) => {
+    for (let s of sections) {
+      s.isNextMove = false;
+    }
+    return sections
   }
+
+  const markTarget = (c: Cell_display) => {
+    setMarkId(c.id)
+  }
+
   const onDragEnd = (source: any, destination: any) => {
-    const { draggableId, sourceDroppableId, sourceIdx } = source;
-    const { destinIdx, destinDroppableId } = destination;
+    unmarkNextMove(sections);
+    const { draggableId, sourceDroppableId } = source;
+    const { destinDroppableId } = destination;
+    const unpackedPrev = prevData.flatMap(d => d)
+    const removed = unpackedPrev.filter(item => item.id != draggableId)
+    const add = sections.filter(item => item.id == destinDroppableId)
+    const result = [...removed, ...add]
 
     if (sourceDroppableId === destinDroppableId) {
       setCurrentData([...prevData]);
     } else {
-      console.log("moving");
+      setCurrentData(groupSectionsByWeek(result));
     }
   };
 
@@ -336,11 +396,13 @@ const Timetable = ({ recommended }: Props) => {
               {/* Column from Monday to Saturday */}
               {currentData.map((d, idx) => (
                 <DayColumn
-                  key={Math.floor(Math.random() * 10000)}
+                  key={"DayCol-"+idx.toString()}
                   data={d}
                   idx={idx}
                   dragEnd={onDragEnd}
                   dragStart={onDragStart}
+                  markTarget={markTarget}
+                  markId={markId}
                 />
               ))}
             </div>

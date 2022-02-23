@@ -11,4 +11,5 @@ import { Section } from "./SectionDD";
     sections: Section[];
     timeGap: number;
     startVariance:number;
+    numFreeDays:number;
   }

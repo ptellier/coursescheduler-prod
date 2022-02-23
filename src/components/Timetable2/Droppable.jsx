@@ -1,7 +1,8 @@
+import { useEffect } from "react";
 import { useDrop } from "react-dnd";
 import Draggable from "./Draggable";
 
-const Droppable = ({ c, idx, moveItem, dragStart }) => {
+const Droppable = ({ c, idx, moveItem, dragStart, markTarget, markId }) => {
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "div",
     // function invokes whenever drops
@@ -11,16 +12,25 @@ const Droppable = ({ c, idx, moveItem, dragStart }) => {
     }),
   }));
 
+  useEffect(() => {
+    if (isOver && c.id) {
+      markTarget(c);
+    }
+  }, [isOver])
+
   return (
     <div ref={drop}>
       {c.isNextMove ? (
         <div
-          className="bg-danger"
+          key={`${c.id}`}
+          className={`d-flex border rounded align-items-center justify-content-center ${markId == c.id && 'bg-success'}`}
           style={{
             height: `${c.height}rem`,
-            backgroundColor: "rgba(106,13,173,0.5)",
+            backgroundColor: "rgba(30,50,173,0.5)",
           }}
-        ></div>
+        >
+          {c.name}
+        </div>
       ) : (
         <Draggable
           key={`${c.id}`}
