@@ -44,7 +44,7 @@ export const is_overlap_schedules = (sch1:Timeslot[], sch2:Timeslot[]): boolean 
     }
   }
   return false;
- }
+}
 
 /**
  * return true if two Sections have an overlapping timeslot in their schedules
@@ -56,34 +56,49 @@ export const is_overlap_sections = (c1:Section, c2:Section): boolean => {
   return is_overlap_schedules(c1.schedule, c2.schedule)
 }
 
+
 /**
- * return true if no sections in array are at the same time
- * @param {Section[]} sections - Array of sections to check
+ * return true if no timeslots in array are at the same time
+ * @param {Timeslot[]} timeSlots - Array of TimeSlots to check
  * @returns {boolean} 
 */
-export const is_overlap_losections = (sections:Section[]): boolean => {
-  for(let i=0; i<sections.length; i++) {
-    for(let j=i+1; j<sections.length; j++) {
-      if(is_overlap_sections(sections[i], sections[j])) {
-        return false;
-      }
-    }
+export const is_overlap_lotimeslots = (timeSlots:Timeslot[]): boolean => {
+  const sortedTimeSlots = timeSlots.slice().sort((ts_a, ts_b) => ts_a.start_time - ts_b.start_time);
+
+  for(let i=0; i<sortedTimeSlots.length-1; i++) {
+    if(is_overlap_timeslots(sortedTimeSlots[i], sortedTimeSlots[i+1])) return false;
   }
   return true;
 }
 
 
 /**
- * return true if sections are not at the given time
+ * return true if no sections in array are at the same time
+ * @param {Section[]} sections - Array of sections to check
+ * @returns {boolean} 
+ * REQUIRES: timeslots in the schedule of each individual section do NOT overlap
+*/
+export const is_overlap_losections = (sections:Section[]): boolean => {
+  let timeSlots = sections.reduce(
+    (lots:Timeslot[], sect:Section) => lots.concat(sect.schedule),
+     []
+  );
+  return is_overlap_lotimeslots(timeSlots);
+}
+
+
+/**
+ * return true if sections are not at the given bad times
  * @param {Section[]} sections - Array of sections to check
  * @param {Timeslot[]} badTimes - Array of times that don't work
  * @returns {boolean}
+ * REQUIRES: sections do not overlap
  */
  export const is_overlap_bad_times = (sections:Section[], badTimes:Timeslot[]): boolean => {
-  for(let i=0; i<sections.length; i++) {
-    if(is_overlap_schedules(sections[i].schedule, badTimes)) {
-      return false;
-    }
-  }
-  return true;
+  let timeSlots = sections.reduce(
+    (lots:Timeslot[], sect:Section) => lots.concat(sect.schedule),
+     []
+  );
+  timeSlots = timeSlots.concat(badTimes);
+  return is_overlap_lotimeslots(timeSlots);
 }
