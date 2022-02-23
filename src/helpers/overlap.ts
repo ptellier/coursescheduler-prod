@@ -1,4 +1,5 @@
 import { Section, Timeslot, Time, Term, Day } from "../data/DataDefinition/SectionDD";
+import { groupTimeSlotsByDays } from "./groupby";
 
 /**
  * make Timeslot from start and end times in 24 hour time

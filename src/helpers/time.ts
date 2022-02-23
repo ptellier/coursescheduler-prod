@@ -55,7 +55,7 @@ export const createCells = (los: Section[]): Cell_display[] => {
     getOccupiedCells(los).map((loc) => interpolateTimes(loc))
   );
   // 2.extract times from 1.
-  const occupied_times = extractTimes(occupied_cells);
+  const occupied_times = extractTimes(occupied_cells);  
   // 3.remove result of 2 from TIMES
   const gap_cells = getGapCells(
     occupied_times,
@@ -68,21 +68,25 @@ export const createCells = (los: Section[]): Cell_display[] => {
   // 5.group cells by name
   const grouped_cells = groupCellsByName(sorted_merged_cells);
   // 6.process cells for display
-  const cells_display = grouped_cells.map((loc) => ({
+  const cells_display = convertToDisplay(grouped_cells)
+  return cells_display;
+};
+
+export const convertToDisplay = (grouped_cells:Cell[][]) => {
+  return grouped_cells.map((loc) => ({
     id: loc[0].id,
     name: loc[0].name,
     height: loc.length * CELL_HEIGHT,
     start: loc[0].time,
-    end: loc.length === 0 ? loc[0].time : loc[loc.length - 1].time,
+    end: loc.length === 1 ? loc[0].time + 30 : loc[loc.length - 1].time + 30,
     is_occupied: loc[0].is_occupied,
     isNextMove: loc[0].isNextMove,
     subject:loc[0].subject,
     course:loc[0].course,
     activity:loc[0].activity,
   }));
-  //   console.log(cells_display)
-  return cells_display;
-};
+}
+
 
 /**
  * produce nested arrays of cells, each cell includes time, name, status of the cell

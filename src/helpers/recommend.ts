@@ -4,7 +4,7 @@ import {
   Timeslot,
   Time,
 } from "../data/DataDefinition/SectionDD";
-import { groupTimeSlotsByDays } from "./groupby";
+import { group5Days, groupTimeSlotsByDays } from "./groupby";
 import { convertToTimeSlot } from "./time";
 
 
@@ -19,7 +19,7 @@ import { convertToTimeSlot } from "./time";
     compact: schedules.sort((sch1, sch2) => sch1.timeGap > sch2.timeGap ? 1 : -1)[0].sections,
     scatter: schedules.sort((sch1, sch2) => sch1.timeGap < sch2.timeGap ? 1 : -1)[0].sections,
     consistent: schedules.sort((sch1, sch2) => sch1.startVariance > sch2.startVariance ? 1 : -1)[0].sections,
-    freeDay: [],
+    freeDay: schedules.sort((sch1, sch2) => sch1.numFreeDays < sch2.numFreeDays ? 1 : -1)[0].sections,
     earlyStart: [],
     lateStart: [],
     earlyEnd: [],
@@ -281,5 +281,13 @@ export const is_free_day = (los: Section[]): boolean => {
   return chk.Mon || chk.Tue || chk.Wed || chk.Thu || chk.Fri;
 };
 
-
-
+/**
+ * REQUIRES: los cannot be empty
+ * EFFECTS: return the number of free days sections has
+ * @param {Sectionp[]} los 
+ * @returns {number}
+ */
+export const countFreeDays = (los:Section[]): number => {
+  const losGroup = group5Days(los);
+  return losGroup.filter(g => g.length === 0).length - 1;
+}

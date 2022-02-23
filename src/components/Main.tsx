@@ -26,6 +26,7 @@ export interface Recommendation {
 }
 
 const Main: FC = () => {
+  const [sections, setSections] = useState<Section[]>([]);
   /** List of Schedule: combinations of sections list that forms a schedule */
   const [recommended, set_recommended] = useState<Recommendation>({
     compact: [],
@@ -37,6 +38,8 @@ const Main: FC = () => {
     lateEnd: [],
     freeDay: [],
   });
+
+  
 
   /** List of Courses: courses that users looked up and want to get scheduled */
   const [loc, set_loc] = useState<Course[]>([]);
@@ -54,12 +57,13 @@ const Main: FC = () => {
           <TriggerAPI
             loc={loc}
             set_recommended={set_recommended}
+            setSections={setSections}
             userTerm={userTerm}
             setUserTerm={setUserTerm}
           />
         </div>
         <div className="col-sm-9 border p-4 px-5">
-          <Timetable recommended={recommended} />
+          <Timetable recommended={recommended} sections={sections} />
         </div>
       </div>
     </div>

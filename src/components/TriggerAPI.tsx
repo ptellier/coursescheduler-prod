@@ -16,9 +16,10 @@ export interface TriggerAPIProps {
   set_recommended: Function;
   userTerm: string;
   setUserTerm: Function;
+  setSections: Function;
 }
 
-export const TriggerAPI = ({ loc, set_recommended, userTerm, setUserTerm}: TriggerAPIProps) => {
+export const TriggerAPI = ({ loc, set_recommended, userTerm, setUserTerm, setSections}: TriggerAPIProps) => {
   /** If true, show loading icon (pulse) on the generate schedule btn */
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("Run")
@@ -29,16 +30,13 @@ export const TriggerAPI = ({ loc, set_recommended, userTerm, setUserTerm}: Trigg
   const handleGenerate = async () => {
     setLoading(true); // turns on loading icon
     setStatus("Fetching")
-    
-    // 1) Fetch sections data from API
-    const sections_api = await fetchSections(loc.map((c) => c.sw));
-    console.log("fetched: ", sections_api)
+  
+    // const sections_api = await fetchSections(loc.map((c) => c.sw));
+    // console.log("fetched: ", sections_api)
     // Warning:fast, but too much load on the server
-    // const sections_api = await fetchParallel(loc.map((c) => c.sw)); 
-
-    // TODO  1.1) take note of required sections (lecs, labs, tuts); are they all present?
-
+    const sections_api = await fetchParallel(loc.map((c) => c.sw)); 
     // 2) Prepare sections data for solve
+    // TODO  1.1) take note of required sections (lecs, labs, tuts); are they all present?
     const prep = (sections: Section[]) => {
       const prep1 = filter_term_avail_waitlist(sections, userTerm);
       const prep2 = filter_duplicate_schedules(prep1);
@@ -46,15 +44,12 @@ export const TriggerAPI = ({ loc, set_recommended, userTerm, setUserTerm}: Trigg
       return prep3;
     };
     const sections_prepped = prep(sections_api);
-
-    // 3) Solve and return combinations
     const sections_solved = solve(sections_prepped);
-    console.log("Solved: ", sections_solved);
-
-    // 4) Categorize the schedules
+    // console.log("Solved: ", sections_solved);
     const sections_recommended = recommend(sections_solved);
-    console.log("Recommended: ", sections_recommended)
+    // console.log("Recommended: ", sections_recommended)
 
+    setSections(sections_prepped.flatMap(s => s))
     set_recommended(sections_recommended);  // pass recommended data for UI
     setStatus("Run")
     setLoading(false); // turns off loading icon
