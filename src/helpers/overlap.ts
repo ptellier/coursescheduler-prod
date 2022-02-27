@@ -63,7 +63,7 @@ export const is_overlap_sections = (c1:Section, c2:Section): boolean => {
  * @param {Timeslot[]} timeSlots - Array of TimeSlots to check
  * @returns {boolean} 
 */
-export const is_overlap_lotimeslots = (timeSlots:Timeslot[]): boolean => {
+export const is_overlap_lotimeslots = (timeSlots:Timeslot[]): boolean => {  
   const sortedTimeSlots = timeSlots.slice().sort((ts_a, ts_b) => ts_a.start_time - ts_b.start_time);
 
   for(let i=0; i<sortedTimeSlots.length-1; i++) {
