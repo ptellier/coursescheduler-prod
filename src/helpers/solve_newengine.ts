@@ -1,6 +1,6 @@
 import { Schedule } from "../data/DataDefinition/ScheduleDD";
 import { Section } from "../data/DataDefinition/SectionDD";
-import { is_overlap_losections, sectionsOverlap } from "./overlap";
+import { is_overlap_losections } from "./overlap";
 import { calculateTimeGap, countFreeDays, findStartVariance, is_free_day, most_compact } from "./recommend";
 import { convertToTimeSlot } from "./time";
 
@@ -82,7 +82,7 @@ export const next_nodes = (node: Node): Node[] => {
   }));
 
   return generated_nodes.filter((nd: Node) =>
-    is_overlap_losections(nd.assigned)
+    !is_overlap_losections(nd.assigned)
     // sectionsOverlap(nd.assigned)
   );
 };

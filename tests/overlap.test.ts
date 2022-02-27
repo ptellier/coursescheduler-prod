@@ -1,6 +1,6 @@
 import { link } from "fs";
-import { make_timeslot, is_overlap_timeslots, is_overlap_schedules,
-   is_overlap_sections, is_overlap_losections, is_overlap_bad_times } from "../src/helpers/overlap";
+import { make_timeslot, is_overlap_timeslots, is_overlap_lotimeslots,
+  is_overlap_losections, is_overlap_bad_times } from "../src/helpers/overlap";
 import { Section,Timeslot } from "../src/data/DataDefinition/SectionDD";
 const ex = require("./constants");
 
@@ -79,52 +79,53 @@ test("overlap is false: different terms", () => {
 });
 
 test("overlap is false: schedules don't overlap", () => {
-  expect(is_overlap_schedules(ex.SCHD3, ex.SCHD2)).toBe(false)
-  expect(is_overlap_schedules(ex.SCHD2, ex.SCHD3)).toBe(false)
+  
+  expect(is_overlap_lotimeslots([ex.SCHD3, ex.SCHD2].flat())).toBe(false)
+  expect(is_overlap_lotimeslots([ex.SCHD2, ex.SCHD3].flat())).toBe(false)
 });
 test("overlap is true: 1st timeslots of schedules overlap", () => {
-  expect(is_overlap_schedules(ex.SCHD1_1, ex.SCHD2)).toBe(true)
-  expect(is_overlap_schedules(ex.SCHD2, ex.SCHD1_1)).toBe(true)
+  expect(is_overlap_lotimeslots([ex.SCHD1_1, ex.SCHD2].flat())).toBe(true)
+  expect(is_overlap_lotimeslots([ex.SCHD2, ex.SCHD1_1].flat())).toBe(true)
 });
 test("overlap is true: 2nd timeslots of schedules overlap", () => {
-  expect(is_overlap_schedules(ex.SCHD1_2, ex.SCHD2)).toBe(true)
-  expect(is_overlap_schedules(ex.SCHD2, ex.SCHD1_2)).toBe(true)
+  expect(is_overlap_lotimeslots([ex.SCHD1_2, ex.SCHD2].flat())).toBe(true)
+  expect(is_overlap_lotimeslots([ex.SCHD2, ex.SCHD1_2].flat())).toBe(true)
 });
 test("overlap is true: 3rd timeslots of schedules overlap", () => {
-  expect(is_overlap_schedules(ex.SCHD1_3, ex.SCHD2)).toBe(true)
-  expect(is_overlap_schedules(ex.SCHD2, ex.SCHD1_3)).toBe(true)
+  expect(is_overlap_lotimeslots([ex.SCHD1_3, ex.SCHD2].flat())).toBe(true)
+  expect(is_overlap_lotimeslots([ex.SCHD2, ex.SCHD1_3].flat())).toBe(true)
 });
 
 test("overlap is false: sections don't overlap", () => {
-  expect(is_overlap_sections(ex.CS2_3TS, ex.CS3_3TS)).toBe(false)
-  expect(is_overlap_sections(ex.CS3_3TS, ex.CS2_3TS)).toBe(false)
+  expect(is_overlap_losections([ex.CS2_3TS, ex.CS3_3TS])).toBe(false)
+  expect(is_overlap_losections([ex.CS3_3TS, ex.CS2_3TS])).toBe(false)
 });
 test("overlap is true: sections overlap", () => {
-  expect(is_overlap_sections(ex.CS1_3TS_1, ex.CS2_3TS)).toBe(true)
-  expect(is_overlap_sections(ex.CS2_3TS, ex.CS1_3TS_1)).toBe(true)
+  expect(is_overlap_losections([ex.CS1_3TS_1, ex.CS2_3TS])).toBe(true)
+  expect(is_overlap_losections([ex.CS2_3TS, ex.CS1_3TS_1])).toBe(true)
 });
 
 
 
-test("true when empty", () => {
-  expect(is_overlap_losections([])).toBe(true)
+test("false when empty", () => {
+  expect(is_overlap_losections([])).toBe(false)
 });
-test("true when no courses overlap", () => {
-  expect(is_overlap_losections([ex.CS2, ex.CS3, ex.CS4])).toBe(true)
+test("false when no courses overlap", () => {
+  expect(is_overlap_losections([ex.CS2, ex.CS3, ex.CS4])).toBe(false)
 });
-test("false when there are courses overlapping", () => {
-  expect(is_overlap_losections([ex.CS4, ex.CS1, ex.CS2])).toBe(false)
+test("true when there are courses overlapping", () => {
+  expect(is_overlap_losections([ex.CS4, ex.CS1, ex.CS2])).toBe(true)
 });
 
-test("true when both empty", () => {
-  expect(is_overlap_bad_times([], [])).toBe(true)
+test("false when both empty", () => {
+  expect(is_overlap_bad_times([], [])).toBe(false)
 });
-test("true when empty badtimes", () => {
-  expect(is_overlap_bad_times([ex.CS3, ex.CS2, ex.CS4], [])).toBe(true)
+test("false when empty badtimes", () => {
+  expect(is_overlap_bad_times([ex.CS3, ex.CS2, ex.CS4], [])).toBe(false)
 });
-test("true when no courses overlap bad time", () => {
-  expect(is_overlap_bad_times([ex.CS3, ex.CS2, ex.CS4], [ex.TS5, ex.TS6])).toBe(true)
+test("false when no courses overlap bad time", () => {
+  expect(is_overlap_bad_times([ex.CS3, ex.CS2, ex.CS4], [ex.TS5, ex.TS6])).toBe(false)
 });
-test("false when course overlaps a bad time", () => {
-  expect(is_overlap_bad_times([ex.CS3, ex.CS2, ex.CS4], [ex.TS5, ex.TS2, ex.TS6])).toBe(false)
+test("true when course overlaps a bad time", () => {
+  expect(is_overlap_bad_times([ex.CS3, ex.CS2, ex.CS4], [ex.TS5, ex.TS2, ex.TS6])).toBe(true)
 });
