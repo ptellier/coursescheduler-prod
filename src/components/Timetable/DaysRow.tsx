@@ -2,7 +2,7 @@ import React from 'react'
 
 const DaysRow = () => {
     return (
-        <div className="row">
+        <div className="row mr-3">
           <div className="col-2">
             <div style={{ height: "1.5rem" }}>Mon</div>
           </div>

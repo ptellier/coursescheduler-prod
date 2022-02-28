@@ -26,7 +26,7 @@ const Droppable = ({ c, idx, moveItem, dragStart, markTarget, markId }) => {
           className={`d-flex border rounded align-items-center justify-content-center ${markId == c.id && 'bg-success'}`}
           style={{
             height: `${c.height}rem`,
-            backgroundColor: "rgba(30,50,173,0.5)",
+            backgroundColor: "rgba(40,140,173,0.35)",
           }}
         >
           {c.name}

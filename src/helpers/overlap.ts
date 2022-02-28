@@ -1,5 +1,6 @@
 import { Section, Timeslot, Time, Term, Day } from "../data/DataDefinition/SectionDD";
 import { groupTimeSlotsByDays } from "./groupby";
+import { Cell_display } from "./time";
 
 /**
  * make Timeslot from start and end times in 24 hour time
@@ -14,6 +15,7 @@ export const make_timeslot = (startTime: string, endTime:string, day:Day, term:T
   let nend: number = (endArr[0]*60)+endArr[1];
   return {start_time: nstart, end_time: nend, day:day, term:term};
 }
+
 
 /**
  * return true if two timeslots overlap
@@ -30,46 +32,27 @@ export const is_overlap_timeslots = (ts1:Timeslot, ts2:Timeslot): boolean => {
            ((e2 <= e1) && (e2 > s1))));
 }
 
-/**
- * return true if two schedules overlap
- * @param {TImeslot[]} sch1
- * @param {TImeslot[]} sch2
- * @returns {boolean}
- */
-export const is_overlap_schedules = (sch1:Timeslot[], sch2:Timeslot[]): boolean => {
-  for(let i=0; i<sch1.length; i++) {
-    for(let j=0; j<sch2.length; j++) {
-      if(is_overlap_timeslots(sch1[i], sch2[j])) {
-        return true;
-      }
-    }
-  }
-  return false;
+//EFFECTS: return true if two cells overlap each other
+export const overlapCells = (c1: Cell_display, c2: Cell_display) => {
+  let s1: Time = c1.start; let e1: Time = c1.end;
+  let s2: Time = c2.start; let e2: Time = c2.end;
+  return (((e2 > e1) && (s2 < e1)) || ((e2 <= e1) && (e2 > s1)))
 }
-
-/**
- * return true if two Sections have an overlapping timeslot in their schedules
- * @param {Section} c1
- * @param {Section} c2
- * @returns {boolean}
- */
-export const is_overlap_sections = (c1:Section, c2:Section): boolean => {
-  return is_overlap_schedules(c1.schedule, c2.schedule)
-}
-
 
 /**
  * return true if no timeslots in array are at the same time
  * @param {Timeslot[]} timeSlots - Array of TimeSlots to check
  * @returns {boolean} 
 */
-export const is_overlap_lotimeslots = (timeSlots:Timeslot[]): boolean => {  
-  const sortedTimeSlots = timeSlots.slice().sort((ts_a, ts_b) => ts_a.start_time - ts_b.start_time);
+export const is_overlap_lotimeslots = (timeSlots:Timeslot[]): boolean => {
+  let sortedByDays:Timeslot[][] = groupTimeSlotsByDays(timeSlots).slice();
+  sortedByDays.forEach((lots:Timeslot[]) => lots.sort((ts_a, ts_b) => ts_a.start_time - ts_b.start_time));
+  let sortedByTimeNDays:Timeslot[] = sortedByDays.flat();
 
-  for(let i=0; i<sortedTimeSlots.length-1; i++) {
-    if(is_overlap_timeslots(sortedTimeSlots[i], sortedTimeSlots[i+1])) return false;
+  for(let i=0; i<sortedByTimeNDays.length-1; i++) {
+    if(is_overlap_timeslots(sortedByTimeNDays[i], sortedByTimeNDays[i+1])) return true;
   }
-  return true;
+  return false;
 }
 
 
@@ -87,7 +70,6 @@ export const is_overlap_losections = (sections:Section[]): boolean => {
   return is_overlap_lotimeslots(timeSlots);
 }
 
-
 /**
  * return true if sections are not at the given bad times
  * @param {Section[]} sections - Array of sections to check
@@ -102,4 +84,26 @@ export const is_overlap_losections = (sections:Section[]): boolean => {
   );
   timeSlots = timeSlots.concat(badTimes);
   return is_overlap_lotimeslots(timeSlots);
+}
+
+
+// EFFECTS: create a subgroup of non-overlapping cells
+//          within the given group
+export const subGroupByNonOverlap = (group: Cell_display[]) => {
+  let rsf = [];
+  let worklist = group;
+
+  for (const cell of group) {
+    let l = [cell]
+    worklist.forEach(g => {
+      if (l.every(item => !overlapCells(item, g))) {
+        l.push(g)
+        const indx = worklist.indexOf(g);
+        worklist.splice(indx, 1)
+      }
+    })
+    rsf.push(l);
+  }
+  console.log(rsf)
+  return rsf;
 }

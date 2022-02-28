@@ -1,4 +1,5 @@
 import { Section, Timeslot } from "../src/data/DataDefinition/SectionDD";
+import { Cell_display } from "../src/helpers/time";
 
 const cloneDeep = require('lodash/clonedeep');
 const fns = require("../unused/optional");
@@ -15,6 +16,7 @@ const CS1: Section = {
               term: "2"}],
   status: "Available",
   term: "2",
+  id: "someID"
 };
 const CS1NAME: string = fns.get_course_name(CS1);
 
@@ -30,6 +32,7 @@ const CS2: Section = {
               term: "2"}],
   status: "Available",
   term: "2",
+  id: "someID"
 };
 const CS2NAME: string = fns.get_course_name(CS2);
 
@@ -45,6 +48,7 @@ const CS3: Section = {
               term: "2"}],
   status: "Available",
   term: "2",
+  id: "someID"
 };
 const CS3NAME: string = fns.get_course_name(CS3);
 
@@ -60,6 +64,7 @@ const CS4: Section = {
               term: "2"}],
   status: "Available",
   term: "2",
+  id: "someID"
 };
 const CS4NAME: string = fns.get_course_name(CS4);
 
@@ -75,6 +80,7 @@ const CS5: Section = {
               term: "2"}],
   status: "Available",
   term: "2",
+  id: "someID"
 };
 const CS5NAME: string = fns.get_course_name(CS5);
 
@@ -90,6 +96,7 @@ const CS6: Section = {
               term: "2"}],
   status: "Available",
   term: "2",
+  id: "someID"
 };
 const CS6NAME: string = fns.get_course_name(CS6);
 
@@ -296,6 +303,7 @@ const CPSC110: Section = {
   ],
   status: "Available",
   term: "2",
+  id: "someID"
 };
 const CPSC121: Section = {
   name: "CPSC 121 101",
@@ -310,6 +318,7 @@ const CPSC121: Section = {
   ],
   status: "Available",
   term: "2",
+  id: "someID"
 };
 const CPSC210: Section = {
   name: "CPSC 210 101",
@@ -324,6 +333,7 @@ const CPSC210: Section = {
   ],
   status: "Available",
   term: "2",
+  id: "someID"
 };
 const CPSC110_compact: Section = {
   name: "CPSC 110 101",
@@ -338,6 +348,7 @@ const CPSC110_compact: Section = {
   ],
   status: "Available",
   term: "2",
+  id: "someID"
 };
 const CPSC121_compact: Section = {
   name: "CPSC 121 101",
@@ -352,6 +363,7 @@ const CPSC121_compact: Section = {
   ],
   status: "Available",
   term: "2",
+  id: "someID"
 };
 const CPSC210_compact: Section = {
   name: "CPSC 210 101",
@@ -366,6 +378,7 @@ const CPSC210_compact: Section = {
   ],
   status: "Available",
   term: "2",
+  id: "someID"
 };
 
 // ECONs are offered on tue, thu
@@ -381,6 +394,7 @@ const ECON101: Section = {
   ],
   status: "Available",
   term: "2",
+  id: "someID"
 };
 const ECON102: Section = {
   name: "ECON 102 101",
@@ -394,6 +408,7 @@ const ECON102: Section = {
   ],
   status: "Available",
   term: "2",
+  id: "someID"
 };
 const ECON101_compact: Section = {
   name: "ECON 101 101",
@@ -407,6 +422,7 @@ const ECON101_compact: Section = {
   ],
   status: "Available",
   term: "2",
+  id: "someID"
 };
 const ECON102_compact: Section = {
   name: "ECON 102 101",
@@ -420,6 +436,7 @@ const ECON102_compact: Section = {
   ],
   status: "Available",
   term: "2",
+  id: "someID"
 };
 
 const MOSTCOMPACT: Section[] = [
@@ -429,6 +446,62 @@ const MOSTCOMPACT: Section[] = [
 const MOSTSCATTER: Section[] = [
   CPSC110, CPSC121, CPSC210, ECON101, ECON102
 ]
+
+
+const OVERLAP_0: Cell_display = {
+  id: "5358ad12-252d-4955-aefa-31388782d346",
+  name: "CPSC 121 T1J",
+  height: 3,
+  start: 900,
+  end: 960,
+  is_occupied: true,
+  isNextMove: false,
+  subject: "CPSC",
+  course: "121",
+  activity: "Tutorial"
+}
+
+const OVERLAP_1: Cell_display = 
+  {
+      id: "090ef8a7-5c35-4149-8eab-e99618d7cece",
+      name: "CPSC 110 L1F",
+      height: 9,
+      start: 930,
+      end: 1110,
+      is_occupied: true,
+      isNextMove: true,
+      subject: "CPSC",
+      course: "110",
+      activity: "Laboratory"
+  }
+const OVERLAP_2: Cell_display = 
+  {
+      id: "de3c85b5-64b4-4aaa-a3e4-d5e58a95b084",
+      name: "CPSC 110 104",
+      height: 4.5,
+      start: 930,
+      end: 1020,
+      is_occupied: true,
+      subject: "CPSC",
+      course: "110",
+      activity: "Lecture"
+  }
+const OVERLAP_3: Cell_display = 
+  {
+      id: "14eb8d4e-4aad-4c7f-9122-203660e00d9f",
+      name: "CPSC 121 102",
+      height: 4.5,
+      start: 1020,
+      end: 1110,
+      is_occupied: true,
+      subject: "CPSC",
+      course: "121",
+      activity: "Lecture"
+  }
+
+
+  const OVERLAP_GROUP: Cell_display[] = [OVERLAP_1, OVERLAP_2, OVERLAP_3]
+
 
 module.exports = {
   CS1:CS1, CS2:CS2, CS3:CS3, CS4:CS4, CS5:CS5, CS6:CS6,
@@ -447,4 +520,6 @@ module.exports = {
   CPSC110:CPSC110, CPSC121:CPSC121, CPSC210:CPSC210, ECON101:ECON101, ECON102:ECON102,
   CPSC110_compact:CPSC110_compact, CPSC121_compact:CPSC121_compact, CPSC210_compact:CPSC210_compact, ECON101_compact:ECON101_compact, ECON102_compact:ECON102_compact,
   MOSTCOMPACT:MOSTCOMPACT, MOSTSCATTER:MOSTSCATTER,
+
+  OVERLAP_0:OVERLAP_0, OVERLAP_1:OVERLAP_1, OVERLAP_2:OVERLAP_2, OVERLAP_3:OVERLAP_3, OVERLAP_GROUP:OVERLAP_GROUP
 }

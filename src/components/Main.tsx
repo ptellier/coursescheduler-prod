@@ -4,7 +4,7 @@ import Selections from "./Selections";
 import { Course } from "../data/DataDefinition/SearchWordDD";
 import { Section } from "../data/DataDefinition/SectionDD";
 import TriggerAPI from "./TriggerAPI";
-import Timetable from "./Timetable2/Timetable";
+import Timetable from "./Timetable/Timetable";
 // import Timetable from "./Timetable/Timetable";
 
 

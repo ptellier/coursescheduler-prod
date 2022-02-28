@@ -44,6 +44,7 @@ const los_ordered_times: Section[] = [
         end_time: 9 * 60 + 30, //"9:30"
       },
     ],
+    id: "someID"
   },
   {
     status: "Restricted",
@@ -61,6 +62,7 @@ const los_ordered_times: Section[] = [
         end_time: 11 * 60, //"11:00",
       },
     ],
+    id: "someID"
   },
 ];
 const los_unordered_times: Section[] = [
@@ -80,6 +82,7 @@ const los_unordered_times: Section[] = [
         end_time: 11 * 60, //"11:00",
       },
     ],
+    id: "someID"
   },
   {
     status: "Available",
@@ -97,6 +100,7 @@ const los_unordered_times: Section[] = [
         end_time: 9 * 60 + 30, //"9:30"
       },
     ],
+    id: "someID"
   },
 ];
 
@@ -197,7 +201,7 @@ test("cellHeight", () => {
       1.5
     )
   ).toEqual(2 * 1.5);
-});
+}); 
 
 test("defuseArray", () => {
   expect(defuseArray([])).toEqual([]);
