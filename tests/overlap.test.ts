@@ -1,7 +1,6 @@
 import { link } from "fs";
-import { subGroupByNonOverlap } from "../src/helpers/groupby";
 import { make_timeslot, is_overlap_timeslots, is_overlap_lotimeslots,
-  is_overlap_losections, is_overlap_bad_times, overlapCells } from "../src/helpers/overlap";
+  is_overlap_losections, is_overlap_bad_times, overlapCells, subGroupByNonOverlap } from "../src/helpers/overlap";
 const ex = require("./constants");
 
 /*------------------------------------------------*/
@@ -145,6 +144,9 @@ test("produce sub-groups of non-overlaapping cells of overlapping cells", () => 
   expect(subGroupByNonOverlap([ex.OVERLAP_0, ex.OVERLAP_1, ex.OVERLAP_2, ex.OVERLAP_3]))
   .toEqual([[ex.OVERLAP_0, ex.OVERLAP_3], [ex.OVERLAP_1],[ex.OVERLAP_2]])
 
-  expect(subGroupByNonOverlap([ex.OVERLAP_1, ex.OVERLAP_2, ex.OVERLAP_3, ex.OVERLAP_2, ex.OVERLAP_3]))
-  .toEqual([[ex.OVERLAP_1],[ex.OVERLAP_2, ex.OVERLAP_3], [ex.OVERLAP_2, ex.OVERLAP_3]])
+  // expect(subGroupByNonOverlap([ex.OVERLAP_1, ex.OVERLAP_2, ex.OVERLAP_3, ex.OVERLAP_2, ex.OVERLAP_3]))
+  // .toEqual([[ex.OVERLAP_1],[ex.OVERLAP_2, ex.OVERLAP_3], [ex.OVERLAP_2, ex.OVERLAP_3]])
+
+  expect(subGroupByNonOverlap([ex.OVERLAP_4, ex.OVERLAP_5, ex.OVERLAP_6, ex.OVERLAP_7]))
+  .toEqual([[ex.OVERLAP_4, ex.OVERLAP_6], [ex.OVERLAP_5], [ex.OVERLAP_7]])
 })

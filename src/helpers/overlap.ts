@@ -89,21 +89,44 @@ export const is_overlap_losections = (sections:Section[]): boolean => {
 
 // EFFECTS: create a subgroup of non-overlapping cells
 //          within the given group
+// TODO: fix duplicate bug [121-L1V, 110-L1S, 121-L1B, 121-L1L]
 export const subGroupByNonOverlap = (group: Cell_display[]) => {
   let rsf = [];
-  let worklist = group;
+  let worklist = [...group];
 
   for (const cell of group) {
-    let l = [cell]
-    worklist.forEach(g => {
-      if (l.every(item => !overlapCells(item, g))) {
-        l.push(g)
-        const indx = worklist.indexOf(g);
-        worklist.splice(indx, 1)
+    if (worklist.length === 0) {break}
+    // console.log(worklist)
+      let list = [cell];
+      for (const wrk of worklist) {
+        if (list.every(l => !overlapCells(l, wrk))) {
+            list.push(wrk)
+            worklist = worklist.filter(x => x !== wrk && x !== cell)
+        } 
       }
-    })
-    rsf.push(l);
+      worklist = worklist.filter(x => x !== cell)
+      rsf.push(list)
   }
   console.log(rsf)
   return rsf;
 }
+
+// export const subGroupByNonOverlap = (group: Cell_display[]) => {
+//   group.forEach(g => console.log(g))
+//   console.log('-------')
+//   let rsf = [];
+//   let worklist = group;
+
+//   for (const cell of group) {
+//     let l = [cell]
+//     worklist.forEach(g => {
+//       if (l.every(item => !overlapCells(item, g))) {
+//         l.push(g)
+//         const indx_g = worklist.indexOf(g);
+//         worklist.splice(indx_g, 1)
+//       }
+//     })
+//     rsf.push(l);   
+//   }
+//   return rsf;
+// }

@@ -499,6 +499,58 @@ const OVERLAP_3: Cell_display =
       activity: "Lecture"
   }
 
+  const OVERLAP_4: Cell_display = 
+  {
+    "id": "9183304a-3d1c-4abb-85ed-ad054f251a27",
+    "name": "CPSC 121 L1V",
+    "height": 6,
+    "start": 660,
+    "end": 780,
+    "is_occupied": true,
+    "isNextMove": true,
+    "subject": "CPSC",
+    "course": "121",
+    "activity": "Laboratory"
+}
+  const OVERLAP_5: Cell_display = 
+  {
+    "id": "408bf7fb-3b62-47ce-bab5-5905b2152bf1",
+    "name": "CPSC 110 L1S",
+    "height": 9,
+    "start": 750,
+    "end": 930,
+    "is_occupied": true,
+    "isNextMove": false,
+    "subject": "CPSC",
+    "course": "110",
+    "activity": "Laboratory"
+}
+  const OVERLAP_6: Cell_display = 
+  {
+    "id": "c01d5434-2e68-485a-bd07-e8389e7e6b5c",
+    "name": "CPSC 121 L1B",
+    "height": 6,
+    "start": 780,
+    "end": 900,
+    "is_occupied": true,
+    "isNextMove": true,
+    "subject": "CPSC",
+    "course": "121",
+    "activity": "Laboratory"
+}
+  const OVERLAP_7: Cell_display = 
+  {
+    "id": "14d785c4-4b2f-4c59-a916-0bd2157ca5c0",
+    "name": "CPSC 121 L1L",
+    "height": 6,
+    "start": 900,
+    "end": 1020,
+    "is_occupied": true,
+    "isNextMove": true,
+    "subject": "CPSC",
+    "course": "121",
+    "activity": "Laboratory"
+}
 
   const OVERLAP_GROUP: Cell_display[] = [OVERLAP_1, OVERLAP_2, OVERLAP_3]
 
@@ -521,5 +573,6 @@ module.exports = {
   CPSC110_compact:CPSC110_compact, CPSC121_compact:CPSC121_compact, CPSC210_compact:CPSC210_compact, ECON101_compact:ECON101_compact, ECON102_compact:ECON102_compact,
   MOSTCOMPACT:MOSTCOMPACT, MOSTSCATTER:MOSTSCATTER,
 
-  OVERLAP_0:OVERLAP_0, OVERLAP_1:OVERLAP_1, OVERLAP_2:OVERLAP_2, OVERLAP_3:OVERLAP_3, OVERLAP_GROUP:OVERLAP_GROUP
+  OVERLAP_0:OVERLAP_0, OVERLAP_1:OVERLAP_1, OVERLAP_2:OVERLAP_2, OVERLAP_3:OVERLAP_3, OVERLAP_GROUP:OVERLAP_GROUP,
+  OVERLAP_4:OVERLAP_4, OVERLAP_5:OVERLAP_5, OVERLAP_6:OVERLAP_6, OVERLAP_7:OVERLAP_7
 }

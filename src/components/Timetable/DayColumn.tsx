@@ -1,5 +1,5 @@
 import { Section } from "../../data/DataDefinition/SectionDD";
-import { subGroupByNonOverlap } from "../../helpers/overlap";
+import { overlapCells, subGroupByNonOverlap } from "../../helpers/overlap";
 import { Cell_display, convertToDisplay, createCells, fillTimes, generateTimes, getGapCells } from "../../helpers/time";
 import Droppable from "./Droppable";
 
@@ -14,59 +14,28 @@ export interface DayColumnProps {
 
 
 const DayColumn = ({ data, idx, dragEnd: moveItem, dragStart, markTarget, markId }: DayColumnProps) => {
-
-// REQUIRES: cells is a sorted array
+ 
 // EFFECTS: group overlapping course schedules
+// INVARIANT: cells is a sorted by start time
 const groupOverlap = (cells: Cell_display[]) => {
-  let acc = [];
-  let prev = cells[0];
-  let addition = [];
-  let record:Cell_display[] = [];
-
-  for (let i=1; i < cells.length; i++) {
-      if (overlaps(prev, cells[i])) {
-          if (record.includes(prev)) {
-              record.push(cells[i])
-              addition.push(cells[i]);
-          } else {
-              record.push(prev)
-              record.push(cells[i])
-              addition.push(prev, cells[i]);
-          }
-          if (prevLonger(prev, cells[i])) {
-            prev = prev;
-          } else {
-            prev = cells[i];
-          }
-      } else {
-          if (addition.length === 0) {
-              acc.push([prev])
-          } else {
-              acc.push(addition);
-              addition = [];
-          }
-          if (i === cells.length - 1) { acc.push([cells[i]])}
-          prev = cells[i];
-      }
+  const first = cells[0];
+  let maxEnd = first.end;
+  let result:Cell_display[][] = [];
+  let curr:Cell_display[] = [];
+  
+  for (const cell of cells) {
+    if (cell.start < maxEnd) {
+      curr.push(cell)    //accumlate cell to curr
+      //set maxEnd = max end of curr
+      maxEnd = Math.max(...curr.map(c => c.end))
+    } else {
+      result.push(curr) //accumulate curr to result
+      curr = [cell]     //set curr = [cell]
+      maxEnd = cell.end //set maxEnd = cell.end
+    }
   }
-  acc.push(addition);
-  if (acc[acc.length - 1].length === 0) { acc.pop() }
-  return acc;
-}
-
-//EFFECTS: produce true if prev course has longer duration than curr
-const prevLonger = (prev:Cell_display , curr: Cell_display) => {
-  const prevDur = prev.end - prev.start;
-  const currDur = curr.end - curr.start;
-  return prevDur > currDur;
-}
-
-// EFFECTS: return true if two cells overlaps
-const overlaps = (c1:Cell_display, c2:Cell_display) => {
-  let s1 = c1.start; let e1 = c1.end;
-  let s2 = c2.start; let e2 = c2.end;
-  return ((e2 > e1) && (s2 < e1)) || ((e2 <= e1) && (e2 > s1))
-}
+  return result;
+} 
 
 const handleNonOverlap = (group:Cell_display[]) => {
   const c = group[0];
@@ -81,9 +50,7 @@ const handleNonOverlap = (group:Cell_display[]) => {
 const handleOverlap = (group:Cell_display[]) => {
   const startW = Math.min(...group.flatMap(g => g).map(g => g.start))
   const endW = Math.max(...group.flatMap(g => g).map(g => g.end))
-  console.log(group)
-  //1. group by non overlaps
-
+  
   const listOfCells = subGroupByNonOverlap(group).map(g => {
     const gapCells = getGapCells(
       g.map(item => fillTimes(item.start, item.end, 30)).flat(),
@@ -104,6 +71,7 @@ const handleOverlap = (group:Cell_display[]) => {
   //   const sortedCells = mergedCells.sort((c1,c2) => c1.start > c2.start ? 1 : -1)
   //   return sortedCells;
   // })
+
   return (
     <div className="d-flex">
       {listOfCells.map(cells => 
