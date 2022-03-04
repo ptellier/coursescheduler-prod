@@ -209,7 +209,7 @@ export const extractTimes = (loc: Cell[]): Time[] => {
 export const getGapCells = (occupied: Time[], times: Time[]): Cell[] => {
   const gap_times = times.filter((time) => !occupied.includes(time));
   const gap_cells = gap_times.map((gap_time) => ({
-    id: "na",
+    id: "gap",
     time: gap_time,
     name: `gap_${gap_time}`,
     is_occupied: false,

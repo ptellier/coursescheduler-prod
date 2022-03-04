@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDrop } from "react-dnd";
 import Draggable from "./Draggable";
 
-const Droppable = ({ c, idx, moveItem, dragStart, markTarget, markId }) => {
+const Droppable = ({ c, idx, moveItem, dragStart, markTarget, markId, isOverlap }) => {
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "div",
     // function invokes whenever drops
@@ -15,7 +15,7 @@ const Droppable = ({ c, idx, moveItem, dragStart, markTarget, markId }) => {
   useEffect(() => {
     if (isOver && c.id) {
       markTarget(c);
-    }
+    } 
   }, [isOver])
 
   return (
@@ -23,17 +23,17 @@ const Droppable = ({ c, idx, moveItem, dragStart, markTarget, markId }) => {
       {c.isNextMove ? (
         <div
           key={`${c.id}`}
-          className={`d-flex border rounded align-items-center justify-content-center ${markId == c.id && 'bg-success'}`}
+          className={`d-flex rounded align-items-center justify-content-center ${markId === c.id && 'bg-primary'}`}
           style={{
             height: `${c.height}rem`,
-            backgroundColor: "rgba(40,140,173,0.35)",
+            backgroundColor: isOverlap ? "rgba(255,0,0,0.35)" : "rgba(	0, 200, 100, 0.35)",
           }}
         >
           {c.name}
         </div>
       ) : (
         <Draggable
-          key={`${c.id}`}
+          key={`Drop-${c.id}`}
           id={c.id}
           idx={idx}
           c={c}

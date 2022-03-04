@@ -6,7 +6,7 @@ const Draggable = ({ id, idx, c, dragStart }) => {
     type: "div",
     item: { draggableId: id, sourceDroppableId: id, sourceIdx: idx },
     collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
+      isDragging: monitor.isDragging(),
     }),
   }));
 
@@ -17,7 +17,6 @@ const Draggable = ({ id, idx, c, dragStart }) => {
   return (
           <div
             ref={drag}
-            key={Math.random().toString(36)}
             className="d-flex border rounded align-items-center justify-content-center"
             style={{
               height: `${c.height}rem`,

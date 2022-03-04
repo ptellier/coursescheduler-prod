@@ -107,7 +107,6 @@ export const subGroupByNonOverlap = (group: Cell_display[]) => {
       worklist = worklist.filter(x => x !== cell)
       rsf.push(list)
   }
-  console.log(rsf)
   return rsf;
 }
 

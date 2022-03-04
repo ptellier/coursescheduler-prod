@@ -1,7 +1,8 @@
 import { Section } from "../../data/DataDefinition/SectionDD";
-import { overlapCells, subGroupByNonOverlap } from "../../helpers/overlap";
+import { subGroupByNonOverlap } from "../../helpers/overlap";
 import { Cell_display, convertToDisplay, createCells, fillTimes, generateTimes, getGapCells } from "../../helpers/time";
 import Droppable from "./Droppable";
+import Gap from "./Gap";
 
 export interface DayColumnProps {
   data: Section[];
@@ -10,10 +11,11 @@ export interface DayColumnProps {
   dragStart: Function;
   markTarget: Function;
   markId:string;
+  setMarkId:Function;
 }
 
 
-const DayColumn = ({ data, idx, dragEnd: moveItem, dragStart, markTarget, markId }: DayColumnProps) => {
+const DayColumn = ({ data, idx, dragEnd: moveItem, dragStart, markTarget, markId, setMarkId}: DayColumnProps) => {
  
 // EFFECTS: group overlapping course schedules
 // INVARIANT: cells is a sorted by start time
@@ -38,9 +40,10 @@ const groupOverlap = (cells: Cell_display[]) => {
 } 
 
 const handleNonOverlap = (group:Cell_display[]) => {
+  const isOverlap = false
   const c = group[0];
   if (c.is_occupied) {
-    return renderDroppable(c)
+    return renderDroppable(c, isOverlap)
   } else {
     return renderGap(c)
   }
@@ -48,6 +51,7 @@ const handleNonOverlap = (group:Cell_display[]) => {
 
 
 const handleOverlap = (group:Cell_display[]) => {
+  const isOverlap = true
   const startW = Math.min(...group.flatMap(g => g).map(g => g.start))
   const endW = Math.max(...group.flatMap(g => g).map(g => g.end))
   
@@ -73,12 +77,14 @@ const handleOverlap = (group:Cell_display[]) => {
   // })
 
   return (
-    <div className="d-flex">
+    <div className="d-flex w-100">
       {listOfCells.map(cells => 
-        <div>
+        <div 
+        key={cells[0].id}
+        className="w-100">
           {cells.map(c => 
             c.is_occupied 
-            ? renderDroppable(c)
+            ? renderDroppable(c, isOverlap)
             : renderGap(c)
           )}
         </div>
@@ -88,12 +94,14 @@ const handleOverlap = (group:Cell_display[]) => {
   );
 }
 
-const renderDroppable = (c: Cell_display) => {
-  return <Droppable key={"Droppable-" + c.id} c={c} idx={idx} moveItem={moveItem} dragStart={dragStart} markTarget={markTarget} markId={markId} /> 
+const renderDroppable = (c: Cell_display, isOverlap:boolean) => {
+  return <Droppable key={"Droppable-" + c.id} c={c} idx={idx} moveItem={moveItem} dragStart={dragStart} markTarget={markTarget} markId={markId} isOverlap={isOverlap} /> 
 }
 
 const renderGap = (c: Cell_display) => {
-  return <div key={Math.random().toString(36)} style={{ height: `${c.height}rem` }} />
+  // console.log(c)
+  // return <div key={Math.random().toString(36)} style={{ height: `${c.height}rem` }} />
+  return <Gap c={c} idx={idx}  moveItem={moveItem} setMarkId={setMarkId}/>
 }
 
 

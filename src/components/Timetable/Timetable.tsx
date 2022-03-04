@@ -17,7 +17,7 @@ export interface TimetableProps {
 const Timetable = ({ recommended, sections }: TimetableProps) => {
   const [currentData, setCurrentData] = useState<Section[][]>([]);
   const [prevData, setPrevData] = useState<Section[][]>([[],[],[],[],[],[]]);
-  const [markId, setMarkId] = useState<string>("default");
+  const [markId, setMarkId] = useState<string>("");
 
   useEffect(() => {
     const default_opt = "compact"
@@ -88,6 +88,10 @@ const Timetable = ({ recommended, sections }: TimetableProps) => {
     unmarkNextMove(sections);
     const { draggableId, sourceDroppableId } = source;
     const { destinDroppableId } = destination;
+    if(destinDroppableId === "gap") {
+      setCurrentData([...prevData])
+      return;
+    }
     const unpackedPrev = prevData.flatMap(d => d)
     const removed = unpackedPrev.filter(item => item.id !== draggableId)
     const add = sections.filter(item => item.id === destinDroppableId)
@@ -187,6 +191,7 @@ const Timetable = ({ recommended, sections }: TimetableProps) => {
                   dragStart={onDragStart}
                   markTarget={markTarget}
                   markId={markId}
+                  setMarkId={setMarkId}
                 />
               ))}
             </div>
