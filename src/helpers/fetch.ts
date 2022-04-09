@@ -8,9 +8,6 @@ import { Section } from "../data/DataDefinition/SectionDD";
  */
 export const fetchParallel = async (losw: SearchWord[]) => {
   let acc: Section[] = []
-  
-  // TODO: split losw in half then loop the subgroups
-
   await Promise.all(losw.map(async(sw) => { 
       const data = await fetchSection(sw)
       acc.push(...data.sections);
@@ -41,7 +38,8 @@ export const fetchSection = async (sw: SearchWord) => {
   const [subject, number] = sw.split("/")
   // const url = `https://api.ubccourses.com/section/${sw}/?realtime=1`; 
   // const url = `https://api.ubccourses.com/section/${sw}/`;
-  const url = `https://puppeteer-test-sl.herokuapp.com/api/sections?subject=${subject}&number=${number}`
+  // const url = `https://puppeteer-test-sl.herokuapp.com/api/sections?subject=${subject}&number=${number}`
+  const url = `http://localhost:3001/api/sections?subject=${subject}&number=${number}`
   const res = await fetch(url);
   const data = await res.json();
   return data;
