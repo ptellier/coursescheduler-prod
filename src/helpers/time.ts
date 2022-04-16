@@ -11,11 +11,13 @@ const CELL_HEIGHT = 1.5;
 
 /**Data Definitions */
 
-/** Cell data
- * @property {number} time time that the cell takes presence
- * @property {number} name name of cell, course name if class (note: gap's name is gap_time)
- * @property {number} is_occupied whether cell occupies certain time
- *  * cell can be either occupied or gap
+/** 
+ * A cell in a timetable
+ * @property {number} time time in the timetable where the cell is to be placed
+ * @property {number} name name of cell 
+ *    (note: if cell is a class then name is course name) 
+ *    (note: if cell is a gap in the timetable name is "gap_time")
+ * @property {number} is_occupied whether cell occupies a certain time cell can be either occupied or gap
  */
 export interface Cell {
   id: string;
@@ -28,7 +30,8 @@ export interface Cell {
   isNextMove?: boolean;
 }
 
-/** Cells ready for display on UI
+/** 
+ * GUI diplay info for a cell in a timetable that has...
  * @property {number} height
  * @property {number} start
  * @property {number} end
