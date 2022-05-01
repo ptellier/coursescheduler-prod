@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDrag } from "react-dnd";
 
 const Draggable = ({ id, idx, c, dragStart }) => {
@@ -6,8 +6,11 @@ const Draggable = ({ id, idx, c, dragStart }) => {
     type: "div",
     item: { draggableId: id, sourceDroppableId: id, sourceIdx: idx },
     collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
+      isDragging: !!monitor.isDragging(),
     }),
+    end: (item, monitor) => {
+      console.log("---")
+    }
   }));
 
   useEffect(() => {

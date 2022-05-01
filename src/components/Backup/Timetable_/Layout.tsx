@@ -1,5 +1,5 @@
 import React from "react";
-import { createCells } from "../../helpers/time";
+import { createCells } from "../../../helpers/time";
 
 const Layout = () => {
   return (

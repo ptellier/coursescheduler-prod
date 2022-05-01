@@ -1,4 +1,4 @@
-import { generateTimes } from "../../helpers/time";
+import { generateTimes } from "../../../helpers/time";
 
 
 

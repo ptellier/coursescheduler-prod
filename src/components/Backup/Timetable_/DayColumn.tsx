@@ -1,6 +1,6 @@
-import { Section } from "../../data/DataDefinition/SectionDD";
-import { subGroupByNonOverlap } from "../../helpers/overlap";
-import { Cell_display, convertToDisplay, createCells, fillTimes, generateTimes, getGapCells } from "../../helpers/time";
+import { Section } from "../../../data/DataDefinition/SectionDD";
+import { subGroupByNonOverlap } from "../../../helpers/overlap";
+import { Cell_display, convertToDisplay, createCells, fillTimes, generateTimes, getGapCells } from "../../../helpers/time";
 import Droppable from "./Droppable";
 import Gap from "./Gap";
 
@@ -99,8 +99,6 @@ const renderDroppable = (c: Cell_display, isOverlap:boolean) => {
 }
 
 const renderGap = (c: Cell_display) => {
-  // console.log(c)
-  // return <div key={Math.random().toString(36)} style={{ height: `${c.height}rem` }} />
   return <Gap c={c} idx={idx}  moveItem={moveItem} setMarkId={setMarkId}/>
 }
 

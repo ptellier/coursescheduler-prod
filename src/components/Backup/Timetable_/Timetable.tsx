@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Section } from "../../data/DataDefinition/SectionDD";
-import { groupSectionsByWeek } from "../../helpers/groupby";
-import { Cell_display } from "../../helpers/time";
-import { Recommendation } from "../Main";
+import { Section } from "../../../data/DataDefinition/SectionDD";
+import { groupSectionsByWeek } from "../../../helpers/groupby";
+import { Cell_display } from "../../../helpers/time";
+import { Recommendation } from "../../Main";
 import DayColumn from "./DayColumn";
 import DaysRow from "./DaysRow";
 import Layout from "./Layout";
@@ -15,6 +15,7 @@ export interface TimetableProps {
 
 
 const Timetable = ({ recommended, sections }: TimetableProps) => {
+  
   const [currentData, setCurrentData] = useState<Section[][]>([]);
   const [prevData, setPrevData] = useState<Section[][]>([[],[],[],[],[],[]]);
   const [markId, setMarkId] = useState<string>("");
@@ -24,6 +25,7 @@ const Timetable = ({ recommended, sections }: TimetableProps) => {
     selectRecommendation(default_opt)
   }, [recommended])
 
+  // group sections state based on recommendation option that user selects
   const selectRecommendation = (opt: string) => {
     if (opt === "compact") {
       setCurrentData(groupSectionsByWeek(recommended.compact));
@@ -44,15 +46,19 @@ const Timetable = ({ recommended, sections }: TimetableProps) => {
     }
   };
 
+  // stash previous data before the move and display possible moves
   const onDragStart = (c: Cell_display) => {
     stashPrevData(currentData);
     displayPossibleMoves(currentData, c);
   };
 
+  // store schedule information before user starts to drag
+  // this information is used for reversing move if user decides to cancel drag
   const stashPrevData = (currentData: Section[][]) => {
     setPrevData([...currentData]);
   };
 
+  // display set of course cells that are relevant to currently dragged course
   const displayPossibleMoves = (currentData: Section[][], c: Cell_display) => {
     let filtered = sections.filter(
       (a) =>
@@ -67,12 +73,15 @@ const Timetable = ({ recommended, sections }: TimetableProps) => {
     setCurrentData(packed);
   };
 
+  // set each section to be considered as next move
   const markNextMove = (sections: Section[]) => {
     for (let s of sections) {
       s.isNextMove = true;
     }
     return sections
   }
+
+  // set each section to be considered not as next move
   const unmarkNextMove = (sections: Section[]) => {
     for (let s of sections) {
       s.isNextMove = false;
@@ -94,7 +103,7 @@ const Timetable = ({ recommended, sections }: TimetableProps) => {
     }
     const unpackedPrev = prevData.flatMap(d => d)
     const removed = unpackedPrev.filter(item => item.id !== draggableId)
-    const add = sections.filter(item => item.id === destinDroppableId)
+    const add = sections.filter(section => section.id === destinDroppableId)
     const result = [...removed, ...add]
 
     if (sourceDroppableId === destinDroppableId) {

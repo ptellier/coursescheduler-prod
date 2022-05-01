@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect } from "react";
 import { useDrop } from "react-dnd";
-import { Cell_display } from '../../helpers/time';
+import { Cell_display } from '../../../helpers/time';
 
 interface GapProp {
   c: Cell_display;
