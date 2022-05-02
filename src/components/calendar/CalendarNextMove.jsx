@@ -10,7 +10,7 @@ const CalendarNextMove = ({ section, timeSlot, current }) => {
         //EFFECTS: produce true if section.id matches currentHoverId
         canDrop: (item) => {
             // console.log("Dragging: ", item, "To: ", section.id)
-            return section.id === current.currentHoverId
+            return section.id === current.currentHover
         },
         drop: (item) => {},
         collect: (monitor) => ({
@@ -22,6 +22,11 @@ const CalendarNextMove = ({ section, timeSlot, current }) => {
         }
     }));
 
+    //Check if the Calendar timeslot being hovered over is of the same course section as this Calendar timeslot
+    function isHoverTheSameSection() {
+      return (section.id === current.currentHover );
+    }
+
 
   return (
     <div className="outlined-cal-slot cal-slot"
@@ -31,7 +36,7 @@ const CalendarNextMove = ({ section, timeSlot, current }) => {
                    + " / " 
                    + timeToGridRow(timeSlot.end_time),
             gridColumn:timeSlot.day,
-            backgroundColor: canDrop && "purple"
+            backgroundColor: isHoverTheSameSection() && "purple"
          }}
     >
         <div>{section.subject}</div>
