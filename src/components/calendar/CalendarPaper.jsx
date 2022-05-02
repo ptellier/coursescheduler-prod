@@ -42,6 +42,11 @@ const CalendarPaper = ({ sections, fetchedSections }) => {
         hideNextMoves
     }
 
+    const current = {
+        currentHover,
+        setCurrentHover
+    }
+
     /**
      * sections are sections given by recommendation algorithm
      * nextMoves are sections are next possible sections corresponding to user's dragging section
@@ -55,6 +60,7 @@ const CalendarPaper = ({ sections, fetchedSections }) => {
                                          section={section} 
                                          isNextMove={false} 
                                          handler={dragHandler}
+                                         current={current}
                         />
                     ))}
 
@@ -63,6 +69,8 @@ const CalendarPaper = ({ sections, fetchedSections }) => {
                                          section={section} 
                                          isNextMove={true}
                                          handler={handleDrop}
+                                         current={current}
+                                         
                         />
                     ))}
 

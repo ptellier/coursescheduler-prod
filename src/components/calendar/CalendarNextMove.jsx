@@ -2,14 +2,15 @@ import React from 'react'
 import {useDrop} from "react-dnd";
 import { timeToGridRow } from './CalendarConstants';
 
-const CalendarNextMove = ({ section, timeSlot }) => {
+const CalendarNextMove = ({ section, timeSlot, current }) => {
 
     const [{ isOver, canDrop }, drop] = useDrop(() => ({
         accept: "calendarTimeSlot",
+
+        //EFFECTS: produce true if section.id matches currentHoverId
         canDrop: (item) => {
-            console.log("Dragging: ", item, "To: ", section.id)
-            // section.id === currentHoverId
-            return section.id === section.id
+            // console.log("Dragging: ", item, "To: ", section.id)
+            return section.id === current.currentHoverId
         },
         drop: (item) => {},
         collect: (monitor) => ({
@@ -17,8 +18,7 @@ const CalendarNextMove = ({ section, timeSlot }) => {
           canDrop: monitor.canDrop(),
         }),
         hover: (item, monitor) => {
-            // console.log("from:",item.draggableId, "to: ", section.id)
-            console.log("Current: ", section.id)
+            current.setCurrentHover(section.id)
         }
     }));
 
@@ -31,7 +31,7 @@ const CalendarNextMove = ({ section, timeSlot }) => {
                    + " / " 
                    + timeToGridRow(timeSlot.end_time),
             gridColumn:timeSlot.day,
-            backgroundColor: (canDrop) && "purple"
+            backgroundColor: canDrop && "purple"
          }}
     >
         <div>{section.subject}</div>
