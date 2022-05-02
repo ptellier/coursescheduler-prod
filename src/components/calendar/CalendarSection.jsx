@@ -23,7 +23,8 @@ const CalendarSection = ({ section, isNextMove, handler }) => {
             <CalendarTimeSlot key={findUniqueKey(timeSlot)}
                               section={section}
                               timeSlot={timeSlot}
-                              showNextMoves={handler}
+                              showNextMoves={handler.showNextMoves}
+                              hideNextMoves={handler.hideNextMoves}
             />
         ))
     }

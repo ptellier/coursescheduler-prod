@@ -3,7 +3,7 @@ import {timeToGridRow} from "./CalendarConstants";
 import {useDrag} from "react-dnd";
 
 
-const CalendarTimeSlot = ({section, timeSlot, showNextMoves}) => {
+const CalendarTimeSlot = ({section, timeSlot, showNextMoves, hideNextMoves}) => {
 
     const [{isDragging}, drag] = useDrag(() => ({
         type: "calendarTimeSlot",
@@ -13,7 +13,7 @@ const CalendarTimeSlot = ({section, timeSlot, showNextMoves}) => {
         }),
         end: (item, monitor) => {
             // Cancel this drag if invalid drop
-            console.log("User Stopped Drag", item)
+            hideNextMoves()
         }
     }));
     

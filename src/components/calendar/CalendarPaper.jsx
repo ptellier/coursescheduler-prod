@@ -9,7 +9,7 @@ import { useState } from "react";
 
 const CalendarPaper = ({ sections, fetchedSections }) => {
     const [nextMoves, setNextMoves] = useState([])
-
+    const [currentHover, setCurrentHover] = useState("")
 
     // Get and sets the next moves.
     // this function allows display of next possible moves
@@ -20,6 +20,7 @@ const CalendarPaper = ({ sections, fetchedSections }) => {
     }
     // find all sections that match given course's name and number
     // and returns all of the search result as an array
+    // important: itself, or given section, must be excluded
     const getNextMoves = (section) => {
         return fetchedSections.filter(fetchedSection => 
             fetchedSection.subject === section.subject && 
@@ -30,6 +31,15 @@ const CalendarPaper = ({ sections, fetchedSections }) => {
 
     const handleDrop = () => {
         //TODO
+    }
+
+    const hideNextMoves = () => {
+        setNextMoves([])
+    }
+
+    const dragHandler = {
+        showNextMoves,
+        hideNextMoves
     }
 
     /**
@@ -44,7 +54,7 @@ const CalendarPaper = ({ sections, fetchedSections }) => {
                         <CalendarSection key={section.id}
                                          section={section} 
                                          isNextMove={false} 
-                                         handler={showNextMoves}
+                                         handler={dragHandler}
                         />
                     ))}
 
