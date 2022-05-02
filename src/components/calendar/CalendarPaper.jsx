@@ -1,28 +1,66 @@
-import * as React from "react";
 import {Paper} from "@mui/material";
 import TopDayCells from "./TopDayCells";
 import LeftTimeCells from "./LeftTimeCells";
 import MainCells from "./MainCells";
-import CalendarSlot from "./CalendarSlot";
-// import {DndProvider} from "react-dnd";
-// import {HTML5Backend} from "react-dnd-html5-backend";
+import CalendarSection from "./CalendarSection";
+import { useState } from "react";
 
 
 
-const CalendarPaper = ({ sections }) => {
+const CalendarPaper = ({ sections, fetchedSections }) => {
+    const [nextMoves, setNextMoves] = useState([])
+
+
+    // Get and sets the next moves.
+    // this function allows display of next possible moves
+    // that user can make
+    const showNextMoves = (section) => {
+        const sections = getNextMoves(section)
+        setNextMoves(sections)
+    }
+    // find all sections that match given course's name and number
+    // and returns all of the search result as an array
+    const getNextMoves = (section) => {
+        return fetchedSections.filter(fetchedSection => 
+            fetchedSection.subject === section.subject && 
+            fetchedSection.course === section.course &&
+            fetchedSection.activity === section.activity
+        );
+    }
+
+    const handleDrop = () => {
+        //TODO
+    }
+
+    /**
+     * sections are sections given by recommendation algorithm
+     * nextMoves are sections are next possible sections corresponding to user's dragging section
+     */
     return (
-        // <DndProvider backend={HTML5Backend}>
-            <Paper className="Paper" elevation={0} sx={{borderRadius:"20px"}}>
-                    <div id="grid-calendar-container">        
-                        {sections.map(section => (
-                            <CalendarSlot section={section} />
-                        ))}
-                        <TopDayCells/>
-                        <LeftTimeCells/>
-                        <MainCells/>
-                    </div>
-            </Paper>
-        // </DndProvider>
+        <Paper className="Paper" elevation={0} sx={{borderRadius:"20px"}}>
+                <div id="grid-calendar-container">      
+
+                    {sections.map(section => (
+                        <CalendarSection key={section.id}
+                                         section={section} 
+                                         isNextMove={false} 
+                                         handler={showNextMoves}
+                        />
+                    ))}
+
+                    {nextMoves.map(section => (
+                        <CalendarSection key={section.id} 
+                                         section={section} 
+                                         isNextMove={true}
+                                         handler={handleDrop}
+                        />
+                    ))}
+
+                    <TopDayCells/>
+                    <LeftTimeCells/>
+                    <MainCells/>
+                </div>
+        </Paper>
     );
 }
 
