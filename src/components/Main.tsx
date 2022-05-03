@@ -12,8 +12,6 @@ import { NextMoveProvider } from "./calendar/NextMoveContext";
 /**
  * User selected course description
  * @typedef  {Object}   Course
- * @property {Section[]} compact        - "CPSC/110"
-
  */
 export interface Recommendation {
   compact: Section[];
@@ -28,14 +26,18 @@ export interface Recommendation {
 
 const Main: FC = () => {
 
+  /** all sections that were fetched from web scrapper */
   const [sections, setSections] = useState<Section[]>([]);
-  /** List of Schedule: combinations of sections list that form a schedule */
-  const [recommended, set_recommended] = useState<Recommendation>({
-    compact: [], consistent: [], scatter: [], earlyStart: [], 
-    lateStart: [], earlyEnd: [], lateEnd: [], freeDay: [],
-  });
 
-  /** List of Courses: courses that users looked up and want to get scheduled */
+  /** sections that were recommended, each array is a recommendation */
+  const [recommended, set_recommended] = useState<Recommendation>(
+    {
+      compact: [], consistent: [], scatter: [], earlyStart: [], 
+      lateStart: [], earlyEnd: [], lateEnd: [], freeDay: [],
+    }
+  );
+
+  /** courses that users looked up and want to get scheduled */
   const [loc, set_loc] = useState<Course[]>([]);
 
   /** raw user input from search bar and term selection components */
