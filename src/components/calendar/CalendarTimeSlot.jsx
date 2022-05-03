@@ -6,13 +6,21 @@ import { NextMoveContext } from "./NextMoveContext";
 
 const CalendarTimeSlot = ({section, timeSlot}) => {
     const {showNextMoves, hideNextMoves} = useContext(NextMoveContext);
+
+    /**
+     * EFFECTS: set isDragging to true when drag start
+     *          invoke hideNextMoves when drag ends
+     * NOTE: 'item: section' passes this section to 
+     *        the call sequence of drop function in
+     *        CalendarNextMove.jsx file
+     */
     const [{isDragging}, drag] = useDrag(() => ({
         type: "calendarTimeSlot",
         item: section, // this section is the section being moved from 
         collect: monitor => ({
             isDragging: !!monitor.isDragging(),            
         }),
-        end: () => {hideNextMoves()}
+        end: () => hideNextMoves()
     }));
     
     /**

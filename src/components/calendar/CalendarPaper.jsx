@@ -12,11 +12,15 @@ const CalendarPaper = ({ recommended }) => {
 
     const [displayedSections, setDisplayedSections] = useState([])
 
+    /**
+     * sets displayedSections with recommended data
+     */
     useEffect(() => {
         setDisplayedSections(recommended)
     }, [recommended])
     
     /**
+     * TODO: move this function to drop context + rename it better
      * MODIFIES: displayedSections
      * EFFECTS: filter 'from' and insert 'to' in displayedSections
      */

@@ -31,14 +31,8 @@ const Main: FC = () => {
   const [sections, setSections] = useState<Section[]>([]);
   /** List of Schedule: combinations of sections list that form a schedule */
   const [recommended, set_recommended] = useState<Recommendation>({
-    compact: [],
-    consistent: [],
-    scatter: [],
-    earlyStart: [],
-    lateStart: [],
-    earlyEnd: [],
-    lateEnd: [],
-    freeDay: [],
+    compact: [], consistent: [], scatter: [], earlyStart: [], 
+    lateStart: [], earlyEnd: [], lateEnd: [], freeDay: [],
   });
 
   /** List of Courses: courses that users looked up and want to get scheduled */
