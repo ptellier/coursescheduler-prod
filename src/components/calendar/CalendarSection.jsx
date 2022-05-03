@@ -17,6 +17,7 @@ const CalendarSection = ({ section, isNextMove, handler, current }) => {
                               section={section} 
                               timeSlot={timeSlot} 
                               current={current}
+                              handler={handler}
             />
         ))
         : section.schedule.map((timeSlot) =>  (

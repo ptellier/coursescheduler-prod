@@ -2,22 +2,29 @@ import React, { useEffect } from 'react'
 import {useDrop} from "react-dnd";
 import { timeToGridRow } from './CalendarConstants';
 
-const CalendarNextMove = ({ section, timeSlot, current }) => {
+const CalendarNextMove = ({ section, timeSlot, current, handler }) => {
 
-    const [{ isOver, canDrop }, drop] = useDrop(() => ({
+    const [{ isOver }, drop] = useDrop(() => ({
         accept: "calendarTimeSlot",
-        drop: (item) => {},
+        drop: (item) => handler, // TODO
         collect: (monitor) => ({
           isOver:  monitor.isOver(),
         }),
-        hover: (item, monitor) => {
+        hover: (monitor) => {
             // sets currentHover to thiscurrently hovered next move's id
-            if (monitor.isOver) {
-                current.setCurrentHover(section.id)
-            }
+            current.setCurrentHover(section.id)
         }
-    }), [current.currentHover]);
+    }));
 
+    //Check if the Calendar timeslot being hovered over is of 
+    // the same course section as this Calendar timeslot
+    function isHoverTheSameSection() {
+      return (section.id === current.currentHover );
+    }
+
+    //Resets currently hovering's id to nothing
+    //this ensures all the next moves get uncolored
+    //when user takes off his mouse away from a next move
     useEffect(() => {
         !isOver && current.setCurrentHover("")
     }, [isOver])
@@ -30,7 +37,7 @@ const CalendarNextMove = ({ section, timeSlot, current }) => {
                    + " / " 
                    + timeToGridRow(timeSlot.end_time),
             gridColumn:timeSlot.day,
-            backgroundColor: (section.id === current.currentHover) && "purple"
+            backgroundColor: isHoverTheSameSection() && "purple"
          }}
     >
         <div>{section.subject}</div>

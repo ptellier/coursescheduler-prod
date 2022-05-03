@@ -1,13 +1,13 @@
+import { useState } from "react";
 import {Paper} from "@mui/material";
 import TopDayCells from "./TopDayCells";
 import LeftTimeCells from "./LeftTimeCells";
 import MainCells from "./MainCells";
 import CalendarSection from "./CalendarSection";
-import { useState } from "react";
 
 
 
-const CalendarPaper = ({ sections, fetchedSections }) => {
+const CalendarPaper = ({ displayedSections, allSections }) => {
     const [nextMoves, setNextMoves] = useState([])
     const [currentHover, setCurrentHover] = useState("")
 
@@ -22,7 +22,7 @@ const CalendarPaper = ({ sections, fetchedSections }) => {
     // and returns all of the search result as an array
     // important: itself, or given section, must be excluded
     const getNextMoves = (section) => {
-        const nextMoves = fetchedSections.filter(fetchedSection => 
+        const nextMoves = allSections.filter(fetchedSection => 
             fetchedSection.subject === section.subject && 
             fetchedSection.course === section.course &&
             fetchedSection.activity === section.activity
@@ -41,11 +41,22 @@ const CalendarPaper = ({ sections, fetchedSections }) => {
         setNextMoves([])
     }
 
+    //Note:
+    // following wrappers are to contain
+    // multiple variables and functions
+    // for convinience in prop drilling
+
+    // dragHandler contains functions that
+    // handle displaying next moves ("timeslot")
+    // when user starts dragging
+    // and hiding next moves when user stops dragging
     const dragHandler = {
         showNextMoves,
         hideNextMoves
     }
 
+    // current contains state and function that
+    // maintains currently hovered timeslot.
     const current = {
         currentHover,
         setCurrentHover
@@ -59,7 +70,7 @@ const CalendarPaper = ({ sections, fetchedSections }) => {
         <Paper className="Paper" elevation={0} sx={{borderRadius:"20px"}}>
                 <div id="grid-calendar-container">      
 
-                    {sections.map(section => (
+                    {displayedSections.map(section => (
                         <CalendarSection key={section.id}
                                          section={section} 
                                          isNextMove={false} 

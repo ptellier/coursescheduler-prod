@@ -100,7 +100,7 @@ const TESTLIST = [CS1, CS2];
           />
         </div>
         <div className="col-sm-9 border p-4 px-5">
-          <CalendarPaper sections={recommended.compact} fetchedSections={sections} />
+          <CalendarPaper displayedSections={recommended.compact} allSections={sections} />
         </div>
       </div>
     </div>
