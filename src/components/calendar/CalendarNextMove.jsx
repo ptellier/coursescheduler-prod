@@ -1,33 +1,47 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import {useDrop} from "react-dnd";
 import { timeToGridRow } from './CalendarConstants';
+import { NextMoveContext } from './NextMoveContext';
 
-const CalendarNextMove = ({ section, timeSlot, current, handler }) => {
+const CalendarNextMove = ({ section, timeSlot, handleDrop }) => {
+
+    const {focusedNextMove, focusNextMove, blurNextMove} = useContext(NextMoveContext);
 
     const [{ isOver }, drop] = useDrop(() => ({
         accept: "calendarTimeSlot",
-        drop: (item) => handler, // TODO
+        drop: (item) => {
+          // parse from and to sections 
+          //       then invoke handleDrop(from, to)
+          const from = item
+          const to = section
+          handleDrop(from, to)
+        }, 
         collect: (monitor) => ({
           isOver:  monitor.isOver(),
         }),
-        hover: (monitor) => {
-            // sets currentHover to thiscurrently hovered next move's id
-            current.setCurrentHover(section.id)
+        hover: () => {
+            focusNextMove(section)
         }
     }));
 
-    //Check if the Calendar timeslot being hovered over is of 
-    // the same course section as this Calendar timeslot
+
+    /**
+     * EFFECTS: blur (uncolor) the user moves the mouse away from this next move
+     *          as a result, ensure all the next moves get uncolored
+     */
+    useEffect(() => {
+      !isOver && blurNextMove();
+    }, [isOver])
+
+    /**
+     * EFFECTS: Check if the Calendar timeslot being hovered over is of 
+     *          the same course section as this Calendar timeslot
+     * @returns {boolean}
+     */
     function isHoverTheSameSection() {
-      return (section.id === current.currentHover );
+      return (section.id === focusedNextMove.id );
     }
 
-    //Resets currently hovering's id to nothing
-    //this ensures all the next moves get uncolored
-    //when user takes off his mouse away from a next move
-    useEffect(() => {
-        !isOver && current.setCurrentHover("")
-    }, [isOver])
     
   return (
     <div className="outlined-cal-slot cal-slot"

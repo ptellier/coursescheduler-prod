@@ -1,24 +1,24 @@
-import {useEffect} from "react";
+import {useContext, useEffect} from "react";
 import {timeToGridRow} from "./CalendarConstants";
 import {useDrag} from "react-dnd";
+import { NextMoveContext } from "./NextMoveContext";
 
 
-const CalendarTimeSlot = ({section, timeSlot, showNextMoves, hideNextMoves}) => {
-
+const CalendarTimeSlot = ({section, timeSlot}) => {
+    const {showNextMoves, hideNextMoves} = useContext(NextMoveContext);
     const [{isDragging}, drag] = useDrag(() => ({
         type: "calendarTimeSlot",
-        item: { draggableId: section.id },
+        item: section, // this section is the section being moved from 
         collect: monitor => ({
             isDragging: !!monitor.isDragging(),            
         }),
-        end: (item, monitor) => {
-            // Cancel this drag if invalid drop
-            hideNextMoves()
-        }
+        end: () => {hideNextMoves()}
     }));
     
+    /**
+     * EFFECTS: When drag starts, show next moves
+     */
     useEffect(() => {
-      // Show next moves
       isDragging && showNextMoves(section);
     }, [isDragging])
     
@@ -30,7 +30,7 @@ const CalendarTimeSlot = ({section, timeSlot, showNextMoves, hideNextMoves}) => 
                     gridRow: timeToGridRow(timeSlot.start_time) 
                     + " / " 
                     + timeToGridRow(timeSlot.end_time),
-                    gridColumn:timeSlot.day
+                    gridColumn:timeSlot.day,
                 }}
         >
             <div>{section.subject}</div>

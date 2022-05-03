@@ -35,6 +35,7 @@ export const TriggerAPI = ({ loc, set_recommended, userTerm, setUserTerm, setSec
     // console.log("fetched: ", sections_api)
     // Warning:fast, but too much load on the server
     const sections_api = await fetchParallel(loc.map((c) => c.sw)); 
+    // console.log(sections_api)
     // 2) Prepare sections data for solve
     // TODO  1.1) take note of required sections (lecs, labs, tuts); are they all present?
     const prep = (sections: Section[]) => {
@@ -44,6 +45,7 @@ export const TriggerAPI = ({ loc, set_recommended, userTerm, setUserTerm, setSec
       return prep3;
     };
     const sections_prepped = prep(sections_api);
+    // console.log("prepped: ", sections_prepped);
     const sections_solved = solve(sections_prepped);
     // console.log("Solved: ", sections_solved);
     const sections_recommended = recommend(sections_solved);

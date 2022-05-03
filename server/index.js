@@ -30,7 +30,11 @@ app.get("/api/sections", async (req, res) => {
   // Directory: /api/sections?subject=CPSC&number=110'
   const subject = req.query.subject
   const number = req.query.number
-  const url = `https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-course&dept=${subject}&course=${number}`
+  
+  //Blocked:
+  // const url = `https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-course&dept=${subject}&course=${number}`
+
+  const url = `https://courses.students.ubc.ca/cs/courseschedule?tname=subj-course&course=${number}&sessyr=2022&sesscd=W&dept=${subject}&pname=subjarea`
 
   const data = await scrapeData(url); //hold until response comes back
   res.status(200).json({ sections: data })
@@ -107,6 +111,7 @@ const scrapeData = async (url) => {
       }
       acc.push(section_data)
     })
+    console.log(acc)
     return acc
   })
   await browser.close()
