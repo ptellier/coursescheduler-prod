@@ -22,11 +22,15 @@ const CalendarPaper = ({ sections, fetchedSections }) => {
     // and returns all of the search result as an array
     // important: itself, or given section, must be excluded
     const getNextMoves = (section) => {
-        return fetchedSections.filter(fetchedSection => 
+        const nextMoves = fetchedSections.filter(fetchedSection => 
             fetchedSection.subject === section.subject && 
             fetchedSection.course === section.course &&
             fetchedSection.activity === section.activity
         );
+        const excludeSelfNextMoves = nextMoves.filter(move => 
+            !(move.name === section.name)
+        )
+        return excludeSelfNextMoves
     }
 
     const handleDrop = () => {
