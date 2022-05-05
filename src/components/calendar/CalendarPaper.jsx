@@ -6,11 +6,12 @@ import MainCells from "./MainCells";
 import CalendarSection from "./CalendarSection";
 import { NextMoveContext } from "./NextMoveContext";
 
+import { TimeSlotContext } from "./TimeSlotContext";
+
 const CalendarPaper = ({ recommended }) => {
 
     const {nextMoves} = useContext(NextMoveContext)
-
-    const [displayedSections, setDisplayedSections] = useState([])
+    const {displayedSections, setDisplayedSections} = useContext(TimeSlotContext)
 
     /**
      * sets displayedSections with recommended data
@@ -19,40 +20,32 @@ const CalendarPaper = ({ recommended }) => {
         setDisplayedSections(recommended)
     }, [recommended])
     
-    /**
-     * TODO: move this function to drop context + rename it better
-     * MODIFIES: displayedSections
-     * EFFECTS: filter 'from' and insert 'to' in displayedSections
-     */
-    const handleDrop = (from, to) => {
-        const filtered = displayedSections.filter(section => section.id !== from.id)
-        const inserted = [...filtered, to]
-        setDisplayedSections(inserted)
-    }
     
     return (
         <Paper className="Paper" elevation={0} sx={{borderRadius:"20px"}}>
-                <div id="grid-calendar-container">      
+            <div id="grid-calendar-container">      
 
-                    {displayedSections.map(section => (
-                        <CalendarSection key={section.id}
-                                         section={section} 
-                                         isNextMove={false}
-                        />
-                    ))}
 
-                    {nextMoves.map(section => (
-                        <CalendarSection key={section.id} 
-                                         section={section} 
-                                         isNextMove={true}            
-                                         handleDrop={handleDrop}                        
-                        />
-                    ))}
+    
+                {displayedSections.map(section => (
+                    <CalendarSection key={section.id}
+                                     section={section} 
+                                     isNextMove={false}
+                    />
+                ))}
 
-                    <TopDayCells/>
-                    <LeftTimeCells/>
-                    <MainCells/>
-                </div>
+                {nextMoves.map(section => (
+                    <CalendarSection key={section.id} 
+                                     section={section} 
+                                     isNextMove={true}                                  
+                    />
+                ))}
+   
+
+                <TopDayCells/>
+                <LeftTimeCells/>
+                <MainCells/>
+            </div>
         </Paper>
     );
 }

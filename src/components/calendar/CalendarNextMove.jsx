@@ -2,10 +2,12 @@ import React, { useContext, useEffect } from 'react'
 import {useDrop} from "react-dnd";
 import { timeToGridRow } from './CalendarConstants';
 import { NextMoveContext } from './NextMoveContext';
+import { TimeSlotContext } from './TimeSlotContext';
 
-const CalendarNextMove = ({ section, timeSlot, handleDrop }) => {
+const CalendarNextMove = ({ section, timeSlot }) => {
 
     const {focusedNextMove, focusNextMove, blurNextMove} = useContext(NextMoveContext);
+    const {displayedSections, setDisplayedSections} = useContext(TimeSlotContext)
 
     const [{ isOver }, drop] = useDrop(() => ({
         accept: "calendarTimeSlot",
@@ -24,7 +26,6 @@ const CalendarNextMove = ({ section, timeSlot, handleDrop }) => {
         }
     }));
 
-
     /**
      * EFFECTS: blur (uncolor) the user moves the mouse away from this next move
      *          as a result, ensure all the next moves get uncolored
@@ -41,6 +42,17 @@ const CalendarNextMove = ({ section, timeSlot, handleDrop }) => {
     function isHoverTheSameSection() {
       return (section.id === focusedNextMove.id );
     }
+
+    /**
+     * TODO: move this function to drop context + rename it better
+     * MODIFIES: displayedSections
+     * EFFECTS: filter 'from' and insert 'to' in displayedSections
+     */
+         const handleDrop = (from, to) => {
+          const filtered = displayedSections.filter(section => section.id !== from.id)
+          const inserted = [...filtered, to]
+          setDisplayedSections(inserted)
+      }
 
     
   return (

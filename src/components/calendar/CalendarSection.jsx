@@ -2,7 +2,7 @@ import React from 'react'
 import CalendarNextMove from './CalendarNextMove';
 import CalendarTimeSlot from './CalendarTimeSlot'
 
-const CalendarSection = ({ section, isNextMove, handleDrop }) => {
+const CalendarSection = ({ section, isNextMove }) => {
 
   //Unique ID that separates one section to many by adding start and end time
   const findUniqueKey = (timeSlot) => {
@@ -15,8 +15,7 @@ const CalendarSection = ({ section, isNextMove, handleDrop }) => {
         ? section.schedule.map((timeSlot) =>  (
             <CalendarNextMove key={findUniqueKey(timeSlot)}
                               section={section} 
-                              timeSlot={timeSlot}
-                              handleDrop={handleDrop}       
+                              timeSlot={timeSlot}      
             />
         ))
         : section.schedule.map((timeSlot) =>  (

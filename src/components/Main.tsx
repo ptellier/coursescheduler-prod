@@ -7,6 +7,7 @@ import TriggerAPI from "./TriggerAPI";
 import CalendarPaper from "./calendar/CalendarPaper";
 import TopNavigationBar from "./topnavbar/TopNavigationBar";
 import { NextMoveProvider } from "./calendar/NextMoveContext";
+import { TimeSlotProvider } from "./calendar/TimeSlotContext";
 
 
 /**
@@ -60,7 +61,9 @@ const Main: FC = () => {
         </div>
         <div className="col-sm-9 border p-4 px-5">
           <NextMoveProvider allSections={sections}>
-            <CalendarPaper recommended={recommended.compact}/>
+            <TimeSlotProvider>
+             <CalendarPaper recommended={recommended.compact}/>
+            </TimeSlotProvider>
           </ NextMoveProvider>
         </div>
       </div>

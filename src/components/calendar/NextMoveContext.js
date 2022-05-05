@@ -8,7 +8,7 @@ export const NextMoveContext = createContext();
  * @returns all logic related to next moves and states
  */
 export const NextMoveProvider = (props) => {
-
+    
     /** 
      * nextMoves: all possible next moves available to user
      * setNextMoves: sets next possible moves
@@ -24,7 +24,7 @@ export const NextMoveProvider = (props) => {
     /**
      * MODIFIES: nextMoves
      * EFFECTS: retreieves and updates the next moves. As a result,
-     *          this fn allows displaying of next possible moves when
+     *          this method allows displaying of next possible moves when
      *          dragging starts
      * @param {Section[][]} section 
      */
@@ -62,7 +62,7 @@ export const NextMoveProvider = (props) => {
     /**
      * MODIFIES: focusedNextMove
      * EFFECTS: sets focusedNextMove as given section, As a result,
-     *          next move(s) that user is hoverring on get colors 
+     *          next move(s) that user is hoverring on get colored
      */
     const focusNextMove = (section) => {
         setFocusedNextMove(section);
