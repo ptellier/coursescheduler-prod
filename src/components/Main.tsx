@@ -8,6 +8,7 @@ import CalendarPaper from "./calendar/CalendarPaper";
 import TopNavigationBar from "./topnavbar/TopNavigationBar";
 import { NextMoveProvider } from "./calendar/NextMoveContext";
 import { TimeSlotProvider } from "./calendar/TimeSlotContext";
+import CourseSearchPaper from "./coursesearch/CourseSearchPaper";
 
 
 /**
@@ -51,6 +52,7 @@ const Main: FC = () => {
         <div className="col-sm-3 border p-3">
           <SearchBar loc={loc} set_loc={set_loc} />
           <Selections loc={loc} set_loc={set_loc} />
+          <CourseSearchPaper ></CourseSearchPaper>
           <TriggerAPI
             loc={loc}
             set_recommended={set_recommended}

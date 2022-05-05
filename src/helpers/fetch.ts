@@ -46,7 +46,7 @@ export const fetchSection = async (sw: SearchWord) => {
 };
 
 /**
- * fetches course description with given sw
+ * fetches course description with given sw (searchWord)
  * Note1: course description is the course user would
  * like to retrieve section data for
  * Note2:

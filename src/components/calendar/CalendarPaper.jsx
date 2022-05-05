@@ -24,9 +24,6 @@ const CalendarPaper = ({ recommended }) => {
     return (
         <Paper className="Paper" elevation={0} sx={{borderRadius:"20px"}}>
             <div id="grid-calendar-container">      
-
-
-    
                 {displayedSections.map(section => (
                     <CalendarSection key={section.id}
                                      section={section} 
@@ -40,8 +37,6 @@ const CalendarPaper = ({ recommended }) => {
                                      isNextMove={true}                                  
                     />
                 ))}
-   
-
                 <TopDayCells/>
                 <LeftTimeCells/>
                 <MainCells/>

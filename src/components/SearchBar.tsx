@@ -29,6 +29,7 @@ export const SearchBar = ({ loc, set_loc }: SearchBarProps) => {
       cred: c.cred,
       desc: c.desc,
     }));
+    console.log(options);
     return options;
   };
 
