@@ -1,6 +1,4 @@
 import { useState, FC } from "react";
-import SearchBar from "./SearchBar";
-import Selections from "./Selections";
 import { Course } from "../data/DataDefinition/SearchWordDD";
 import { Section } from "../data/DataDefinition/SectionDD";
 import TriggerAPI from "./TriggerAPI";
@@ -50,8 +48,6 @@ const Main: FC = () => {
       <TopNavigationBar />
       <div className="row h-100">
         <div className="col-sm-3 border p-3">
-          <SearchBar loc={loc} set_loc={set_loc} />
-          <Selections loc={loc} set_loc={set_loc} />
           <CourseSearchPaper ></CourseSearchPaper>
           <TriggerAPI
             loc={loc}

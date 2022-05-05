@@ -11,14 +11,9 @@ import { fetchCourseDesc } from '../../helpers/fetch';
 
 const CourseSearchPaper = () => {
     
-    const [courseOptions, setCourseOptions] = useState(
-        [
-            { label: 'STAT 302', year: 1994 , key:1},
-            { label: 'CPSC 121', year: 1972 , key:2},
-            { label: 'CPSC 110', year: 1974 , key:3},
-            { label: 'CPSC 210', year: 1974 , key:4},
-        ]
-    );
+    const [courseOptions, setCourseOptions] = useState([]);
+    const [coursesChosen, setCoursesChosen] = useState([]);
+    const [totalCredits, setTotalCredits] = useState(0);
     
     /**
      * parse user's raw input of search word then fetch course description data
@@ -40,6 +35,62 @@ const CourseSearchPaper = () => {
         setCourseOptions(options);
     };
 
+
+      /**
+   * push user selected course option to coursesChosen and keep track of
+   * total credits. If exceed, raise warning.
+   * Note: this function is triggered when user clicks the course option in popover box
+   * @param option
+   */
+    const handleChange = (option) => {
+        console.log(option);
+        if (exceededCredLimit(option)) {
+        alert("You exceeded maximum (18) credits per term. Remove some courses");
+        } else if (selectedDuplicate(option)) {
+        alert(`You already selected ${option.sw}`);
+        } else {
+        selectCourseDesc(option.sw, option.cred, option.desc);
+        setTotalCredits(totalCredits + option.cred);
+        }
+    };
+
+  const exceededCredLimit = (option) => {
+    return totalCredits + option.cred >= 18;
+  };
+  const selectedDuplicate = (option) => {
+    return coursesChosen.some((c) => c.sw === formatSearchWord(option.sw));
+  };
+
+    /**
+   * create course with search word, credit, description then accumulate it in coursesChosen
+   * @param sw
+   * @param cred
+   * @param desc
+   */
+     const selectCourseDesc = (sw, cred, desc) => {
+        const new_course = {
+        //   sw: formatSearchWord(sw),
+            sw: sw,
+            cred: cred,
+            desc: desc,
+        };
+        setCoursesChosen([...coursesChosen, new_course]);
+        console.log("what")
+        console.log(coursesChosen)
+      };
+    
+      /**
+       * removes space and inserts '/' at first digit of the str
+       * resulting string will be inserted into url for fetch
+       * @param {string} str
+       * @returns {SearchWord}; i.e "CPSC 121"  -> "CPSC/121"
+       */
+      const formatSearchWord = (str) => {
+        const removedSpace = str.replace(/\s/g, "");
+        const pos = removedSpace.search(/\d/);
+        return removedSpace.substring(0, pos) + "/" + removedSpace.substring(pos);
+      };
+
     return (
     <Paper className="Paper" elevation={0} sx={{borderRadius:"20px"}}>
         <Box p={4}>
@@ -50,9 +101,18 @@ const CourseSearchPaper = () => {
                 renderInput={(params) =>
                     <TextField {...params} label="Search Courses" />
                 }
-                onInputChange={() => loadCourseOptions()}
+                onInputChange={(event) => loadCourseOptions(event.target.value)}
+                onChange={(event, values) => handleChange(values)}
             />
-            <ChoosenCourse courseNum={"MATH"} subject={"200"} description={"vector calculus"} credits={3} />
+            {coursesChosen.map((courseChosen) => (
+                <ChoosenCourse 
+                    courseNum={courseChosen.key} 
+                    subject={"blahh"} 
+                    description={courseChosen.desc} 
+                    credits={courseChosen.cred} 
+                />
+            ))}
+            
             <ChoosenCourse courseNum={"STAT"} subject={"302"} description={"probability intro"} credits={3} />
             <ChoosenCourse courseNum={"CPSC"} subject={"110"} description={"programs, computers"} credits={4} />
         </Box>
