@@ -38,7 +38,7 @@ const Main: FC = () => {
   );
 
   /** courses that users looked up and want to get scheduled */
-  const [loc, set_loc] = useState<Course[]>([]);
+  const [coursesToFetch, setCoursesToFetch] = useState<Course[]>([]);
 
   /** raw user input from search bar and term selection components */
   const [userTerm, setUserTerm] = useState<string>("1");
@@ -48,9 +48,11 @@ const Main: FC = () => {
       <TopNavigationBar />
       <div className="row h-100">
         <div className="col-sm-3 border p-3">
-          <CourseSearchPaper ></CourseSearchPaper>
+          <CourseSearchPaper coursesToFetch={coursesToFetch} 
+                             setCoursesToFetch={setCoursesToFetch}
+          />
           <TriggerAPI
-            loc={loc}
+            loc={coursesToFetch}
             set_recommended={set_recommended}
             setSections={setSections}
             userTerm={userTerm}
