@@ -23,7 +23,9 @@ const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch }) => {
        * Note4: fetches from Ben Cheung's API (so much more efficient than Liang's)
        * @param searchWord
        */
-      const loadCourseOptions = async (searchWord) => {
+      const loadCourseOptions = async (event) => {
+        if (event.nativeEvent.type === "input") {
+          const searchWord = event.target.value;
           const data = await fetchCourseDesc(searchWord);
           const options = data.map((c) => ({
               key: c.code,
@@ -32,6 +34,7 @@ const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch }) => {
               desc: c.desc,
           }));
           setCourseOptions(options);
+        }
       };
 
 
@@ -42,8 +45,6 @@ const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch }) => {
        * @param option
        */
         const handleChange = (event, option) => {  
-           
-            console.log(event)         
             if (exceededCredLimit(option)) {
               alert("You exceeded maximum (18) credits per term. Remove some courses");
             } else if (selectedDuplicate(option)) {
@@ -93,14 +94,14 @@ const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch }) => {
     <Paper className="Paper" elevation={0} sx={{borderRadius:"20px"}}>
         <Box p={4}>
             <Autocomplete
-                disablePortal
+                // disablePortal
                 options={courseOptions}
                 sx={{[`& fieldset`]:{borderRadius:"10px"}}}
                 renderInput={(params) =>
                     <TextField {...params} label="Search Courses" />
                 }
-                onInputChange={(event) => loadCourseOptions(event.target.value)}
-                onChange={(event, values) => handleChange(event, values)}
+                onChange={handleChange}
+                onInputChange={loadCourseOptions}
             />
             {coursesChosen.map((courseChosen) => (
                 <ChoosenCourse 
