@@ -32,12 +32,6 @@ export const is_overlap_timeslots = (ts1:Timeslot, ts2:Timeslot): boolean => {
            ((e2 <= e1) && (e2 > s1))));
 }
 
-//EFFECTS: return true if two cells overlap each other
-export const overlapCells = (c1: Cell_display, c2: Cell_display) => {
-  let s1: Time = c1.start; let e1: Time = c1.end;
-  let s2: Time = c2.start; let e2: Time = c2.end;
-  return (((e2 > e1) && (s2 < e1)) || ((e2 <= e1) && (e2 > s1)))
-}
 
 /**
  * return true if no timeslots in array are at the same time
@@ -87,8 +81,11 @@ export const is_overlap_losections = (sections:Section[]): boolean => {
 }
 
 
+
+
+
 // EFFECTS: create a subgroup of non-overlapping cells
-//          within the given group
+//          within the given overlap group
 // TODO: fix duplicate bug [121-L1V, 110-L1S, 121-L1B, 121-L1L]
 export const subGroupByNonOverlap = (group: Cell_display[]) => {
   let rsf = [];
@@ -109,6 +106,15 @@ export const subGroupByNonOverlap = (group: Cell_display[]) => {
   }
   return rsf;
 }
+
+//EFFECTS: return true if two cells overlap each other
+export const overlapCells = (c1: Cell_display, c2: Cell_display) => {
+  let s1: Time = c1.start; let e1: Time = c1.end;
+  let s2: Time = c2.start; let e2: Time = c2.end;
+  return (((e2 > e1) && (s2 < e1)) || ((e2 <= e1) && (e2 > s1)))
+}
+
+
 
 // export const subGroupByNonOverlap = (group: Cell_display[]) => {
 //   group.forEach(g => console.log(g))

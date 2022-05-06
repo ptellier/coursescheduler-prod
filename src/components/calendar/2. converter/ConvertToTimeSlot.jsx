@@ -1,44 +1,112 @@
 import React from 'react'
-import NextTimeSlot from '../3. timeslot/NextTimeSlot';
-import CurrentTimeSlot from '../3. timeslot/CurrentTimeSlot'
+import HandleOverlapTimeSlots from './HandleOverlapTimeSlots';
 
 
 /**
  * Combines given displayedSections and nextSections
  * then create timeslot objects
- * 
- * timeslot object = {
- * 
- * 
- * }
- * @param {*} param0 
- * @returns 
+ * @param {Section[], Section[]} param
+ * @returns {TimeSlot[]}
  */
-const ConvertToTimeSlot = ({ section, isNextMove }) => {
+const ConvertToTimeSlot = ({ currentSections, nextSections }) => {
 
+  //TODO: move this
   //Unique ID that separates one section to many by adding start and end time
-  const findUniqueKey = (timeSlot) => {
-    return section.id + timeSlot.day + timeSlot.start_time + timeSlot.end_time;
+  const findUniqueKey = (timeSlot, move) => {
+    return timeSlot.section.id + timeSlot.day + timeSlot.start_time + timeSlot.end_time + move;
   }
+
+  /**
+   * EFFECTS:  excute sections to timeslots conversion sequence
+   * sequence: convert => (sectionsToTimeSlots x 2) => (createTimeSlots x n)
+   *                   => (mergeTimeSlots)
+   * @param {Section[]} currentSections 
+   * @param {Section[]} nextSections 
+   * @returns {TimeSlot[]}
+   */
+  const convert = (currentSections, nextSections) => {
+      const currentTimeSlots = sectionsToTimeSlots(currentSections);
+      const nextTimeSlots    = sectionsToTimeSlots(nextSections);
+      const mergedTimeSlots  = mergeTimeSlots(currentTimeSlots, nextTimeSlots);
+      return mergedTimeSlots;
+  }
+
+  /**
+   * EFFECTS: convert given sections to timeslots
+   * @param {Section[]} sections 
+   * @param {boolean} isNext 
+   */
+  const sectionsToTimeSlots = (sections, isNext) => {
+      const timeSlots = [];
+      for (const section of sections) {
+          for (const time of section.schedule) {
+              timeSlots.push(createTimeSlot(section, time, isNext));
+          };
+      };
+      return timeSlots;
+  }
+
+  /**
+   * EFFECTS: creates timeslot with given section
+   * @param {Section} section
+   * @param {Time} time 
+   * @param {boolean} isNext 
+   * @returns {TimeSlot}
+   */
+  const createTimeSlot = (section, time, isNext) => {
+      const timeSlot = {
+          section: section,
+          day: time.day,
+          start_time: time.start_time,
+          end_time: time.end_time,
+          isNextTimeSlot: isNext,
+      };
+      return timeSlot;
+  }
+
+  /**
+   * EFFECTS: merge current and next timeslots
+   */
+  const mergeTimeSlots = (current, next) => {
+    return [...current, ...next];
+  }
+
 
   return (
     <>
-    {isNextMove 
-        ? section.schedule.map((timeSlot) =>  (
-            <NextTimeSlot key={findUniqueKey(timeSlot)}
-                              section={section} 
-                              timeSlot={timeSlot}      
-            />
-        ))
-        : section.schedule.map((timeSlot) =>  (
-            <CurrentTimeSlot key={findUniqueKey(timeSlot)}
-                              section={section}
-                              timeSlot={timeSlot}
-            />
-        ))
-    }
+      <HandleOverlapTimeSlots timeSlots={convert(currentSections, nextSections)} />
     </>
   )
 }
 
 export default ConvertToTimeSlot
+
+// {isNextMove 
+//   ? section.schedule.map((timeSlot) =>  (
+//       <NextTimeSlot key={findUniqueKey(timeSlot)}
+//                         section={section} 
+//                         timeSlot={timeSlot}      
+//       />
+//   ))
+//   : section.schedule.map((timeSlot) =>  (
+//       <CurrentTimeSlot key={findUniqueKey(timeSlot)}
+//                         section={section}
+//                         timeSlot={timeSlot}
+//       />
+//   ))
+// }
+
+
+// {mergeTimeSlots(sectionsToTimeSlots(currentSections, false),
+//   sectionsToTimeSlots(nextSections, true)).map(timeSlot => 
+//     timeSlot.isNextTimeSlot 
+//     ? <NextTimeSlot key={findUniqueKey(timeSlot, "next")} 
+//                     section={timeSlot.section}
+//                     timeSlot={timeSlot}
+//                     />
+//     : <CurrentTimeSlot key={findUniqueKey(timeSlot, "current")}
+//                        section={timeSlot.section}
+//                        timeSlot={timeSlot}
+//                       />
+//   )
+// }
