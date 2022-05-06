@@ -4,17 +4,15 @@ import TopDayCells from "../layout/TopDayCells";
 import LeftTimeCells from "../layout/LeftTimeCells";
 import MainCells from "../layout/MainCells";
 import ConvertToTimeSlot from "../2. converter/ConvertToTimeSlot";
-import { NextMoveContext } from "../context/NextMoveContext";
-
-import { TimeSlotContext } from "../context/TimeSlotContext";
+import { SectionsContext } from "../context/SectionsContext";
 
 const Calendar = ({ recommended }) => {
 
     // const {currentSections, setCurrentSections} = useContext(TimeSlotContext)
-    const {currentSections, setCurrentSections, nextMoves} = useContext(NextMoveContext)
+    const {currentSections, setCurrentSections, nextSections} = useContext(SectionsContext)
 
     /**
-     * sets displayedSections with recommended data
+     * sets currentSections to the recommended data
      */
     useEffect(() => {
         setCurrentSections(recommended)
@@ -32,7 +30,7 @@ const Calendar = ({ recommended }) => {
                     />
                 ))}
 
-                {nextMoves.map(section => (
+                {nextSections.map(section => (
                     <ConvertToTimeSlot key={section.id} 
                                      section={section} 
                                      isNextMove={true}                                  

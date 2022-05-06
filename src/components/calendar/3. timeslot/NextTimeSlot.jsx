@@ -1,20 +1,19 @@
 import React, { useContext, useEffect } from 'react'
 import {useDrop} from "react-dnd";
 import { timeToGridRow } from '../CalendarConstants';
-import { NextMoveContext } from '../context/NextMoveContext';
-import { TimeSlotContext } from '../context/TimeSlotContext';
+import { SectionsContext } from '../context/SectionsContext';
 
 const NextTimeSlot = ({ section, timeSlot }) => {
 
-    const {focusedNextMove, focusNextMove, blurNextMove} = useContext(NextMoveContext);
-    const {currentSections, setCurrentSections} = useContext(NextMoveContext);
+    const {focusedNextSection, focusNextSection, blurNextSection} = useContext(SectionsContext);
+    const {currentSections, setCurrentSections} = useContext(SectionsContext);
     
 
     const [{ isOver }, drop] = useDrop(() => ({
         accept: "calendarTimeSlot",
         drop: (item) => {
           // parse from and to sections 
-          //       then invoke handleDrop(from, to)
+          // then invoke handleDrop(from, to)
           const from = item
           const to = section
           handleDrop(from, to)
@@ -23,30 +22,31 @@ const NextTimeSlot = ({ section, timeSlot }) => {
           isOver:  monitor.isOver(),
         }),
         hover: () => {
-            focusNextMove(section)
+          focusNextSection(section)
         }
     }));
 
     /**
-     * EFFECTS: blur (uncolor) the user moves the mouse away from this next move
-     *          as a result, ensure all the next moves get uncolored
+     * EFFECTS: blur (uncolor) the available next sections when user moves the mouse away 
+     *          from this next section. As a result, ensure all the next sections get uncolored
      */
     useEffect(() => {
-      !isOver && blurNextMove();
+      !isOver && blurNextSection();
     }, [isOver])
 
     /**
-     * EFFECTS: Check if the Calendar timeslot being hovered over is of 
-     *          the same course section as this Calendar timeslot
+     * TODO: fix the specification V
+     * EFFECTS: produce true if the section being hovered by user is
+     *          the same section as this section
      * @returns {boolean}
      */
     function isHoverTheSameSection() {
-      return (section.id === focusedNextMove.id);
+      return (section.id === focusedNextSection.id);
     }
 
     /**
-     * MODIFIES: displayedSections
-     * EFFECTS: filter 'from' and insert 'to' in displayedSections
+     * MODIFIES: currentSections
+     * EFFECTS: filter 'from' and insert 'to' in currentSections
      */
      const handleDrop = (from, to) => {
           const filtered = currentSections.filter(section => section.id !== from.id)

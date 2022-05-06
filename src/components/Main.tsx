@@ -4,8 +4,7 @@ import { Section } from "../data/DataDefinition/SectionDD";
 import TriggerAPI from "./TriggerAPI";
 import Calendar from "./calendar/1. calendar/Calendar";
 import TopNavigationBar from "./topnavbar/TopNavigationBar";
-import { NextMoveProvider } from "./calendar/context/NextMoveContext";
-import { TimeSlotProvider } from "./calendar/context/TimeSlotContext";
+import { SectionsProvider } from "./calendar/context/SectionsContext";
 import CourseSearchPaper from "./coursesearch/CourseSearchPaper";
 
 
@@ -60,11 +59,9 @@ const Main: FC = () => {
           />
         </div>
         <div className="col-sm-9 border p-4 px-5">
-          <NextMoveProvider allSections={sections}>
-            <TimeSlotProvider>
+          <SectionsProvider allSections={sections}>
              <Calendar recommended={recommended.compact}/>
-            </TimeSlotProvider>
-          </ NextMoveProvider>
+          </ SectionsProvider>
         </div>
       </div>
     </div>
