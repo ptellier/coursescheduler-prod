@@ -105,6 +105,7 @@ const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch }) => {
             />
             {coursesChosen.map((courseChosen) => (
                 <ChoosenCourse 
+                    key={courseChosen.key+courseChosen.description}
                     courseNum={courseChosen.key} 
                     subject={"blahh"} 
                     description={courseChosen.desc} 

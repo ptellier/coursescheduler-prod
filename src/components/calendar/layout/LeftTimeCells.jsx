@@ -1,5 +1,5 @@
 import * as React from "react";
-import {TIMES_OF_THE_DAY} from "./CalendarConstants";
+import {TIMES_OF_THE_DAY} from "../CalendarConstants";
 
 const LeftTimeCells = () => {
     return (<>

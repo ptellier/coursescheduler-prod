@@ -1,8 +1,20 @@
 import React from 'react'
-import CalendarNextMove from './CalendarNextMove';
-import CalendarTimeSlot from './CalendarTimeSlot'
+import NextTimeSlot from '../3. timeslot/NextTimeSlot';
+import CurrentTimeSlot from '../3. timeslot/CurrentTimeSlot'
 
-const CalendarSection = ({ section, isNextMove }) => {
+
+/**
+ * Combines given displayedSections and nextSections
+ * then create timeslot objects
+ * 
+ * timeslot object = {
+ * 
+ * 
+ * }
+ * @param {*} param0 
+ * @returns 
+ */
+const ConvertToTimeSlot = ({ section, isNextMove }) => {
 
   //Unique ID that separates one section to many by adding start and end time
   const findUniqueKey = (timeSlot) => {
@@ -13,13 +25,13 @@ const CalendarSection = ({ section, isNextMove }) => {
     <>
     {isNextMove 
         ? section.schedule.map((timeSlot) =>  (
-            <CalendarNextMove key={findUniqueKey(timeSlot)}
+            <NextTimeSlot key={findUniqueKey(timeSlot)}
                               section={section} 
                               timeSlot={timeSlot}      
             />
         ))
         : section.schedule.map((timeSlot) =>  (
-            <CalendarTimeSlot key={findUniqueKey(timeSlot)}
+            <CurrentTimeSlot key={findUniqueKey(timeSlot)}
                               section={section}
                               timeSlot={timeSlot}
             />
@@ -29,4 +41,4 @@ const CalendarSection = ({ section, isNextMove }) => {
   )
 }
 
-export default CalendarSection
+export default ConvertToTimeSlot

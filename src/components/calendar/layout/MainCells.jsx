@@ -1,5 +1,5 @@
 import * as React from "react";
-import {DAYS_OF_THE_WEEK, TIMES_OF_THE_DAY} from "./CalendarConstants";
+import {DAYS_OF_THE_WEEK, TIMES_OF_THE_DAY} from "../CalendarConstants";
 
 const MainCells = () => {
     return (<>

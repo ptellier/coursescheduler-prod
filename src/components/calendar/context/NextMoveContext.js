@@ -9,6 +9,13 @@ export const NextMoveContext = createContext();
  */
 export const NextMoveProvider = (props) => {
     
+    /**
+     * currentSections: sections that are displayed on the calendar
+     * setCurrentSections: sets current sections; common usage includes
+     *                     switching between recommended schedules by user
+     */
+    const [currentSections, setCurrentSections] = useState([]);
+
     /** 
      * nextMoves: all possible next moves available to user
      * setNextMoves: sets next possible moves
@@ -79,6 +86,9 @@ export const NextMoveProvider = (props) => {
 
   return (
     <NextMoveContext.Provider value={{
+        currentSections: currentSections,
+        setCurrentSections: setCurrentSections,
+
         nextMoves: nextMoves,
         showNextMoves: showNextMoves,
         getNextMoves: getNextMoves,

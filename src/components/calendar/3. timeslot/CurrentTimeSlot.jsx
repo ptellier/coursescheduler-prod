@@ -1,10 +1,10 @@
 import {useContext, useEffect} from "react";
-import {timeToGridRow} from "./CalendarConstants";
+import {timeToGridRow} from "../CalendarConstants";
 import {useDrag} from "react-dnd";
-import { NextMoveContext } from "./NextMoveContext";
+import { NextMoveContext } from "../context/NextMoveContext";
 
 
-const CalendarTimeSlot = ({section, timeSlot}) => {
+const CurrentTimeSlot = ({section, timeSlot}) => {
     const {showNextMoves, hideNextMoves} = useContext(NextMoveContext);
 
     /**
@@ -47,4 +47,4 @@ const CalendarTimeSlot = ({section, timeSlot}) => {
     );
 }
 
-export default CalendarTimeSlot;
+export default CurrentTimeSlot;

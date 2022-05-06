@@ -1,13 +1,14 @@
 import React, { useContext, useEffect } from 'react'
 import {useDrop} from "react-dnd";
-import { timeToGridRow } from './CalendarConstants';
-import { NextMoveContext } from './NextMoveContext';
-import { TimeSlotContext } from './TimeSlotContext';
+import { timeToGridRow } from '../CalendarConstants';
+import { NextMoveContext } from '../context/NextMoveContext';
+import { TimeSlotContext } from '../context/TimeSlotContext';
 
-const CalendarNextMove = ({ section, timeSlot }) => {
+const NextTimeSlot = ({ section, timeSlot }) => {
 
     const {focusedNextMove, focusNextMove, blurNextMove} = useContext(NextMoveContext);
-    const {displayedSections, setDisplayedSections} = useContext(TimeSlotContext)
+    const {currentSections, setCurrentSections} = useContext(NextMoveContext);
+    
 
     const [{ isOver }, drop] = useDrop(() => ({
         accept: "calendarTimeSlot",
@@ -40,18 +41,17 @@ const CalendarNextMove = ({ section, timeSlot }) => {
      * @returns {boolean}
      */
     function isHoverTheSameSection() {
-      return (section.id === focusedNextMove.id );
+      return (section.id === focusedNextMove.id);
     }
 
     /**
-     * TODO: move this function to drop context + rename it better
      * MODIFIES: displayedSections
      * EFFECTS: filter 'from' and insert 'to' in displayedSections
      */
-         const handleDrop = (from, to) => {
-          const filtered = displayedSections.filter(section => section.id !== from.id)
+     const handleDrop = (from, to) => {
+          const filtered = currentSections.filter(section => section.id !== from.id)
           const inserted = [...filtered, to]
-          setDisplayedSections(inserted)
+          setCurrentSections(inserted)
       }
 
     
@@ -72,4 +72,4 @@ const CalendarNextMove = ({ section, timeSlot }) => {
   )
 }
 
-export default CalendarNextMove
+export default NextTimeSlot

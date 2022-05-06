@@ -2,10 +2,10 @@ import { useState, FC } from "react";
 import { Course } from "../data/DataDefinition/SearchWordDD";
 import { Section } from "../data/DataDefinition/SectionDD";
 import TriggerAPI from "./TriggerAPI";
-import CalendarPaper from "./calendar/CalendarPaper";
+import Calendar from "./calendar/1. calendar/Calendar";
 import TopNavigationBar from "./topnavbar/TopNavigationBar";
-import { NextMoveProvider } from "./calendar/NextMoveContext";
-import { TimeSlotProvider } from "./calendar/TimeSlotContext";
+import { NextMoveProvider } from "./calendar/context/NextMoveContext";
+import { TimeSlotProvider } from "./calendar/context/TimeSlotContext";
 import CourseSearchPaper from "./coursesearch/CourseSearchPaper";
 
 
@@ -62,7 +62,7 @@ const Main: FC = () => {
         <div className="col-sm-9 border p-4 px-5">
           <NextMoveProvider allSections={sections}>
             <TimeSlotProvider>
-             <CalendarPaper recommended={recommended.compact}/>
+             <Calendar recommended={recommended.compact}/>
             </TimeSlotProvider>
           </ NextMoveProvider>
         </div>
