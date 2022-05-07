@@ -150,3 +150,4 @@ test("produce sub-groups of non-overlaapping cells of overlapping cells", () => 
   expect(subGroupByNonOverlap([ex.OVERLAP_4, ex.OVERLAP_5, ex.OVERLAP_6, ex.OVERLAP_7]))
   .toEqual([[ex.OVERLAP_4, ex.OVERLAP_6], [ex.OVERLAP_5], [ex.OVERLAP_7]])
 })
+

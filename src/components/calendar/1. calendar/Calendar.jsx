@@ -21,7 +21,7 @@ const Calendar = ({ recommended }) => {
     
     return (
         <Paper className="Paper" elevation={0} sx={{borderRadius:"20px"}}>
-            <div id="grid-calendar-container">    
+            <div className="grid-calendar-container">    
                 <ConvertToTimeSlot currentSections={currentSections}
                                    nextSections={nextSections} 
                 />

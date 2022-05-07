@@ -148,7 +148,7 @@ div.cal-background-grid.last-col.last-row {
 }
 
 
-#grid-calendar-container {
+.grid-calendar-container {
   display: grid;
   grid-template-columns: [times] 5em [Mon] 1fr [Tue] 1fr [Wed] 1fr [Thu] 1fr [Fri] 1fr;
   grid-auto-rows: 30px;
@@ -157,6 +157,13 @@ div.cal-background-grid.last-col.last-row {
   font-family: "M PLUS 1p","Helvetica","Arial",sans-serif;
   color: #5b5b5b;
   font-size:1rem;
+}
+
+.grid-overlap-container {
+  display: grid;
+  grid-template-columns: [times] 5em 1fr;
+  grid-auto-rows: 30px;
+  grid-gap: 0px;
 }
 
 /* run this in javascript repl to get grid-template-columns*/

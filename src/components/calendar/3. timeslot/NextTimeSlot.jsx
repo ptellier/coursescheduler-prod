@@ -55,15 +55,18 @@ const NextTimeSlot = ({ section, timeSlot }) => {
       }
 
     
+      // TODO: implement another grid system 
+      //       max start: groupStartTime, 
+      //       max end : groupEndTime
   return (
-    <div className="outlined-cal-slot cal-slot"
+    <div className="outlined-cal-slot cal-slot w-100"
          ref={drop}
          style={{
             gridRow: timeToGridRow(timeSlot.start_time) 
                    + " / " 
                    + timeToGridRow(timeSlot.end_time),
             gridColumn:timeSlot.day,
-            backgroundColor: isHoverTheSameSection() && "purple"
+            backgroundColor: isHoverTheSameSection() && "green"
          }}
     >
         <div>{section.subject}</div>

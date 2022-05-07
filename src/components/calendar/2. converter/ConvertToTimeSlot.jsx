@@ -10,12 +10,6 @@ import HandleOverlapTimeSlots from './HandleOverlapTimeSlots';
  */
 const ConvertToTimeSlot = ({ currentSections, nextSections }) => {
 
-  //TODO: move this
-  //Unique ID that separates one section to many by adding start and end time
-  const findUniqueKey = (timeSlot, move) => {
-    return timeSlot.section.id + timeSlot.day + timeSlot.start_time + timeSlot.end_time + move;
-  }
-
   /**
    * EFFECTS:  excute sections to timeslots conversion sequence
    * sequence: convert => (sectionsToTimeSlots x 2) => (createTimeSlots x n)
@@ -25,14 +19,15 @@ const ConvertToTimeSlot = ({ currentSections, nextSections }) => {
    * @returns {TimeSlot[]}
    */
   const convert = (currentSections, nextSections) => {
-      const currentTimeSlots = sectionsToTimeSlots(currentSections);
-      const nextTimeSlots    = sectionsToTimeSlots(nextSections);
+      const currentTimeSlots = sectionsToTimeSlots(currentSections, false);
+      const nextTimeSlots    = sectionsToTimeSlots(nextSections, true);
       const mergedTimeSlots  = mergeTimeSlots(currentTimeSlots, nextTimeSlots);
       return mergedTimeSlots;
   }
 
   /**
-   * EFFECTS: convert given sections to timeslots
+   * EFFECTS: convert given sections to timeslots, setting isNext
+   *          to true for nextSections
    * @param {Section[]} sections 
    * @param {boolean} isNext 
    */

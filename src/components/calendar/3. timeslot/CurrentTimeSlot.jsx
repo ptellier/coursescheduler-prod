@@ -32,7 +32,7 @@ const CurrentTimeSlot = ({section, timeSlot}) => {
     
 
     return (
-        <div className="solid-cal-slot cal-slot"
+        <div className="solid-cal-slot cal-slot w-100"
                 ref={drag}
                 style={{
                     gridRow: timeToGridRow(timeSlot.start_time) 
