@@ -44,14 +44,17 @@ const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch }) => {
        * Note: this function is triggered when user clicks the course option in popover box
        * @param option
        */
-        const handleChange = (event, option) => {  
-            if (exceededCredLimit(option)) {
-              alert("You exceeded maximum (18) credits per term. Remove some courses");
+        const handleChange = (event, option) => {
+            console.log(option);
+            if (option === null) {
+                return
+            } else if (exceededCredLimit(option)) {
+                alert("You exceeded maximum (18) credits per term. Remove some courses");
             } else if (selectedDuplicate(option)) {
-              alert(`You already selected ${option.sw}`);
+                alert(`You already selected ${option.key}`);
             } else {
-              selectCourseDesc(option.key, option.cred, option.desc);
-              setTotalCredits(totalCredits + option.cred);
+                selectCourseDesc(option.key, option.cred, option.desc);
+                setTotalCredits(totalCredits + option.cred);
             }
         };
 
@@ -59,7 +62,7 @@ const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch }) => {
         return totalCredits + option.cred >= 18;
       };
       const selectedDuplicate = (option) => {
-        return coursesChosen.some((c) => c.sw === formatSearchWord(option.sw));
+        return coursesChosen.some((c) => c.sw === formatSearchWord(option.key));
       };
 
       /**
@@ -105,7 +108,7 @@ const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch }) => {
             />
             {coursesChosen.map((courseChosen) => (
                 <ChoosenCourse 
-                    key={courseChosen.key+courseChosen.description}
+                    key={courseChosen.key+courseChosen.desc+"choosen_course"}
                     courseNum={courseChosen.key} 
                     subject={"blahh"} 
                     description={courseChosen.desc} 

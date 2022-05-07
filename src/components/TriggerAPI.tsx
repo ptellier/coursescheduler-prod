@@ -9,6 +9,7 @@ import { solve } from "../helpers/solve_newengine";
 import { groupSections } from "../helpers/groupby";
 import { useState } from "react";
 import { recommend } from "../helpers/recommend";
+import {MenuItem, TextField } from "@mui/material";
 
 
 export interface TriggerAPIProps {
@@ -58,24 +59,41 @@ export const TriggerAPI = ({ loc, set_recommended, userTerm, setUserTerm, setSec
   };
 
   return (
-    <div className="form-group my-4">
-      <select
-        onChange={(e) => setUserTerm(e.target.value)}
-        className="form-control text-center"
-        aria-label="Default select example"
+      <>
+    {/*// <div className="form-group my-4">*/}
+    {/*//   <select*/}
+    {/*//     onChange={(e) => setUserTerm(e.target.value)}*/}
+    {/*//     className="form-control text-center"*/}
+    {/*//     aria-label="Default select example"*/}
+    {/*//   >*/}
+    {/*//     <option value="1">Select Term</option>*/}
+    {/*//     <option value="1">Term: 1</option>*/}
+    {/*//     <option value="2">Term: 2</option>*/}
+    {/*//   </select>*/}
+
+      <TextField
+          select
+          label="Term"
+          value={userTerm}
+          onChange={(event) => setUserTerm((event.target.value))}
+          sx={{[`& fieldset`]:{borderRadius:"10px"}}}
+          margin="normal"
       >
-        <option value="1">Select Term</option>
-        <option value="1">Term: 1</option>
-        <option value="2">Term: 2</option>
-      </select>
+        <MenuItem key={1} value={"1"}>#1 Winter (Sept - Dec)</MenuItem>
+        <MenuItem key={2} value={"2"}>#2 Winter (Jan - Apr)</MenuItem>
+        <MenuItem key={3} value={"3"}>#1 Summer (May - June)</MenuItem>
+        <MenuItem key={4} value={"4"}>#2 Summer (July - Aug)</MenuItem>
+      </TextField>
+
       <button
-        className="form-control btn btn-large btn-primary"
-        onClick={handleGenerate}
+          className="form-control btn btn-large btn-primary"
+          onClick={handleGenerate}
       >
-        <span> {status} </span> 
+        <span> {status} </span>
         {loading && <i className="ml-2 fas fa-spinner fa-pulse" />}
       </button>
-    </div>
+    {/*</div>*/}
+  </>
   );
 };
 
