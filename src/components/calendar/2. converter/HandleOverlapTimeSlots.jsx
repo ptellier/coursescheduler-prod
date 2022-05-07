@@ -2,6 +2,82 @@ import { groupTimeSlotsByDays } from '../../../helpers/groupby';
 import OverlapTimeSlot from '../3. timeslot/OverlapTimeSlot';
 import SplitCurrentNextTimeSlot from './SplitCurrentNextTimeSlot'
 
+const overlapGroup1 = [
+    {
+        "section": {
+            "id": "longest",
+            "status": "Available",
+            "name": "CPSC 110 L1S",
+            "subject": "CPSC",
+            "course": "110",
+            "section": "L1S",
+            "activity": "Laboratory",
+            "term": "1",
+            "schedule": [
+                {
+                    "start_time": 750,
+                    "end_time": 930,
+                    "day": "Tue",
+                    "term": "1"
+                }
+            ]
+        },
+        "day": "Tue",
+        "start_time": 660,
+        "end_time": 990,
+        "isNextTimeSlot": false
+    },
+    {
+        "section": {
+            "id": "medium",
+            "status": "Available",
+            "name": "CPSC 110 L1S",
+            "subject": "CPSC",
+            "course": "110",
+            "section": "L1S",
+            "activity": "Laboratory",
+            "term": "1",
+            "schedule": [
+                {
+                    "start_time": 750,
+                    "end_time": 930,
+                    "day": "Tue",
+                    "term": "1"
+                }
+            ]
+        },
+        "day": "Tue",
+        "start_time": 660,
+        "end_time": 900,
+        "isNextTimeSlot": false
+    },
+    {
+        "section": {
+            "id": "shortest",
+            "status": "Available",
+            "name": "CPSC 110 L1S",
+            "subject": "CPSC",
+            "course": "110",
+            "section": "L1S",
+            "activity": "Laboratory",
+            "term": "1",
+            "schedule": [
+                {
+                    "start_time": 750,
+                    "end_time": 930,
+                    "day": "Tue",
+                    "term": "1"
+                }
+            ]
+        },
+        "day": "Tue",
+        "start_time": 900,
+        "end_time": 960,
+        "isNextTimeSlot": false
+    }
+]
+
+
 const HandleOverlapTimeSlots = ({ timeSlots }) => {
     
     /**
@@ -15,7 +91,8 @@ const HandleOverlapTimeSlots = ({ timeSlots }) => {
             const sorted = sortTimeSlotsByStartTime(timeSlots)
             const groupByDay = groupTimeSlotsByDays(sorted)
             const groupByOverlap = groupByDay.map(group => groupOverlap(group));
-            return groupByOverlap.flatMap(group => group);
+            const ungroupFromDay = groupByOverlap.flatMap(group => group);
+            return ungroupFromDay
         } else {
             return [];
         }
@@ -69,7 +146,6 @@ const HandleOverlapTimeSlots = ({ timeSlots }) => {
         return group.length > 1
     }
 
-
     //TODO: move this
     //Unique ID that separates one section to many by adding start and end time
     const findUniqueKey = (timeSlot, move) => {
@@ -88,5 +164,6 @@ const HandleOverlapTimeSlots = ({ timeSlots }) => {
         </>
     )
 }
+
 
 export default HandleOverlapTimeSlots
