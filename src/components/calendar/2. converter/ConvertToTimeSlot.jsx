@@ -3,7 +3,7 @@ import HandleOverlapTimeSlots from './HandleOverlapTimeSlots';
 
 
 /**
- * Combines given displayedSections and nextSections
+ * Combines given currentSections and nextSections
  * then create timeslot objects
  * @param {Section[], Section[]} param
  * @returns {TimeSlot[]}
