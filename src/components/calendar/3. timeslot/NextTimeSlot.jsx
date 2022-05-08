@@ -59,14 +59,13 @@ const NextTimeSlot = ({ section, timeSlot }) => {
       //       max start: groupStartTime, 
       //       max end : groupEndTime
   return (
-    <div className="outlined-cal-slot cal-slot w-100"
+    <div className={"outlined-cal-slot cal-slot w-100 " + (isHoverTheSameSection() ? "next-move" : "")}
          ref={drop}
          style={{
             gridRow: timeToGridRow(timeSlot.start_time) 
                    + " / " 
                    + timeToGridRow(timeSlot.end_time),
             gridColumn:timeSlot.day,
-            backgroundColor: isHoverTheSameSection() && "green"
          }}
     >
         <div>{section.subject}</div>
