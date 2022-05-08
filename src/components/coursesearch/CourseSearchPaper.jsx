@@ -5,11 +5,13 @@ import {
     Paper,
     TextField
 } from "@mui/material";
-import ChoosenCourse from "./ChosenCourse";
+import ChosenCourse from "./ChosenCourse";
 import { fetchCourseDesc } from '../../helpers/fetch';
+import TriggerAPI from "../TriggerAPI";
 
 
-const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch }) => {
+const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch,
+                               set_recommended, userTerm, setUserTerm, setSections}) => {
       
       const [courseOptions, setCourseOptions] = useState([]);
       const [coursesChosen, setCoursesChosen] = useState([]);
@@ -107,10 +109,10 @@ const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch }) => {
                 onInputChange={loadCourseOptions}
             />
             {coursesChosen.map((courseChosen) => (
-                <ChoosenCourse 
+                <ChosenCourse
                     key={courseChosen.key+courseChosen.desc+"choosen_course"}
-                    courseNum={courseChosen.key} 
-                    subject={"blahh"} 
+                    subject={courseChosen.sw.split("/")[0]}
+                    courseNum={courseChosen.sw.split("/")[1]}
                     description={courseChosen.desc} 
                     credits={courseChosen.cred} 
                 />
@@ -118,6 +120,15 @@ const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch }) => {
             
             {/* <ChoosenCourse courseNum={"STAT"} subject={"302"} description={"probability intro"} credits={3} />
             <ChoosenCourse courseNum={"CPSC"} subject={"110"} description={"programs, computers"} credits={4} /> */}
+
+            <TriggerAPI
+                loc={coursesToFetch}
+                set_recommended={set_recommended}
+                setSections={setSections}
+                userTerm={userTerm}
+                setUserTerm={setUserTerm}
+            />
+
         </Box>
     </Paper>);
 }
