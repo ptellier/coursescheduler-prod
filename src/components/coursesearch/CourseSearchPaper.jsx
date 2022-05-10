@@ -11,7 +11,7 @@ import TriggerAPI from "../TriggerAPI";
 
 
 const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch,
-                               set_recommended, userTerm, setUserTerm, setSections}) => {
+                             set_recommended, userTerm, setUserTerm, setSections}) => {
       
       const [courseOptions, setCourseOptions] = useState([]);
       const [coursesChosen, setCoursesChosen] = useState([]);

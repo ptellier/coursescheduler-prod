@@ -17,7 +17,7 @@ app.get("/", async (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`Example app is listening on port http://localhost:${port}`)
+  console.log(`This app is listening on port http://localhost:${port}`)
 })
 
 
@@ -66,9 +66,9 @@ const scrapeData = async (url) => {
     let acc = [] // accumulates section
     const trTags = document.querySelectorAll('.table.table-striped.section-summary tbody tr')
     const create_UUID = () => {
-      var dt = new Date().getTime();
-      var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-          var r = (dt + Math.random()*16)%16 | 0;
+      let dt = new Date().getTime();
+      let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          let r = (dt + Math.random()*16)%16 | 0;
           dt = Math.floor(dt/16);
           return (c=='x' ? r :(r&0x3|0x8)).toString(16);
       });

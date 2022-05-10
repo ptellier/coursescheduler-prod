@@ -3,7 +3,7 @@ import {useDrop} from "react-dnd";
 import { timeToGridRow } from '../CalendarConstants';
 import { SectionsContext } from '../context/SectionsContext';
 
-const NextTimeSlot = ({ section, timeSlot }) => {
+const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
 
     const {focusedNextSection, focusNextSection, blurNextSection} = useContext(SectionsContext);
     const {currentSections, setCurrentSections} = useContext(SectionsContext);
@@ -55,24 +55,28 @@ const NextTimeSlot = ({ section, timeSlot }) => {
       }
 
     
-      // TODO: implement another grid system 
-      //       max start: groupStartTime, 
-      //       max end : groupEndTime
-  return (
-    <div className="outlined-cal-slot cal-slot w-100"
-         ref={drop}
-         style={{
-            gridRow: timeToGridRow(timeSlot.start_time) 
-                   + " / " 
-                   + timeToGridRow(timeSlot.end_time),
+    const provideStyle = () => {
+        const gridStyle = {
+            gridRow: timeToGridRow(timeSlot.start_time) + " / " 
+                    + timeToGridRow(timeSlot.end_time),
             gridColumn:timeSlot.day,
             backgroundColor: isHoverTheSameSection() && "green"
-         }}
-    >
-        <div>{section.subject}</div>
-        <div>{section.course + " " + section.section}</div>
-    </div>
-  )
+        }
+        const overlapGroupStyle = {
+            height: (timeSlot.end_time - timeSlot.start_time)
+        }
+        return isInOverlapGroup ? {...gridStyle, ...overlapGroupStyle} : gridStyle
+    }
+
+    return (
+      <div className="outlined-cal-slot cal-slot"
+          ref={drop}
+          style={provideStyle()}
+      >
+          <div>{section.subject}</div>
+          <div>{section.course + " " + section.section}</div>
+      </div>
+    )
 }
 
 export default NextTimeSlot

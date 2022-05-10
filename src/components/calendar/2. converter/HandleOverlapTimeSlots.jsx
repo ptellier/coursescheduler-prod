@@ -1,87 +1,17 @@
 import { groupTimeSlotsByDays } from '../../../helpers/groupby';
 import OverlapTimeSlot from '../3. timeslot/OverlapTimeSlot';
-import SplitCurrentNextTimeSlot from './SplitCurrentNextTimeSlot'
+import useSortTimeSlots from '../hook/useSortTimeSlots';
+import useUniqueID from '../hook/useUniqueID';
 
-const overlapGroup1 = [
-    {
-        "section": {
-            "id": "longest",
-            "status": "Available",
-            "name": "CPSC 110 L1S",
-            "subject": "CPSC",
-            "course": "110",
-            "section": "L1S",
-            "activity": "Laboratory",
-            "term": "1",
-            "schedule": [
-                {
-                    "start_time": 750,
-                    "end_time": 930,
-                    "day": "Tue",
-                    "term": "1"
-                }
-            ]
-        },
-        "day": "Tue",
-        "start_time": 660,
-        "end_time": 990,
-        "isNextTimeSlot": false
-    },
-    {
-        "section": {
-            "id": "medium",
-            "status": "Available",
-            "name": "CPSC 110 L1S",
-            "subject": "CPSC",
-            "course": "110",
-            "section": "L1S",
-            "activity": "Laboratory",
-            "term": "1",
-            "schedule": [
-                {
-                    "start_time": 750,
-                    "end_time": 930,
-                    "day": "Tue",
-                    "term": "1"
-                }
-            ]
-        },
-        "day": "Tue",
-        "start_time": 660,
-        "end_time": 900,
-        "isNextTimeSlot": false
-    },
-    {
-        "section": {
-            "id": "shortest",
-            "status": "Available",
-            "name": "CPSC 110 L1S",
-            "subject": "CPSC",
-            "course": "110",
-            "section": "L1S",
-            "activity": "Laboratory",
-            "term": "1",
-            "schedule": [
-                {
-                    "start_time": 750,
-                    "end_time": 930,
-                    "day": "Tue",
-                    "term": "1"
-                }
-            ]
-        },
-        "day": "Tue",
-        "start_time": 900,
-        "end_time": 960,
-        "isNextTimeSlot": false
-    }
-]
+import SplitCurrentNextTimeSlot from './SplitCurrentNextTimeSlot'
 
 
 const HandleOverlapTimeSlots = ({ timeSlots }) => {
-    
+    const {getUUID} = useUniqueID()
+    const { sortTimeSlotsByStartTime } = useSortTimeSlots();
     /**
-     * EFFECTS: execute group by timeslots sequence
+     * EFFECTS: execute group by timeslots sequence, return empty array
+     *          if given timeSlots is empty
      * sequence: group => sort => group by days => group by overlap
      *           => ungroup
      * @param {*} timeSlots 
@@ -97,6 +27,7 @@ const HandleOverlapTimeSlots = ({ timeSlots }) => {
             return [];
         }
     }
+
     /**
      * EFFECTS: group timeSlots by overlapping time interval
      * INVARIANT: timeSlots must be sorted by start time
@@ -128,15 +59,6 @@ const HandleOverlapTimeSlots = ({ timeSlots }) => {
     }
 
     /**
-     * EFFECTS: sort given timeslots based start time
-     * @param {TimeSlot[]} timeSlots
-     * @returns {TimeSlot[]}
-     */
-    const sortTimeSlotsByStartTime = (timeSlots) => {
-        return timeSlots.sort((t1, t2) => (t1.start_time > t2.start_time ? 1 : -1));
-    };
-    
-    /**
      * EFFECTS: produce true if given group is overlapping group, false otherwise
      * NOTE: group is overlapping if it contains more than one timeslot
      * @param {TimeSlot[][]} group 
@@ -146,19 +68,17 @@ const HandleOverlapTimeSlots = ({ timeSlots }) => {
         return group.length > 1
     }
 
-    //TODO: move this
-    //Unique ID that separates one section to many by adding start and end time
-    const findUniqueKey = (timeSlot, move) => {
-        return timeSlot.section.id + timeSlot.day + timeSlot.start_time + timeSlot.end_time + move;
-    }
-
     return (
         <>
             {group(timeSlots).length > 0 && group(timeSlots).map(group =>
                 isOverlappingGroup(group) 
-                ? <OverlapTimeSlot group={group}/>
+                ? <OverlapTimeSlot 
+                                // key={getUUID() + Math.random().toString(36)}       
+                                group={group}/>
                 : group.map(timeSlot => 
-                    <SplitCurrentNextTimeSlot timeSlot={timeSlot}/>
+                    <SplitCurrentNextTimeSlot 
+                                            //  key={getUUID() + Math.random().toString(36)} 
+                                             timeSlot={timeSlot}/>
                  )   
             )} 
         </>

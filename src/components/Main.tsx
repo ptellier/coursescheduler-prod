@@ -57,7 +57,6 @@ const Main: FC = () => {
             <div className="main-page-left">
               <Stack direction="column" spacing={2}>
                 <CourseSearchPaper coursesToFetch={coursesToFetch}
-                                   loc={coursesToFetch}
                                    setCoursesToFetch={setCoursesToFetch}
                                    set_recommended={set_recommended}
                                    userTerm={userTerm}

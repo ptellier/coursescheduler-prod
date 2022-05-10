@@ -4,7 +4,7 @@ import {useDrag} from "react-dnd";
 import { SectionsContext } from "../context/SectionsContext";
 
 
-const CurrentTimeSlot = ({section, timeSlot}) => {
+const CurrentTimeSlot = ({section, timeSlot, isInOverlapGroup}) => {
     const {showNextSections, hideNextSections} = useContext(SectionsContext);
 
     /**
@@ -16,11 +16,15 @@ const CurrentTimeSlot = ({section, timeSlot}) => {
      */
     const [{isDragging}, drag] = useDrag(() => ({
         type: "calendarTimeSlot",
-        item: section, // this section is the section being moved from 
         collect: monitor => ({
             isDragging: !!monitor.isDragging(),            
         }),
-        end: () => hideNextSections()
+        item: (monitor) => { 
+            return section
+        }, // this section is the section being moved from 
+        end: () => {
+            hideNextSections()
+        }
     }));
     
     /**
@@ -29,17 +33,27 @@ const CurrentTimeSlot = ({section, timeSlot}) => {
     useEffect(() => {
       isDragging && showNextSections(section);
     }, [isDragging])
+
+    const provideStyle = () => {
+        const gridStyle = {
+            gridRow: timeToGridRow(timeSlot.start_time) + " / " 
+                    + timeToGridRow(timeSlot.end_time),
+            gridColumn:timeSlot.day,            
+        }
+        const overlapGroupStyle = {
+            height: (timeSlot.end_time - timeSlot.start_time)
+        }
+        const currentDragStyle = {
+            opacity: 0.5
+        }
+        return isInOverlapGroup ? {...gridStyle, ...overlapGroupStyle} : gridStyle
+    }
     
 
     return (
-        <div className="solid-cal-slot cal-slot w-100"
-                ref={drag}
-                style={{
-                    gridRow: timeToGridRow(timeSlot.start_time) 
-                    + " / " 
-                    + timeToGridRow(timeSlot.end_time),
-                    gridColumn:timeSlot.day,
-                }}
+        <div className="solid-cal-slot cal-slot"
+             ref={drag}
+             style={provideStyle()}
         >
             <div>{section.subject}</div>
             <div>{section.course + " " + section.section}</div>
