@@ -31,13 +31,13 @@ const OptionsPaper = () => {
                             <FormControlLabel sx={{height:H_SPACING}} value="most scattered" control={<Radio />} label="most scattered" />
                             <FormControlLabel sx={{height:H_SPACING}} value="most consistent" control={<Radio />} label="most consistent" />
                             <FormControlLabel sx={{height:H_SPACING}} value="free days" control={<Radio />} label="free days" />
-                            <FormControlLabel sx={{height:H_SPACING}} value="latest end" control={<Radio />} label="latest end" />
+                            {/* <FormControlLabel sx={{height:H_SPACING}} value="latest end" control={<Radio />} label="latest end" />
                             <FormControlLabel sx={{height:H_SPACING}} value="earliest start" control={<Radio />} label="earliest start" />
                             <FormControlLabel sx={{height:H_SPACING}} value="latest start" control={<Radio />} label="latest start" />
-                            <FormControlLabel sx={{height:H_SPACING}} value="earliest end" control={<Radio />} label="earliest end" />
+                            <FormControlLabel sx={{height:H_SPACING}} value="earliest end" control={<Radio />} label="earliest end" /> */}
                         </RadioGroup>
                     </FormControl>
-                    <Button variant="contained" color="primary">Generate</Button>
+                    <Button variant="contained" color="primary">Select</Button>
                 </Stack>
             </Box>
         </Paper>

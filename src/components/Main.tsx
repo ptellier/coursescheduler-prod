@@ -50,6 +50,9 @@ const Main: FC = () => {
   /** raw user input from search bar and term selection components */
   const [userTerm, setUserTerm] = useState<string>("1");
 
+  const [selectedRecommended, setSelectedRecommended] 
+  = useState<Section[]>(recommended.compact);
+
   return (
       <ThemeProvider theme={theme}>
       <div className="Page">
@@ -77,9 +80,8 @@ const Main: FC = () => {
                   </ButtonGroup>
                 </Box>
                 <SectionsProvider allSections={sections}>
-                  <Calendar recommended={recommended.compact}/>
+                  <Calendar recommended={selectedRecommended}/>
                 </ SectionsProvider>
-                {/*<CalendarPaper text={"second right"}/>*/}
               </Stack>
             </div>
           </div>

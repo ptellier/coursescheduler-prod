@@ -117,9 +117,6 @@ const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch,
                     credits={courseChosen.cred} 
                 />
             ))}
-            
-            {/* <ChoosenCourse courseNum={"STAT"} subject={"302"} description={"probability intro"} credits={3} />
-            <ChoosenCourse courseNum={"CPSC"} subject={"110"} description={"programs, computers"} credits={4} /> */}
 
             <TriggerAPI
                 loc={coursesToFetch}
