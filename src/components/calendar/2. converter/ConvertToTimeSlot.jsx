@@ -76,33 +76,3 @@ const ConvertToTimeSlot = ({ currentSections, nextSections }) => {
 }
 
 export default ConvertToTimeSlot
-
-// {isNextMove 
-//   ? section.schedule.map((timeSlot) =>  (
-//       <NextTimeSlot key={findUniqueKey(timeSlot)}
-//                         section={section} 
-//                         timeSlot={timeSlot}      
-//       />
-//   ))
-//   : section.schedule.map((timeSlot) =>  (
-//       <CurrentTimeSlot key={findUniqueKey(timeSlot)}
-//                         section={section}
-//                         timeSlot={timeSlot}
-//       />
-//   ))
-// }
-
-
-// {mergeTimeSlots(sectionsToTimeSlots(currentSections, false),
-//   sectionsToTimeSlots(nextSections, true)).map(timeSlot => 
-//     timeSlot.isNextTimeSlot 
-//     ? <NextTimeSlot key={findUniqueKey(timeSlot, "next")} 
-//                     section={timeSlot.section}
-//                     timeSlot={timeSlot}
-//                     />
-//     : <CurrentTimeSlot key={findUniqueKey(timeSlot, "current")}
-//                        section={timeSlot.section}
-//                        timeSlot={timeSlot}
-//                       />
-//   )
-// }
