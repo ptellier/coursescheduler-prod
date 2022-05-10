@@ -31,7 +31,7 @@ const CurrentTimeSlot = ({section, timeSlot, isInOverlapGroup}) => {
      * EFFECTS: When drag starts, show next sections
      */
     useEffect(() => {
-      isDragging && showNextSections(section);
+        isDragging && showNextSections(section);
     }, [isDragging])
 
     const provideStyle = () => {

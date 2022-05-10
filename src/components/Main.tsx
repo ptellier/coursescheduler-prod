@@ -3,6 +3,7 @@ import { Course } from "../data/DataDefinition/SearchWordDD";
 import { Section } from "../data/DataDefinition/SectionDD";
 import { SectionsProvider } from "./calendar/context/SectionsContext";
 import {Box, ButtonGroup, Stack, IconButton} from "@mui/material";
+import { ThemeProvider } from '@mui/material/styles';
 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -12,6 +13,7 @@ import CourseSearchPaper from "./coursesearch/CourseSearchPaper";
 import TriggerAPI from "./TriggerAPI";
 import OptionsPaper from "./OptionsPaper";
 import Calendar from "./calendar/1. calendar/Calendar";
+import { theme } from "./Theme";
 
 
 /**
@@ -49,7 +51,7 @@ const Main: FC = () => {
   const [userTerm, setUserTerm] = useState<string>("1");
 
   return (
-      <>
+      <ThemeProvider theme={theme}>
       <div className="Page">
         <TopNavigationBar/>
         <Box m={2} sx={{height:"100%"}}>
@@ -83,15 +85,7 @@ const Main: FC = () => {
           </div>
         </Box>
       </div>
-
-
-
-
-
-
-
-
-      </>
+      </ThemeProvider>
   );
 };
 

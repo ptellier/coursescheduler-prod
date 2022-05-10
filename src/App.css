@@ -215,11 +215,19 @@ div.cal-background-grid.last-col.last-row {
 .outlined-cal-slot {
   border: 2px dashed rgba(89, 89, 89, 0.5);
   color: grey;
+  transition: border-color 0.2s, color 0.2s, transform 0.2s;
+} .outlined-cal-slot.next-move {
+  border: 2px dashed green;
+  color: green;
+  transform: scale(1.1);
 }
 
 .solid-cal-slot {
   background-color: #BFEAFF;
   color:#2B81AB;
+  transition: transform 0.2s linear 0s;
+} .solid-cal-slot:hover {
+  transform: scale(1.1);
 }
 
 
