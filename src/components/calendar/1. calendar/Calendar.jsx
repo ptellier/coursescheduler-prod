@@ -8,9 +8,7 @@ import { SectionsContext } from "../context/SectionsContext";
 
 const Calendar = ({ recommended }) => {
 
-    const { currentSections, setCurrentSections } = useContext(SectionsContext)
-    const { nextSections } = useContext(SectionsContext)
-
+    const { currentSections, setCurrentSections, nextSections } = useContext(SectionsContext)
     /**
      * sets currentSections to the recommended data
      */

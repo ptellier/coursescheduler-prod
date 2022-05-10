@@ -7,7 +7,6 @@ import SplitCurrentNextTimeSlot from './SplitCurrentNextTimeSlot'
 
 
 const HandleOverlapTimeSlots = ({ timeSlots }) => {
-    const {getUUID} = useUniqueID()
     const { sortTimeSlotsByStartTime } = useSortTimeSlots();
     /**
      * EFFECTS: execute group by timeslots sequence, return empty array
@@ -68,17 +67,18 @@ const HandleOverlapTimeSlots = ({ timeSlots }) => {
         return group.length > 1
     }
 
+    //Unique ID that separates one section to many by adding start and end time
+    const findUniqueKey = (timeSlot) => {
+        return timeSlot.section.id + timeSlot.day + timeSlot.start_time + timeSlot.end_time;
+    }
+
     return (
         <>
             {group(timeSlots).length > 0 && group(timeSlots).map(group =>
                 isOverlappingGroup(group) 
-                ? <OverlapTimeSlot 
-                                // key={getUUID() + Math.random().toString(36)}       
-                                group={group}/>
+                ? <OverlapTimeSlot group={group}/>
                 : group.map(timeSlot => 
-                    <SplitCurrentNextTimeSlot 
-                                            //  key={getUUID() + Math.random().toString(36)} 
-                                             timeSlot={timeSlot}/>
+                    <SplitCurrentNextTimeSlot key={findUniqueKey(timeSlot)} timeSlot={timeSlot} isInOverlapGroup={false}/>
                  )   
             )} 
         </>

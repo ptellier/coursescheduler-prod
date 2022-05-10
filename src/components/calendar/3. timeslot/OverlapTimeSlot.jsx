@@ -7,14 +7,14 @@ import useUniqueID from '../hook/useUniqueID';
 
 
 const OverlapTimeSlot = ({ group }) => {
-
+    
     const groupStartTime = Math.min(...group.flatMap(g => g).map(g => g.start_time))
     const groupEndTime = Math.max(...group.flatMap(g => g).map(g => g.end_time))
     const day = group[0].day
     const interval = 30;
 
     const { sortTimeSlotsByStartTime } = useSortTimeSlots();
-    const {getUUID} = useUniqueID()
+    const { getUUID } = useUniqueID()
     /**
      * EFFECTS:
      * @param {*} group 
@@ -25,7 +25,6 @@ const OverlapTimeSlot = ({ group }) => {
         // Only for Test purpose, remove next two lines when deployed
         // const groupStartTime = 660
         // const groupEndTime = 990
-
         const result = [];
         const allTimes = generateTimes(groupStartTime, groupEndTime, interval)
         const subGroups = subGroupByNonOverlap(group)
@@ -119,13 +118,12 @@ const OverlapTimeSlot = ({ group }) => {
     }
 
     //Unique ID that separates one section to many by adding start and end time
-  const findUniqueKey = (timeSlot) => {
-    return timeSlot.section.id + timeSlot.day + timeSlot.start_time + timeSlot.end_time;
-  }
+    const findUniqueKey = (timeSlot) => {
+        return timeSlot.section.id + timeSlot.day + timeSlot.start_time + timeSlot.end_time;
+    }
 
     return (
         <div 
-                // key={getUUID()} 
                 style={{
                 display:'flex',
                 gridRow: timeToGridRow(groupStartTime) 
@@ -138,18 +136,16 @@ const OverlapTimeSlot = ({ group }) => {
                 and map the subgroup in it. While mapping subgroup, split each timeslot
                 into gap, current and next timeslot */}
             {insertGapTimeSlots(group).map(timeSlots => 
-                <div 
-                    //  key={getUUID()}  
-                     className="overlap-column w-100" 
+                <div className="overlap-column w-100" 
                      style={{zIndex:3}}
                 >
                     {timeSlots.map(timeSlot => 
                         timeSlot.type === "gap"
                          ? displayGapTimeSlot()
                          : <SplitCurrentNextTimeSlot 
-                                                    //  key={getUUID()}
-                                                     timeSlot={timeSlot} 
-                                                     isInOverlapGroup={true}
+                                key={findUniqueKey(timeSlot)}
+                                timeSlot={timeSlot} 
+                                isInOverlapGroup={true}
                             />
                     )}
                 </div>    

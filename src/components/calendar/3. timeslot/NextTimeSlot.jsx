@@ -3,6 +3,7 @@ import {useDrop} from "react-dnd";
 import { timeToGridRow } from '../CalendarConstants';
 import { SectionsContext } from '../context/SectionsContext';
 
+
 const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
 
     const {focusedNextSection, focusNextSection, blurNextSection} = useContext(SectionsContext);
@@ -19,7 +20,7 @@ const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
           handleDrop(from, to)
         }, 
         collect: (monitor) => ({
-          isOver:  monitor.isOver(),
+          isOver:  !!monitor.isOver(),
         }),
         hover: () => {
           focusNextSection(section)
