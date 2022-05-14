@@ -1,4 +1,4 @@
-import { useState, FC } from "react";
+import { useState, FC, useEffect } from "react";
 import { Course } from "../data/DataDefinition/SearchWordDD";
 import { Section } from "../data/DataDefinition/SectionDD";
 import { SectionsProvider } from "./calendar/context/SectionsContext";
@@ -14,6 +14,7 @@ import TriggerAPI from "./TriggerAPI";
 import OptionsPaper from "./OptionsPaper";
 import Calendar from "./calendar/1. calendar/Calendar";
 import { theme } from "./Theme";
+import { Recommended } from "../data/DataDefinition/RecommendDD";
 
 
 /**
@@ -50,6 +51,29 @@ const Main: FC = () => {
   /** raw user input from search bar and term selection components */
   const [userTerm, setUserTerm] = useState<string>("1");
 
+  /** indicates the current category of recommendation that user selected*/
+  const [selectedRecommended, setSelectedRecommended] = useState<Recommended>(Recommended.compact)
+
+  /** currently viewed sections that is selected from recommended data */
+  const [currentRecommended, setCurrentRecommended] = useState<Section[]>([])
+  
+  /** Switch currently view sections whenever selected is changed from user's selection*/
+  useEffect(() => {
+    switch (selectedRecommended) {
+      case Recommended.compact:
+        setCurrentRecommended(recommended.compact) 
+        break;
+      case Recommended.scattered:
+        setCurrentRecommended(recommended.scatter) 
+        break;
+      case Recommended.consistent:
+        setCurrentRecommended(recommended.consistent) 
+        break;
+      default:
+        setCurrentRecommended(recommended.freeDay)
+        break;
+    }
+  }, [selectedRecommended, recommended])
 
   return (
       <ThemeProvider theme={theme}>
@@ -66,7 +90,7 @@ const Main: FC = () => {
                                    setUserTerm={setUserTerm}
                                    setSections={setSections}
                 />
-                <OptionsPaper/>
+                <OptionsPaper setSelectedRecommended={setSelectedRecommended}/>
               </Stack>
             </div>
             <div className="main-page-right">
@@ -78,7 +102,7 @@ const Main: FC = () => {
                   </ButtonGroup>
                 </Box>
                 <SectionsProvider allSections={sections}>
-                  <Calendar recommended={recommended.compact}/>
+                  <Calendar recommended={currentRecommended}/>
                 </ SectionsProvider>
               </Stack>
             </div>
