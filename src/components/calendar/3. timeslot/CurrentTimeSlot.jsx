@@ -2,10 +2,14 @@ import {useContext, useEffect} from "react";
 import {timeToGridRow} from "../CalendarConstants";
 import {useDrag} from "react-dnd";
 import { SectionsContext } from "../context/SectionsContext";
+import { useTheme } from '@mui/material';
 
 
 const CurrentTimeSlot = ({section, timeSlot, isInOverlapGroup}) => {
     const {showNextSections, hideNextSections} = useContext(SectionsContext);
+    const theme = useTheme();
+    const backgroundColors = theme.palette.calendarTimeSlotBackgroundColors;
+    const textColors = theme.palette.calendarTimeSlotTextColors;
 
     /**
      * EFFECTS: set isDragging to true when drag start
@@ -38,7 +42,9 @@ const CurrentTimeSlot = ({section, timeSlot, isInOverlapGroup}) => {
         const gridStyle = {
             gridRow: timeToGridRow(timeSlot.start_time) + " / " 
                     + timeToGridRow(timeSlot.end_time),
-            gridColumn:timeSlot.day,            
+            gridColumn:timeSlot.day,   
+            color: textColors[timeSlot.colorIndex],
+            backgroundColor: backgroundColors[timeSlot.colorIndex]         
         }
         const overlapGroupStyle = {
             height: (timeSlot.end_time - timeSlot.start_time)

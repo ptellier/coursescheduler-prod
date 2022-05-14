@@ -3,7 +3,8 @@ import {
     Autocomplete,
     Box,
     Paper,
-    TextField
+    TextField,
+    useTheme
 } from "@mui/material";
 import ChosenCourse from "./ChosenCourse";
 import { fetchCourseDesc } from '../../helpers/fetch';
@@ -16,7 +17,17 @@ const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch,
       const [courseOptions, setCourseOptions] = useState([]);
       const [coursesChosen, setCoursesChosen] = useState([]);
       const [totalCredits, setTotalCredits] = useState(0);
-    
+      const theme = useTheme();
+      const chosenCourseBackgroundColors = theme.palette.calendarTimeSlotBackgroundColors;
+      function getThemeBackgroundColor(index) {
+        return chosenCourseBackgroundColors[index % chosenCourseBackgroundColors.length];
+      }
+      const chosenCourseTextColors = theme.palette.calendarTimeSlotTextColors;
+      function getThemeTextColor(index) {
+        return chosenCourseTextColors[index % chosenCourseTextColors.length];
+      }
+
+
       /**
        * parse user's raw input of search word then fetch course description data
        * Note1: course description data includes course code, name, description, credits
@@ -108,8 +119,10 @@ const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch,
                 onChange={handleChange}
                 onInputChange={loadCourseOptions}
             />
-            {coursesChosen.map((courseChosen) => (
-                <ChosenCourse
+            {coursesChosen.map((courseChosen, index) => (
+                <ChosenCourse 
+                    color={getThemeTextColor(index)}
+                    backgroundColor={getThemeBackgroundColor(index)}
                     key={courseChosen.key+courseChosen.desc+"choosen_course"}
                     subject={courseChosen.sw.split("/")[0]}
                     courseNum={courseChosen.sw.split("/")[1]}

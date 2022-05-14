@@ -2,9 +2,10 @@ import {Autocomplete, Box, IconButton, List, Paper, TextField} from "@mui/materi
 import * as React from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 
-const ChosenCourse = ({subject, courseNum, description, credits}) => {
+const ChosenCourse = ({subject, courseNum, description, credits, 
+    backgroundColor, color}) => {
     return (<div className="chosen-course">
-        <span className="chosen-course-start">
+        <span className="chosen-course-start" style={{color:color, backgroundColor:backgroundColor}}>
             <div className="chosen-course-start-top">{subject}</div>
             <div className="chosen-course-start-bottom">{courseNum}</div>
         </span>

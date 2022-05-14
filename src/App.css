@@ -101,7 +101,6 @@ div.cal-background-grid {
 }
 
 div.cal-background-grid.first-row {
-  background-color:#f8f9ff;
   border-width: 0px 1px 0px 1px;
   font-weight: bold;
 }
@@ -234,7 +233,7 @@ div.cal-background-grid.last-col.last-row {
 
 .chosen-course {
   font-size: 1rem;
-  background-color: darkorchid;
+  /* background-color: darkorchid; */
   width: 268px;
   margin-top: 20px;
   display:flex;
@@ -286,17 +285,3 @@ div.cal-background-grid.last-col.last-row {
   margin:auto;
   width: min-content;
 }
-
-
-
-
-
-
-/*@keyframes App-logo-spin {*/
-/*  from {*/
-/*    transform: rotate(0deg);*/
-/*  }*/
-/*  to {*/
-/*    transform: rotate(360deg);*/
-/*  }*/
-/*}*/

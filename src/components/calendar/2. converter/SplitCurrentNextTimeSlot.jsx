@@ -4,6 +4,7 @@ import NextTimeSlot from '../3. timeslot/NextTimeSlot';
 const SplitCurrentNextTimeSlot = ({timeSlot, isInOverlapGroup}) => {
 
 
+
   return (
       <>
         {timeSlot.isNextTimeSlot 

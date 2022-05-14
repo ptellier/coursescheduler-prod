@@ -2,12 +2,17 @@ import React, { useContext, useEffect } from 'react'
 import {useDrop} from "react-dnd";
 import { timeToGridRow } from '../CalendarConstants';
 import { SectionsContext } from '../context/SectionsContext';
+import { useTheme } from '@mui/material';
 
 
 const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
 
     const {focusedNextSection, focusNextSection, blurNextSection} = useContext(SectionsContext);
     const {currentSections, setCurrentSections} = useContext(SectionsContext);
+
+    const theme = useTheme();
+    const backgroundColors = theme.palette.calendarTimeSlotBackgroundColors;
+    const textColors = theme.palette.calendarTimeSlotTextColors;
     
 
     const [{ isOver }, drop] = useDrop(() => ({
@@ -61,7 +66,10 @@ const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
             gridRow: timeToGridRow(timeSlot.start_time) + " / " 
                     + timeToGridRow(timeSlot.end_time),
             gridColumn:timeSlot.day,
-            backgroundColor: isHoverTheSameSection() && "green"
+            backgroundColor: isHoverTheSameSection() && "green",
+            
+            borderColor : textColors[timeSlot.colorIndex],
+
         }
         const overlapGroupStyle = {
             height: (timeSlot.end_time - timeSlot.start_time)
