@@ -3,6 +3,7 @@ import SplitCurrentNextTimeSlot from '../2. converter/SplitCurrentNextTimeSlot'
 import { timeToGridRow } from '../CalendarConstants'
 import useSortTimeSlots from '../hook/useSortTimeSlots';
 import useUniqueID from '../hook/useUniqueID';
+import { getGapTimes, gapTimesToTimeSlots } from './useGap';
 
 
 
@@ -21,12 +22,12 @@ const OverlapTimeSlot = ({ group }) => {
      */
     const insertGapTimeSlots = (group) => {
         const result = [];
-        const allTimes = generateTimes(groupStartTime, groupEndTime, interval)
         const subGroups = subGroupByNonOverlap(group)
 
         for (let subGroup of subGroups) {
             const occupiedTimes = extractOccupiedTimes(subGroup)
-            const gapTimeSlots = createGapTimeSlots(occupiedTimes, allTimes)
+            const gapTimes = getGapTimes(occupiedTimes, groupStartTime, groupEndTime)
+            const gapTimeSlots = gapTimesToTimeSlots(gapTimes)
             const mergedTimeSlots = [...subGroup, ...gapTimeSlots]
             const sortedTimeSlots = sortTimeSlotsByStartTime(mergedTimeSlots) 
             result.push(sortedTimeSlots)
@@ -65,28 +66,14 @@ const OverlapTimeSlot = ({ group }) => {
     }
 
     /**
-     * EFFECTS: create time gaps by filtering non-occupied times from all times
-     * IMPROVE: removing overlap times from all times is not properly done, 
-                but this still produces correct number of gaps. When time permits,
-                re-work this function
-     * @param {*} occupiedTimes 
-     * @param {*} allTimes 
-     * @returns 
+     * EFFECTS: display and create a div with height of 30px
+     * INVARIANT: interval must follow exact height of 30 minutes interval
      */
-    const createGapTimeSlots = (occupiedTimes, allTimes) => {
-
-        const gapTimes = allTimes.filter((time) => !occupiedTimes.includes(time));
-        const gapTimeSlots = gapTimes.map((gapTime) => createGapTimeSlot(gapTime));
-        return gapTimeSlots;
+    const displayGapTimeSlot = (timeSlot) => { 
+        return <div className="p-0 m-0" key={getUUID()}
+                        style={{height: timeSlot.end_time - timeSlot.start_time}} 
+                />
     }
-
-    /**
-     * EFFECTS: creates a gap timeslot
-     */
-    const createGapTimeSlot = (gapTime) => {
-        return ({ type: "gap", start_time: gapTime, end_time: gapTime + interval })
-    }
-
     /**
      * EFFECTS: extracts times occupied timeslots from given subGroup
      */
@@ -113,27 +100,18 @@ const OverlapTimeSlot = ({ group }) => {
         return [start, ...result];
     };
 
-    /**
-     * EFFECTS: display and create a div with height of 30px
-     * INVARIANT: interval must follow exact height of 30 minutes interval
-     */
-    const displayGapTimeSlot = () => { 
-        return <div key={getUUID()} style={{height: 30}}> </div>
-    }
-
     //Unique ID that separates one section to many by adding start and end time
     const findUniqueKey = (timeSlot) => {
         return timeSlot.section.id + timeSlot.day + timeSlot.start_time + timeSlot.end_time;
     }
 
     return (
-        <div 
-                style={{
-                display:'flex',
-                gridRow: timeToGridRow(groupStartTime) 
-                        + " / " 
-                        + timeToGridRow(groupEndTime),
-                gridColumn:day,
+        <div style={{
+             display:'flex',
+             gridRow: timeToGridRow(groupStartTime) 
+                    + " / " 
+                    + timeToGridRow(groupEndTime),
+             gridColumn:day,
             }}
         >
             {/* create a column <div> that holds timeslots vertically for each subgroup,
@@ -145,7 +123,7 @@ const OverlapTimeSlot = ({ group }) => {
                 >
                     {timeSlots.map(timeSlot => 
                         timeSlot.type === "gap"
-                         ? displayGapTimeSlot()
+                         ? displayGapTimeSlot(timeSlot)
                          : <SplitCurrentNextTimeSlot 
                                 key={findUniqueKey(timeSlot)}
                                 timeSlot={timeSlot} 
