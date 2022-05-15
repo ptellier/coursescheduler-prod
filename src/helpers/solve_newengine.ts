@@ -35,6 +35,7 @@ interface Node {
  * @returns
  */
 export const solve = (los: Section[][]): Schedule[] => {
+  const LIMIT = 50000 // up to 3,000,000 or 3 million potential results. 
   let n_wl: Node[] = []; //node worklist
   let node: Node; //current node
   let rsf: Schedule[] = [];
@@ -46,7 +47,7 @@ export const solve = (los: Section[][]): Schedule[] => {
   n_wl.push(root);
 
   while (n_wl.length > 0 /*&& ii<10000*/) {
-    if(rsf.length >= 3000000){return rsf} //keep track of total number of loops
+    if(rsf.length >= LIMIT){return rsf} //keep track of total number of loops
     node = n_wl.pop() as Node;
 
     if (node.remain.length === 0) {
