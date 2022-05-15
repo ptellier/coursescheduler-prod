@@ -72,7 +72,7 @@ const OptionsPaper = ({setSelectedRecommended}) => {
                             <FormControlLabel sx={{height:H_SPACING}} value="earliest end" control={<Radio />} label="earliest end" /> */}
                         </RadioGroup>
                     </FormControl>
-                    <Button variant="contained" color="customButton">Select</Button>
+                    {/* <Button variant="contained" color="customButton">Select</Button> */}
                 </Stack>
             </Box>
         </Paper>

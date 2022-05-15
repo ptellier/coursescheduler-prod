@@ -15,6 +15,7 @@ import OptionsPaper from "./OptionsPaper";
 import Calendar from "./calendar/1. calendar/Calendar";
 import { theme } from "./Theme";
 import { Recommended } from "../data/DataDefinition/RecommendDD";
+import Instruction from "./Instruction";
 
 
 /**
@@ -83,6 +84,7 @@ const Main: FC = () => {
           <div className="main-page-flexbox">
             <div className="main-page-left">
               <Stack direction="column" spacing={2}>
+              <Instruction />
                 <CourseSearchPaper coursesToFetch={coursesToFetch}
                                    setCoursesToFetch={setCoursesToFetch}
                                    set_recommended={set_recommended}
@@ -91,6 +93,7 @@ const Main: FC = () => {
                                    setSections={setSections}
                 />
                 <OptionsPaper setSelectedRecommended={setSelectedRecommended}/>
+                
               </Stack>
             </div>
             <div className="main-page-right">
