@@ -6,7 +6,7 @@ import { useTheme } from '@mui/material';
 
 
 const CurrentTimeSlot = ({section, timeSlot, isInOverlapGroup}) => {
-    const {showNextSections, hideNextSections} = useContext(SectionsContext);
+    const {showNextSections, hideNextSections, nextSections} = useContext(SectionsContext);
     const theme = useTheme();
     const backgroundColors = theme.palette.calendarTimeSlotBackgroundColors;
     const textColors = theme.palette.calendarTimeSlotTextColors;
@@ -37,6 +37,8 @@ const CurrentTimeSlot = ({section, timeSlot, isInOverlapGroup}) => {
     useEffect(() => {
         isDragging && showNextSections(section);
     }, [isDragging])
+
+    
 
     const provideStyle = () => {
         const gridStyle = {

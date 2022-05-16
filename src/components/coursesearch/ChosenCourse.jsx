@@ -11,10 +11,10 @@ const ChosenCourse = ({subject, courseNum, description, credits,
         </span>
         <span className="chosen-course-mid">
             <div className="chosen-course-mid-top">{description}</div>
-            <div className="chosen-course-mid-bottom">{credits + "Cr"}</div>
+            <div className="chosen-course-mid-bottom">{credits + " Credit"}</div>
         </span>
         <span className="chosen-course-end">
-            <IconButton aria-label="delete">
+            <IconButton aria-label="delete" onClick={() => console.log("Delete")}>
                 <ClearIcon />
             </IconButton>
         </span>
