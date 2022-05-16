@@ -37,23 +37,27 @@ const OverlapTimeSlot = ({ group }) => {
 
     // EFFECTS: create a subgroup of non-overlapping group
     //          within the given overlapping group
-    // IMPROVE: fix duplicate bug
-    const subGroupByNonOverlap = (group) => {
-        let rsf = [];
-        let worklist = [...group];
-        for (const timeSlot of group) {
-            if (worklist.length === 0) {break}
-                let list = [timeSlot];
-                for (const wrk of worklist) {
-                    if (list.every(l => !overlapSlots(l, wrk))) {
-                        list.push(wrk)
-                        worklist = worklist.filter(x => x !== wrk && x !== timeSlot)
-                    } 
-                }
-                worklist = worklist.filter(x => x !== timeSlot)
-                rsf.push(list)
+    const subGroupByNonOverlap = (group) =>{
+        group = group.sort((a,b) => a.start_time > b.start_time ? 1 : -1)
+        let worklist = [...group]
+        let currRes = []
+        let res = []
+    
+        while (worklist.length > 0) {
+        //-- get first and push into currRes:
+            const first = worklist.shift(); // get first of worklist
+            currRes.push(first)
+        //-- check if none of currRes slots conflict with rest of worklist
+            for (let ts of worklist) {
+                if (currRes.every(curr => !overlapSlots(curr, ts))) {
+                    currRes.push(ts) // collect ts in currRes
+                    worklist.splice(worklist.indexOf(ts), 1)  // remove ts from worklist
+                } 
+            }
+            res.push(currRes) // collect res
+            currRes = []; //reset currRes
         }
-        return rsf;
+        return res
     }
 
     /**
