@@ -58,7 +58,6 @@ const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch,
        * @param option
        */
         const handleChange = (event, option) => {
-            console.log(option);
             if (option === null) {
                 return
             } else if (exceededCredLimit(option)) {

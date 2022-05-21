@@ -3,12 +3,15 @@ import {useDrop} from "react-dnd";
 import { timeToGridRow } from '../CalendarConstants';
 import { SectionsContext } from '../context/SectionsContext';
 import { useTheme } from '@mui/material';
+import { HistoryContext } from '../../context/HistoryContext';
+import ReportIcon from '@mui/icons-material/Report';
 
 
 const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
 
     const {focusedNextSection, focusNextSection, blurNextSection} = useContext(SectionsContext);
     const {currentSections, setCurrentSections} = useContext(SectionsContext);
+    const {addToHistory} = useContext(HistoryContext);
 
     const theme = useTheme();
     const backgroundColors = theme.palette.calendarTimeSlotBackgroundColors;
@@ -58,6 +61,7 @@ const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
           const filtered = currentSections.filter(section => section.id !== from.id)
           const inserted = [...filtered, to]
           setCurrentSections(inserted)
+          addToHistory(inserted);
       }
 
     
@@ -82,6 +86,7 @@ const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
           ref={drop}
           style={provideStyle()}
       >
+          {isInOverlapGroup && <ReportIcon />}
           <div>{section.subject}</div>
           <div>{section.course + " " + section.section}</div>
       </div>

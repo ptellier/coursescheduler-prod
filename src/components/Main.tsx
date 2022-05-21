@@ -2,20 +2,17 @@ import { useState, FC, useEffect } from "react";
 import { Course } from "../data/DataDefinition/SearchWordDD";
 import { Section } from "../data/DataDefinition/SectionDD";
 import { SectionsProvider } from "./calendar/context/SectionsContext";
-import {Box, ButtonGroup, Stack, IconButton} from "@mui/material";
+import {Box, Stack} from "@mui/material";
 import { ThemeProvider } from '@mui/material/styles';
-
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-
 import TopNavigationBar from "./topnavbar/TopNavigationBar";
 import CourseSearchPaper from "./coursesearch/CourseSearchPaper";
-import TriggerAPI from "./TriggerAPI";
 import OptionsPaper from "./OptionsPaper";
 import Calendar from "./calendar/1. calendar/Calendar";
 import { theme } from "./Theme";
 import { Recommended } from "../data/DataDefinition/RecommendDD";
 import Instruction from "./Instruction";
+import History from "./History";
+import { HistoryProvider } from "./context/HistoryContext";
 
 
 /**
@@ -76,42 +73,44 @@ const Main: FC = () => {
     }
   }, [selectedRecommended, recommended])
 
+ 
+
   return (
       <ThemeProvider theme={theme}>
-      <div className="Page">
-        <TopNavigationBar/>
-        <Box m={2} sx={{height:"100%"}}>
-          <div className="main-page-flexbox">
-            <div className="main-page-left">
-              <Stack direction="column" spacing={2}>
-              <Instruction />
-                <CourseSearchPaper coursesToFetch={coursesToFetch}
-                                   setCoursesToFetch={setCoursesToFetch}
-                                   set_recommended={set_recommended}
-                                   userTerm={userTerm}
-                                   setUserTerm={setUserTerm}
-                                   setSections={setSections}
-                />
-                <OptionsPaper setSelectedRecommended={setSelectedRecommended}/>
-                
-              </Stack>
+
+        <div className="Page">
+          <TopNavigationBar/>
+          <Box m={2} sx={{height:"100%"}}>
+            <div className="main-page-flexbox">
+              <div className="main-page-left">
+                <Stack direction="column" spacing={2}>
+                <Instruction />
+                  <CourseSearchPaper coursesToFetch={coursesToFetch}
+                                     setCoursesToFetch={setCoursesToFetch}
+                                     set_recommended={set_recommended}
+                                     userTerm={userTerm}
+                                     setUserTerm={setUserTerm}
+                                     setSections={setSections}
+                  />
+                  <OptionsPaper setSelectedRecommended={setSelectedRecommended}/>
+                  
+                </Stack>
+              </div>
+              <div className="main-page-right">
+
+                <HistoryProvider>
+                  <Stack direction="column" spacing={1}>
+                    <History />
+                    <SectionsProvider allSections={sections}>
+                      <Calendar recommended={currentRecommended}/>
+                    </ SectionsProvider>
+                  </Stack>
+                </HistoryProvider>
+
+              </div>
             </div>
-            <div className="main-page-right">
-              <Stack direction="column" spacing={1}>
-                <Box p={1}>
-                  <ButtonGroup>
-                    <IconButton><ChevronLeftIcon fontSize="large"/></IconButton>
-                    <IconButton><ChevronRightIcon fontSize="large"/></IconButton>
-                  </ButtonGroup>
-                </Box>
-                <SectionsProvider allSections={sections}>
-                  <Calendar recommended={currentRecommended}/>
-                </ SectionsProvider>
-              </Stack>
-            </div>
-          </div>
-        </Box>
-      </div>
+          </Box>
+        </div>
       </ThemeProvider>
   );
 };

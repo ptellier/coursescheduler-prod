@@ -3,6 +3,7 @@ import {timeToGridRow} from "../CalendarConstants";
 import {useDrag} from "react-dnd";
 import { SectionsContext } from "../context/SectionsContext";
 import { useTheme } from '@mui/material';
+import ReportIcon from '@mui/icons-material/Report';
 
 
 const CurrentTimeSlot = ({section, timeSlot, isInOverlapGroup}) => {
@@ -46,13 +47,10 @@ const CurrentTimeSlot = ({section, timeSlot, isInOverlapGroup}) => {
                     + timeToGridRow(timeSlot.end_time),
             gridColumn:timeSlot.day,   
             color: textColors[timeSlot.colorIndex],
-            backgroundColor: backgroundColors[timeSlot.colorIndex]         
+            backgroundColor: backgroundColors[timeSlot.colorIndex],
         }
         const overlapGroupStyle = {
             height: (timeSlot.end_time - timeSlot.start_time)
-        }
-        const currentDragStyle = {
-            opacity: 0.5
         }
         return isInOverlapGroup ? {...gridStyle, ...overlapGroupStyle} : gridStyle
     }
@@ -62,7 +60,8 @@ const CurrentTimeSlot = ({section, timeSlot, isInOverlapGroup}) => {
         <div className="solid-cal-slot cal-slot"
              ref={drag}
              style={provideStyle()}
-        >
+        >   
+            {isInOverlapGroup && <ReportIcon />}
             <div>{section.subject}</div>
             <div>{section.course + " " + section.section}</div>
         </div>
