@@ -28,8 +28,9 @@ const History = () => {
             </IconButton>
         </ButtonGroup>
 
+       {/* Wrap this in the slider */}
       {history.map((h, idx) => 
-        <button className={`mx-2 btn ${(idx === pointer && history[0].length > 0) ? "btn-primary" : "btn-secondary"}`}>{idx}</button>
+        <button className={`mini-map mx-2 btn ${(idx === pointer && history[0].length > 0) ? "btn-primary" : "btn-secondary"}`}>{idx}</button>
       )}
    </Box>
   )

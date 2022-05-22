@@ -229,7 +229,12 @@ div.cal-background-grid.last-col.last-row {
   transform: scale(1.1);
 }
 
-
+.mini-map {
+  transition: transform 0.2s linear 0s;
+}
+.mini-map:hover {
+  transform: scale(2);
+}
 
 .chosen-course {
   font-size: 1rem;
