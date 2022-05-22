@@ -43,7 +43,11 @@ export const HistoryProvider = (props) => {
             setCurrentSections(selectedHistory)
             setPointer(pointer - 1);
         }
+    }
 
+    const jumpHistoryTo = (idx) => {
+        setCurrentSections(history[idx])
+        setPointer(idx)
     }
     
     const showNextInHistory = () => {
@@ -62,6 +66,7 @@ export const HistoryProvider = (props) => {
         <HistoryContext.Provider value={{
             history: history,
             pointer: pointer,
+            jumpHistoryTo: jumpHistoryTo,
             setHistory: setHistory,
             addToHistory: addToHistory,
             showPrevInHistory,

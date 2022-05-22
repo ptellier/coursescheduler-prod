@@ -233,7 +233,7 @@ div.cal-background-grid.last-col.last-row {
   transition: transform 0.2s linear 0s;
 }
 .mini-map:hover {
-  transform: scale(2);
+  transform: scale(1.4);
 }
 
 .chosen-course {

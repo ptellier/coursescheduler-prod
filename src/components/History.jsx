@@ -8,7 +8,9 @@ import { HistoryContext } from './context/HistoryContext';
 
 const History = () => {
   
-  const {pointer, history, showPrevInHistory, showNextInHistory} = useContext(HistoryContext);
+  const {jumpHistoryTo, pointer, history, showPrevInHistory, showNextInHistory} = useContext(HistoryContext);
+
+
 
   return (
     <Box p={1}>        
@@ -28,10 +30,20 @@ const History = () => {
             </IconButton>
         </ButtonGroup>
 
-       {/* Wrap this in the slider */}
+       {/* TODO: Wrap this in the slider */}
       {history.map((h, idx) => 
-        <button className={`mini-map mx-2 btn ${(idx === pointer && history[0].length > 0) ? "btn-primary" : "btn-secondary"}`}>{idx}</button>
+        <button className={
+          `mini-map 
+           mx-2 btn 
+          ${(idx === pointer && history[0].length > 0) ? "btn-primary" : "btn-secondary"}`
+          }
+          onClick={() => jumpHistoryTo(idx)}
+        >
+          {idx}
+        </button>
       )}
+
+
    </Box>
   )
 }
