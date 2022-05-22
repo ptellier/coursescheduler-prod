@@ -20,7 +20,6 @@ export const HistoryProvider = (props) => {
     
     const addToHistory = (inserted) => {
         let newHistory = [...history]
-        
         if (pointer < history.length - 1) {
             const current = history[pointer];            
             newHistory = [...newHistory, current, inserted]
@@ -29,7 +28,6 @@ export const HistoryProvider = (props) => {
             newHistory = [...newHistory, inserted]
             setPointer(newHistory.length - 1);
         }
-
         setHistory(newHistory)
     }
 

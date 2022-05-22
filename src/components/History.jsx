@@ -30,6 +30,7 @@ const History = () => {
             </IconButton>
         </ButtonGroup>
 
+       {/* TODO: Put screen shot on the button https://www.npmjs.com/package/use-react-screenshot */}
        {/* TODO: Wrap this in the slider */}
       {history.map((h, idx) => 
         <button className={
