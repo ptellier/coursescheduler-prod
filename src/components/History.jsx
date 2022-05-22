@@ -13,14 +13,23 @@ const History = () => {
   return (
     <Box p={1}>        
         <ButtonGroup>
-            <IconButton onClick={() => showPrevInHistory()}><ChevronLeftIcon fontSize="large"/></IconButton>
-            <IconButton onClick={() => showNextInHistory()}><ChevronRightIcon fontSize="large"/></IconButton>
+            <IconButton 
+              disabled={pointer === 0 ? true : false}
+              onClick={() => showPrevInHistory()}
+            >
+              <ChevronLeftIcon fontSize="large"/>
+            </IconButton>
+            
+            <IconButton 
+              disabled={pointer === history.length-1 ? true : false}
+              onClick={() => showNextInHistory()}
+              >
+                <ChevronRightIcon fontSize="large"/>
+            </IconButton>
         </ButtonGroup>
 
       {history.map((h, idx) => 
-        // <IconButton className="btn btn-primary">{idx}</IconButton>
-
-        <button className={`mx-2 btn ${idx === pointer ? "btn-primary" : "btn-secondary"}`}>{idx}</button>
+        <button className={`mx-2 btn ${(idx === pointer && history[0].length > 0) ? "btn-primary" : "btn-secondary"}`}>{idx}</button>
       )}
    </Box>
   )
