@@ -5,16 +5,21 @@ import LeftTimeCells from "../layout/LeftTimeCells";
 import MainCells from "../layout/MainCells";
 import ConvertToTimeSlot from "../2. converter/ConvertToTimeSlot";
 import { SectionsContext } from "../context/SectionsContext";
+import { HistoryContext } from "../../context/HistoryContext";
 
 const Calendar = ({ recommended }) => {
 
-    const { currentSections, setCurrentSections, nextSections } = useContext(SectionsContext)
+    const { currentSections, setCurrentSections, nextSections } = useContext(SectionsContext);
+    const {setHistory} = useContext(HistoryContext);
     /**
      * sets currentSections to the recommended data
      */
     useEffect(() => {
-        setCurrentSections(recommended)
+        setCurrentSections(recommended);
+        setHistory([recommended]);
     }, [recommended])
+
+    
     
     
     return (

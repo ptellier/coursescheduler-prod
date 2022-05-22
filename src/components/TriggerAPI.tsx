@@ -61,7 +61,6 @@ export const TriggerAPI = ({ loc, set_recommended, userTerm, setUserTerm, setSec
 
   return (
       <>
-
           <TextField
               id="term-choice-field"
               select
@@ -75,12 +74,14 @@ export const TriggerAPI = ({ loc, set_recommended, userTerm, setUserTerm, setSec
               <MenuItem key={3} value={"3"}>#1 Summer (May - June)</MenuItem>
               <MenuItem key={4} value={"4"}>#2 Summer (July - Aug)</MenuItem>
           </TextField>
-
-          <LoadingButton variant="contained"
-                         color="primary"
-                         onClick={handleGenerate}
-                         loading={loading}
-          >Generate</LoadingButton>
+          <div className="d-flex justify-content-center">
+            <LoadingButton className="mt-3 w-100" 
+                           variant="contained"
+                           color="primary"
+                           onClick={handleGenerate}
+                           loading={loading}
+            >Generate</LoadingButton>
+          </div>
       </>
   );
 };

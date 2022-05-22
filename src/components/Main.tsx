@@ -98,14 +98,14 @@ const Main: FC = () => {
               </div>
               <div className="main-page-right">
 
-                <HistoryProvider>
+                <SectionsProvider allSections={sections}>
+                <HistoryProvider setCurrentRecommended={setCurrentRecommended}>
                   <Stack direction="column" spacing={1}>
                     <History />
-                    <SectionsProvider allSections={sections}>
                       <Calendar recommended={currentRecommended}/>
-                    </ SectionsProvider>
                   </Stack>
-                </HistoryProvider>
+                </ HistoryProvider>
+                </ SectionsProvider>
 
               </div>
             </div>

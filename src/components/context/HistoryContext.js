@@ -1,5 +1,6 @@
 
-import { useState, createContext } from 'react'
+import { useState, createContext, useContext } from 'react'
+import { SectionsContext } from '../calendar/context/SectionsContext';
 
 export const HistoryContext = createContext();
 
@@ -9,7 +10,7 @@ export const HistoryContext = createContext();
  * @returns all logic related to current and next sections and states
  */
 export const HistoryProvider = (props) => {
-
+    const { setCurrentSections } = useContext(SectionsContext);
      /** history of schedules that user has explored so far */
     const [history, setHistory] = useState([]);
 
@@ -18,25 +19,50 @@ export const HistoryProvider = (props) => {
     
     
     const addToHistory = (inserted) => {
-        setHistory([...history, inserted])
-        // set pointer to len - 1;
+        let newHistory = [...history]
+        
+        if (pointer < history.length - 1) {
+            const current = history[pointer];            
+            newHistory = [...newHistory, current, inserted]
+            setPointer(newHistory.length - 1);
+        } else {
+            newHistory = [...newHistory, inserted]
+            setPointer(newHistory.length - 1);
+        }
+
+        setHistory(newHistory)
     }
 
     const showPrevInHistory = () => {
         // if not at the left end
         // update pointer to left
         // select sch from hitory according to pointer index
+        if (pointer > 0) {
+            const selectedHistory = history[pointer - 1];
+            // await props.setCurrentRecommended(selectedHistory)
+            setCurrentSections(selectedHistory)
+            setPointer(pointer - 1);
+        }
+
     }
     
     const showNextInHistory = () => {
         // if not at the right end:
         // update pointer to left
         // select sch from hitory according to pointer index
+        if (pointer < history.length - 1) {
+            const selectedHistory = history[pointer + 1];
+            // await props.setCurrentRecommended(selectedHistory)
+            setCurrentSections(selectedHistory)
+            setPointer(pointer + 1);
+        }
     }
 
     return (
         <HistoryContext.Provider value={{
             history: history,
+            pointer: pointer,
+            setHistory: setHistory,
             addToHistory: addToHistory,
             showPrevInHistory,
             showNextInHistory,
