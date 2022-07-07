@@ -214,8 +214,8 @@ div.cal-background-grid.last-col.last-row {
 .outlined-cal-slot {
   border: 2px dashed rgba(89, 89, 89, 0.5);
   color: grey;
-  transition: border-color 0.2s, color 0.2s, transform 0.2s;
-} .outlined-cal-slot.next-move {
+  transition: color 0.2s, border-color 0.2s, transform 0.2s;
+} .outlined-cal-slot:hover {
   border: 2px dashed green;
   color: green;
   transform: scale(1.1);
@@ -258,6 +258,7 @@ div.cal-background-grid.last-col.last-row {
   display:inline-block;
   white-space: break-spaces;
   padding:0 1rem 0 1rem;
+  width: 4.5rem;
 }
 .chosen-course-mid {
   background-color:#F6F6F6;
@@ -269,8 +270,9 @@ div.cal-background-grid.last-col.last-row {
   background-color:#F6F6F6;
   text-overflow: ellipsis;
   overflow: hidden;
-  /*white-space: nowrap;*/
-
+  white-space: nowrap;
+  font-size: 0.9rem;
+  width: calc(268px - 45px - 4.5rem - 2rem);
 }
 .chosen-course-mid-bottom {
   color:#807D7D;
@@ -278,6 +280,7 @@ div.cal-background-grid.last-col.last-row {
 .chosen-course-end {
   background-color:#F6F6F6;
   border-radius: 0px 10px 10px 0px;
+  padding-right:5px;
   display:inline-flex;
 }
 
