@@ -16,6 +16,7 @@ const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
     const theme = useTheme();
     const backgroundColors = theme.palette.calendarTimeSlotBackgroundColors;
     const textColors = theme.palette.calendarTimeSlotTextColors;
+    const dropAcceptedColor = theme.palette.calendarTimeSlotDropAccepted;
     
 
     const [{ isOver }, drop] = useDrop(() => ({
@@ -72,8 +73,9 @@ const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
             gridRow: timeToGridRow(timeSlot.start_time) + " / " 
                     + timeToGridRow(timeSlot.end_time),
             gridColumn:timeSlot.day,
-            backgroundColor: isHoverTheSameSection() && "green",
-            
+            border: isHoverTheSameSection() && ("2px dashed " + dropAcceptedColor),
+            color: isHoverTheSameSection() && dropAcceptedColor,
+            transform: isHoverTheSameSection() && "scale(1.05)",
             borderColor : textColors[timeSlot.colorIndex],
 
         }

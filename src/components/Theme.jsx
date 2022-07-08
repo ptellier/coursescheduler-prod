@@ -48,6 +48,7 @@ export const theme = createTheme({
             teal[900],
             yellow[900],
         ],
+        calendarTimeSlotDropAccepted: green[900]
     },
 });
 
