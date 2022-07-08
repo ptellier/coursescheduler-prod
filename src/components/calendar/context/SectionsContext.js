@@ -23,7 +23,7 @@ export const SectionsProvider = (props) => {
     const [nextSections, setNextSections] = useState([]);
 
     /**
-     * focusedNextSection: section that user is hoverring on
+     * focusedNextSection: section that user is hovering on
      * setFocusedNextSection: sets focused next section
      */
     const [focusedNextSection, setFocusedNextSection] = useState({})
@@ -69,8 +69,8 @@ export const SectionsProvider = (props) => {
 
     /**
      * MODIFIES: focusedNextSection
-     * EFFECTS: sets focusedNextSection as given section, As a result,
-     *          next section(s) that user is hoverring on get colored
+     * EFFECTS: sets focusedNextSection as given section. As a result,
+     *          next section(s) that user is hovering on gets colored
      */
     const focusNextSection = (section) => {
         setFocusedNextSection(section);
@@ -79,7 +79,7 @@ export const SectionsProvider = (props) => {
     /**
      * MODIFIES: focusedNextSection
      * EFFECTS: sets focusedNextSection to empty object. As a result, 
-     *          uncolor next section(s) that user was hoverring on
+     *          uncolor next section(s) that user was hovering on
      */
     const blurNextSection = () => {
         setFocusedNextSection({});

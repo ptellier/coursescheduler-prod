@@ -26,7 +26,7 @@ const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
           const from = item
           const to = section
           handleDrop(from, to)
-        }, 
+        },
         collect: (monitor) => ({
           isOver:  !!monitor.isOver(),
         }),
@@ -55,13 +55,15 @@ const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
 
     /**
      * MODIFIES: currentSections
-     * EFFECTS: filter 'from' and insert 'to' in currentSections
+     * EFFECTS: change the 'from' Section to the 'to' Section in currentSections
+     *          (preserves Array order so colors stay with their sections)
      */
      const handleDrop = (from, to) => {
-          const filtered = currentSections.filter(section => section.id !== from.id)
-          const inserted = [...filtered, to]
-          setCurrentSections(inserted)
-          addToHistory(inserted);
+          const replacementIndex = currentSections.findIndex(section => section.id === from.id);
+          let newCurrentSections = currentSections;
+          newCurrentSections.splice(replacementIndex, 1, to);
+          setCurrentSections(newCurrentSections);
+          addToHistory(newCurrentSections);
       }
 
     
