@@ -9,14 +9,13 @@ import {
 import ChosenCourse from "./ChosenCourse";
 import { fetchCourseDesc } from '../../helpers/fetch';
 import TriggerAPI from "../TriggerAPI";
+import {CourseColorMap} from "../../data/DataDefinition/CourseColorMap";
 
 
 const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch,
                              set_recommended, userTerm, setUserTerm, setSections}) => {
-      
-      const [courseOptions, setCourseOptions] = useState([]);
-      const [coursesChosen, setCoursesChosen] = useState([]);
-      const [totalCredits, setTotalCredits] = useState(0);
+
+
       const theme = useTheme();
       const chosenCourseBackgroundColors = theme.palette.calendarTimeSlotBackgroundColors;
       function getThemeBackgroundColor(index) {
@@ -27,6 +26,9 @@ const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch,
         return chosenCourseTextColors[index % chosenCourseTextColors.length];
       }
 
+      const [courseOptions, setCourseOptions] = useState([]);
+      const [coursesChosen, setCoursesChosen] = useState(new CourseColorMap(chosenCourseBackgroundColors.length));
+      const [totalCredits, setTotalCredits] = useState(0);
 
       /**
        * parse user's raw input of search word then fetch course description data
@@ -61,7 +63,7 @@ const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch,
             if (option === null) {
                 return
             } else if (exceededCredLimit(option)) {
-                alert("You exceeded maximum (18) credits per term. Remove some courses");
+                alert("You exceeded maximum (18) credits per term. Remove some courses before adding more");
             } else if (selectedDuplicate(option)) {
                 alert(`You already selected ${option.key}`);
             } else {
@@ -74,7 +76,7 @@ const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch,
         return totalCredits + option.cred >= 18;
       };
       const selectedDuplicate = (option) => {
-        return coursesChosen.some((c) => c.sw === formatSearchWord(option.key));
+        return coursesChosen.courseColors.some((ccp) => ccp.course.sw === formatSearchWord(option.key));
       };
 
       /**
@@ -89,7 +91,8 @@ const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch,
             cred: cred,
             desc: desc,
         };
-        setCoursesChosen([...coursesChosen, newCourse]);
+        coursesChosen.insert(newCourse);
+        setCoursesChosen(coursesChosen);
         setCoursesToFetch([...coursesToFetch, newCourse]);
       };
     
@@ -118,15 +121,15 @@ const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch,
                 onChange={handleChange}
                 onInputChange={loadCourseOptions}
             />
-            {coursesChosen.map((courseChosen, index) => (
-                <ChosenCourse 
-                    color={getThemeTextColor(index)}
-                    backgroundColor={getThemeBackgroundColor(index)}
-                    key={courseChosen.key+courseChosen.desc+"choosen_course"}
-                    subject={courseChosen.sw.split("/")[0]}
-                    courseNum={courseChosen.sw.split("/")[1]}
-                    description={courseChosen.desc} 
-                    credits={courseChosen.cred} 
+            {coursesChosen.courseColors.map((courseColorPair) => (
+                <ChosenCourse
+                    color={getThemeTextColor(courseColorPair.color)}
+                    backgroundColor={getThemeBackgroundColor(courseColorPair.color)}
+                    key={courseColorPair.course.key+courseColorPair.course.desc+"chosen_course"}
+                    subject={courseColorPair.course.sw.split("/")[0]}
+                    courseNum={courseColorPair.course.sw.split("/")[1]}
+                    description={courseColorPair.course.desc}
+                    credits={courseColorPair.course.cred}
                 />
             ))}
 
