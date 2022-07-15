@@ -121,17 +121,33 @@ const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch,
                 onChange={handleChange}
                 onInputChange={loadCourseOptions}
             />
-            {coursesChosen.courseColors.map((courseColorPair) => (
-                <ChosenCourse
+            {coursesChosen.courseColors.map((courseColorPair) => {
+                const deleteSelf = () => {
+                    coursesChosen.delete(courseColorPair.course);
+                    setCoursesChosen(coursesChosen);
+                    setTotalCredits(totalCredits - courseColorPair.course.cred);
+                    // find course in array and remove
+                    for (let i = 0; i < coursesToFetch.length; i++) {
+                        if (coursesToFetch[i].sw === courseColorPair.course.sw) {
+                            coursesToFetch.splice(i,1);
+                            setCoursesToFetch(coursesToFetch);
+                            return;
+                        }
+                    }
+                    throw new Error("Could not find course in CourseColorMap to replace!!!");
+                };
+
+                return <ChosenCourse
                     color={getThemeTextColor(courseColorPair.color)}
                     backgroundColor={getThemeBackgroundColor(courseColorPair.color)}
-                    key={courseColorPair.course.key+courseColorPair.course.desc+"chosen_course"}
+                    key={courseColorPair.course.key + courseColorPair.course.desc + "chosen_course"}
                     subject={courseColorPair.course.sw.split("/")[0]}
                     courseNum={courseColorPair.course.sw.split("/")[1]}
                     description={courseColorPair.course.desc}
                     credits={courseColorPair.course.cred}
+                    deleteSelfFunc={deleteSelf}
                 />
-            ))}
+            })}
 
             <TriggerAPI
                 loc={coursesToFetch}

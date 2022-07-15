@@ -3,7 +3,7 @@ import * as React from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 
 const ChosenCourse = ({subject, courseNum, description, credits, 
-    backgroundColor, color}) => {
+    backgroundColor, color, deleteSelfFunc}) => {
     return (<div className="chosen-course">
         <span className="chosen-course-start" style={{color:color, backgroundColor:backgroundColor}}>
             <div className="chosen-course-start-top">{subject}</div>
@@ -14,7 +14,7 @@ const ChosenCourse = ({subject, courseNum, description, credits,
             <div className="chosen-course-mid-bottom">{credits + " Credits"}</div>
         </span>
         <span className="chosen-course-end">
-            <IconButton aria-label="delete" onClick={() => console.log("Delete")}>
+            <IconButton aria-label="delete" onClick={deleteSelfFunc}>
                 <ClearIcon />
             </IconButton>
         </span>
