@@ -1,5 +1,6 @@
 import { Section, Timeslot } from "../src/data/DataDefinition/SectionDD";
 import { Cell_display } from "../src/helpers/time";
+import {Course, SearchWord} from "../src/data/DataDefinition/SearchWordDD";
 
 const cloneDeep = require('lodash/clonedeep');
 const fns = require("../unused/optional");
@@ -554,6 +555,32 @@ const OVERLAP_3: Cell_display =
 
   const OVERLAP_GROUP: Cell_display[] = [OVERLAP_1, OVERLAP_2, OVERLAP_3]
 
+const SWC1:Course = {
+  sw: "CPSC 110",
+  cred: 4,
+  desc: "computers, programs, programming",
+}
+
+const SWC2:Course = {
+  sw: "CPSC 210",
+  cred: 4,
+  desc: "introduction to software engineering",
+}
+
+const SWC3:Course = {
+  sw: "ENGL 301",
+  cred: 3,
+  desc: "a terrible experience",
+}
+
+const SWC4:Course = {
+  sw: "STAT 302",
+  cred: 5,
+  desc: "really hard stats course",
+}
+
+
+
 
 module.exports = {
   CS1:CS1, CS2:CS2, CS3:CS3, CS4:CS4, CS5:CS5, CS6:CS6,
@@ -574,5 +601,7 @@ module.exports = {
   MOSTCOMPACT:MOSTCOMPACT, MOSTSCATTER:MOSTSCATTER,
 
   OVERLAP_0:OVERLAP_0, OVERLAP_1:OVERLAP_1, OVERLAP_2:OVERLAP_2, OVERLAP_3:OVERLAP_3, OVERLAP_GROUP:OVERLAP_GROUP,
-  OVERLAP_4:OVERLAP_4, OVERLAP_5:OVERLAP_5, OVERLAP_6:OVERLAP_6, OVERLAP_7:OVERLAP_7
+  OVERLAP_4:OVERLAP_4, OVERLAP_5:OVERLAP_5, OVERLAP_6:OVERLAP_6, OVERLAP_7:OVERLAP_7,
+
+  SWC1:SWC1,SWC2:SWC2,SWC3:SWC3,SWC4:SWC4,
 }
