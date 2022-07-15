@@ -134,7 +134,7 @@ const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch,
                             return;
                         }
                     }
-                    throw new Error("Could not find course in CourseColorMap to replace!!!");
+                    throw new Error("Could not find course in coursesToFetch to delete!!!");
                 };
 
                 return <ChosenCourse
