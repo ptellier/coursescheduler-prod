@@ -11,6 +11,7 @@ export const HistoryContext = createContext();
  */
 export const HistoryProvider = (props) => {
     const { setCurrentSections } = useContext(SectionsContext);
+
      /** history of schedules that user has explored so far */
     const [history, setHistory] = useState([]);
 
@@ -42,11 +43,6 @@ export const HistoryProvider = (props) => {
             setPointer(pointer - 1);
         }
     }
-
-    const jumpHistoryTo = (idx) => {
-        setCurrentSections(history[idx])
-        setPointer(idx)
-    }
     
     const showNextInHistory = () => {
         // if not at the right end:
@@ -59,6 +55,13 @@ export const HistoryProvider = (props) => {
             setPointer(pointer + 1);
         }
     }
+
+    const jumpHistoryTo = (idx) => {
+        setCurrentSections(history[idx])
+        setPointer(idx)
+    }
+
+
 
     return (
         <HistoryContext.Provider value={{

@@ -18,7 +18,6 @@ const TopNavigationBar = () => {
             <div id="nav-actions">
                 <NavButton text="About" icon={<InfoOutlinedIcon/>}></NavButton>
                 <NavButton href="https://github.com/limseung1/coursescheduler" text="GitHub" icon={<GitHubIcon/>}></NavButton>
-                <NavButton text="Theme" icon={<PaletteIcon/>}></NavButton>
             </div>
         </Paper>
     );

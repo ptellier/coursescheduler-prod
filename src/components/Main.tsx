@@ -10,9 +10,8 @@ import OptionsPaper from "./OptionsPaper";
 import Calendar from "./calendar/1. calendar/Calendar";
 import { theme } from "./Theme";
 import { Recommended } from "../data/DataDefinition/RecommendDD";
-import Instruction from "./Instruction";
-import History from "./History";
 import { HistoryProvider } from "./context/HistoryContext";
+import { CalendarApps } from "./CalendarApps";
 
 
 /**
@@ -77,14 +76,12 @@ const Main: FC = () => {
 
   return (
       <ThemeProvider theme={theme}>
-
         <div className="Page">
           <TopNavigationBar/>
           <Box m={2} sx={{height:"100%"}}>
             <div className="main-page-flexbox">
               <div className="main-page-left">
                 <Stack direction="column" spacing={2}>
-                <Instruction />
                   <CourseSearchPaper coursesToFetch={coursesToFetch}
                                      setCoursesToFetch={setCoursesToFetch}
                                      set_recommended={set_recommended}
@@ -93,20 +90,17 @@ const Main: FC = () => {
                                      setSections={setSections}
                   />
                   <OptionsPaper setSelectedRecommended={setSelectedRecommended}/>
-                  
                 </Stack>
               </div>
               <div className="main-page-right">
-
                 <SectionsProvider allSections={sections}>
                 <HistoryProvider setCurrentRecommended={setCurrentRecommended}>
                   <Stack direction="column" spacing={1}>
-                    <History />
-                      <Calendar recommended={currentRecommended}/>
+                    <CalendarApps setSelectedRecommended={setSelectedRecommended} />
+                    <Calendar recommended={currentRecommended}/>
                   </Stack>
                 </ HistoryProvider>
                 </ SectionsProvider>
-
               </div>
             </div>
           </Box>

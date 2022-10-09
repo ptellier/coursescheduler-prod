@@ -8,44 +8,25 @@ import { HistoryContext } from './context/HistoryContext';
 
 const History = () => {
   
-  const {jumpHistoryTo, pointer, history, showPrevInHistory, showNextInHistory} = useContext(HistoryContext);
+  const {pointer, history, showPrevInHistory, showNextInHistory} = useContext(HistoryContext);
 
 
-
-  return (
-    <Box p={1}>        
-        <ButtonGroup>
-            <IconButton 
-              disabled={pointer === 0 ? true : false}
-              onClick={() => showPrevInHistory()}
+  return (      
+      <ButtonGroup>
+          <IconButton 
+            disabled={pointer === 0 ? true : false}
+            onClick={() => showPrevInHistory()}
+          >
+            <ChevronLeftIcon fontSize="large"/>
+          </IconButton>
+          
+          <IconButton 
+            disabled={pointer === history.length-1 ? true : false}
+            onClick={() => showNextInHistory()}
             >
-              <ChevronLeftIcon fontSize="large"/>
-            </IconButton>
-            
-            <IconButton 
-              disabled={pointer === history.length-1 ? true : false}
-              onClick={() => showNextInHistory()}
-              >
-                <ChevronRightIcon fontSize="large"/>
-            </IconButton>
-        </ButtonGroup>
-
-       {/* TODO: Put screen shot on the button https://www.npmjs.com/package/use-react-screenshot */}
-       {/* TODO: Wrap this in the slider */}
-      {history.map((h, idx) => 
-        <button className={
-          `mini-map 
-           mx-2 btn 
-          ${(idx === pointer && history[0].length > 0) ? "btn-primary" : "btn-secondary"}`
-          }
-          onClick={() => jumpHistoryTo(idx)}
-        >
-          {idx}
-        </button>
-      )}
-
-
-   </Box>
+              <ChevronRightIcon fontSize="large"/>
+          </IconButton>
+      </ButtonGroup>
   )
 }
 

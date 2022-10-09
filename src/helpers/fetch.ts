@@ -36,10 +36,9 @@ export const fetchParallel = async (losw: SearchWord[]) => {
  */
 export const fetchSection = async (sw: SearchWord) => {
   const [subject, number] = sw.split("/")
-  // const url = `https://api.ubccourses.com/section/${sw}/?realtime=1`; 
-  // const url = `https://api.ubccourses.com/section/${sw}/`;
-  // const url = `https://puppeteer-test-sl.herokuapp.com/api/sections?subject=${subject}&number=${number}`
-  const url = `http://localhost:3001/api/sections?subject=${subject}&number=${number}`
+  const url = `http://localhost:3002/api/sections?subject=${subject}&number=${number}`
+  // const url = `https://busy-jade-toad-toga.cyclic.app/api/sections?subject=${subject}&number=${number}`
+  // const url = `https://ubcscheduler-api.onrender.com/api/sections?subject=${subject}&number=${number}`
   const res = await fetch(url);
   const data = await res.json();
   return data;

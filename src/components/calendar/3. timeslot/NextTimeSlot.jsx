@@ -14,7 +14,6 @@ const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
     const {addToHistory} = useContext(HistoryContext);
 
     const theme = useTheme();
-    const backgroundColors = theme.palette.calendarTimeSlotBackgroundColors;
     const textColors = theme.palette.calendarTimeSlotTextColors;
     const dropAcceptedColor = theme.palette.calendarTimeSlotDropAccepted;
     

@@ -1,5 +1,4 @@
 import {IconButton} from "@mui/material";
-import * as React from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 
 const ChosenCourse = ({subject, courseNum, description, credits, 

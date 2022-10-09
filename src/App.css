@@ -40,6 +40,7 @@
   display: flex;
   gap: 0px 20px;
 }
+
 .main-page-left {
   display: inline-block;
   width: min-content;
@@ -47,6 +48,15 @@
 .main-page-right {
   display: inline-block;
   flex-grow: 1;
+}
+
+@media (max-width: 850px) {
+  .main-page-flexbox {
+    flex-direction: column;
+  }
+  .main-page-left {
+    width: 100% !important;
+  }
 }
 
 #top-nav-bar {
@@ -72,11 +82,29 @@
   display:inline-block;
   color:#5b5b5b;
 }
+
 #nav-actions {
   margin-right: 30px;
   display:flex;
   column-gap: 40px;
 }
+
+
+@media (max-width: 510px) {
+  #logo-ubc {
+    font-size: 2rem;
+    line-height:4rem;
+  }
+  #logo-course-scheduler {
+    font-size: 0.8rem;
+    line-height: 1rem;
+  }
+  #nav-actions {
+    margin-right: 20px;
+    column-gap: 10px;
+  }
+}
+
 
 
 .App-link {
@@ -236,7 +264,7 @@ div.cal-background-grid.last-col.last-row {
 .chosen-course {
   font-size: 1rem;
   /* background-color: darkorchid; */
-  width: 268px;
+  width: 100%;
   margin-top: 20px;
   display:flex;
 }
