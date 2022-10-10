@@ -1,18 +1,18 @@
-import { Course } from "../data/DataDefinition/SearchWordDD";
-import { Section } from "../data/DataDefinition/SectionDD";
-import { fetchParallel } from "../helpers/fetch";
+import { Course } from "../../data/DataDefinition/SearchWordDD";
+import { Section } from "../../data/DataDefinition/SectionDD";
+import { fetchParallel } from "../../helpers/fetch";
 import {
   filterByTermStatusActivity,
   filterDuplicatedSchedules,
-} from "../helpers/filter";
-import { solve } from "../helpers/solve_newengine";
-import { groupSections } from "../helpers/groupby";
+} from "../../helpers/filter";
+import { solve } from "../../helpers/solve_newengine";
+import { groupSections } from "../../helpers/groupby";
 import { useState } from "react";
-import { recommend } from "../helpers/recommend";
+import { recommend } from "../../helpers/recommend";
 import { Alert, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { EmptySearchResult } from "../exceptions/EmptySearchResult";
-import { PartitallyEmptySearchResult } from "../exceptions/PartiallyEmptySearchResult";
+import { EmptySearchResult } from "../../exceptions/EmptySearchResult";
+import { PartitallyEmptySearchResult } from "../../exceptions/PartiallyEmptySearchResult";
 
 export interface GenerateProps {
   loc: Course[];
@@ -31,6 +31,9 @@ export const Generate = ({
   setUserTerm,
   setSections,
 }: GenerateProps) => {
+
+  const [status, setStatus] = useState<string[]>(["Full", "Blocked", "Restricted", "STT"]);
+  const [mode, setMode] = useState<string[]>(["In-Person", "Online", "Hybrid"]);
 
   /** If true, show loading icon (pulse) on the generate schedule btn */
   const [loading, setLoading] = useState(false);
@@ -52,7 +55,7 @@ export const Generate = ({
     } catch (error: any) {
         switch (true) {
           case (error instanceof EmptySearchResult): 
-            setErrorMessage("Search result is completely empty!")
+            setErrorMessage("Search result is empty!")
             setWarnMessage('')
             break;
           case (error instanceof PartitallyEmptySearchResult):
@@ -75,10 +78,12 @@ export const Generate = ({
   const invokeAPI = async() => {
     const {sections, receipt} = await fetchParallel(loc.map((c) => c.sw));
 
-    let sectionsFiltered = filterByTermStatusActivity(sections, userTerm);
+    let sectionsFiltered = filterByTermStatusActivity(sections, userTerm, status, mode);
     checkEmptySearchResult(sectionsFiltered)
 
     const sectionsFilteredFlat = sectionsFiltered.flatMap(group => group)
+    console.log(sections)
+    console.log(sectionsFiltered)
     checkSectionWithoutName(sectionsFilteredFlat)
 
     const sectionsNoDuplicate = filterDuplicatedSchedules(sectionsFilteredFlat);
@@ -134,14 +139,29 @@ export const Generate = ({
     }
   };
 
+  /** TODO: Implement this */
   const checkTermIssues = () => {
-    // 2. Term 1-2
+   
+  }
+
+  // TODO: Implement this
+  // example: 'Term 1-2'
+  const checkAbnormalTerm = () => {
     // Loop: if section.term.includes(1) ^ section.term.includes(2) 
     //.      convert 1-2 to 1
     //.      duplicate to 2
+  }
+  
 
-    // 3. '^Fri'
-    // Loop: if section.includes(^)
+  // TODO: Implement this
+  // example: '^Fri'
+  const checkAbnormalDay = () => {
+
+  }
+
+  // TODO: Implement this
+  const checkIncompleteSchedule = () => {
+
   }
 
   const provideErrorAlertUI = () => {
@@ -162,7 +182,6 @@ export const Generate = ({
 
   return (
     <>
-    
       <TextField
         id="term-choice-field"
         select
@@ -179,26 +198,29 @@ export const Generate = ({
         <MenuItem key={2} value={"2"}> #2 Winter (Jan - Apr) </MenuItem>
       </TextField>
 
-        
-
       <FormControl fullWidth>
         <InputLabel style={{marginTop:20}} id="status-choice-field">Status</InputLabel>
         <Select
           id="status-choice-field"
           multiple
           label="Status"
-          value={[1,2,3]}
-          // onChange={(event) => setUserTerm(event.target.value)}
+          value={status}
+          onChange={(event) => setStatus(event.target.value as string[])}
           sx={{
             [`& fieldset`]: { borderRadius: "10px" },
             marginTop: "20px",
+            width: "100%"
           }}
+          
         >
-          <MenuItem key={1} value={"1"}>Full</MenuItem>
-          <MenuItem key={2} value={"2"}>Blocked</MenuItem>
-          <MenuItem key={2} value={"2"}>Restricted</MenuItem>
-          <MenuItem key={2} value={"2"}>STT</MenuItem>
+          <MenuItem key={3} value={"Full"}>Full</MenuItem>
+          <MenuItem key={4} value={"Blocked"}>Blocked</MenuItem>
+          <MenuItem key={5} value={"Restricted"}>Restricted</MenuItem>
+          <MenuItem key={6} value={"STT"}>STT</MenuItem>
+
+          {/* TODO: include waitlist */}
           {/* <MenuItem key={2} value={"2"}> Waitlist </MenuItem> */}
+
         </Select>
       </FormControl>
       
@@ -208,23 +230,18 @@ export const Generate = ({
           id="mode-choice-field"
           multiple
           label="Mode"
-          value={[1,2,3]}
-          // onChange={(event) => setUserTerm(event.target.value)}
+          value={mode}
+          onChange={(event) => setMode(event.target.value as string[])}
           sx={{
             [`& fieldset`]: { borderRadius: "10px" },
             marginTop: "20px",
           }}
         >
-          <MenuItem key={1} value={"1"}>In-Person</MenuItem>
-          <MenuItem key={2} value={"2"}>Online</MenuItem>
-          <MenuItem key={2} value={"2"}>Hybrid</MenuItem>
+          <MenuItem key={7} value={"In-Person"}>In-Person</MenuItem>
+          <MenuItem key={8} value={"Online"}>Online</MenuItem>
+          <MenuItem key={9} value={"Hybrid"}>Hybrid</MenuItem>
         </Select>
       </FormControl>
-      
-
-
-      {provideErrorAlertUI()}
-      {provideWarnAlertUI()}
      
       <div className="d-flex justify-content-center">
         <LoadingButton
@@ -237,6 +254,8 @@ export const Generate = ({
           Generate
         </LoadingButton>
       </div>
+      {provideErrorAlertUI()}
+      {provideWarnAlertUI()}
     </>
   );
 };

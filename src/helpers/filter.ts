@@ -9,15 +9,18 @@ import {
  */
 export const filterByTermStatusActivity = (
   groupOfSections: Section[][],
-  term: string
+  term: string,
+  status: string[],
+  mode: string[]
 ): Section[][] => {
   let acc = []
   for (let sections of groupOfSections) {
     const filtered = sections.filter(
       (s) =>
-        // s.status !== "Full" &&
         s.term === term &&
-        s.activity !== "Waiting List"
+        s.activity !== "Waiting List" &&
+        status.includes(s.status) &&
+        mode.includes(s.mode)
     );
     acc.push(filtered)
   }
@@ -52,12 +55,3 @@ export const filterDuplicatedSchedules = (los: Section[]): Section[] => {
   );
 };
 
-/**
- * filter out sections that conflicts in time with rest of sections
- * @param node
- * @returns
- */
-const filter_timeconflict = (node: Node) => {
-  //TODO: Implement
-  return true;
-};

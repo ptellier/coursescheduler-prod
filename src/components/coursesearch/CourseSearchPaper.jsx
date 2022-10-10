@@ -8,9 +8,8 @@ import {
 } from "@mui/material";
 import ChosenCourse from "./ChosenCourse";
 import { fetchCourseDesc } from "../../helpers/fetch";
-import Generate from "../Generate";
+import Generate from "./Generate";
 import { CourseColorMap } from "../../data/DataDefinition/CourseColorMap";
-import { FormLabel } from "react-bootstrap";
 
 const CourseSearchPaper = ({
   coursesToFetch,
@@ -121,7 +120,7 @@ const CourseSearchPaper = ({
   };
 
   return (
-    <Paper className="Paper" elevation={0} sx={{ borderRadius: "20px" }}>
+    <Paper className="Paper" elevation={0} style={{minWidth:'20rem'}} sx={{ borderRadius: "20px" }}>
       <Box p={4}>
         <Autocomplete
           // disablePortal

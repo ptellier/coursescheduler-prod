@@ -23,6 +23,7 @@ export interface Section {
   status:   Status;
   activity: string;
   term:     Term;
+  mode:     string;
   schedule: Timeslot[];
   isNextMove?: boolean;
   isOnTarget?: boolean;
