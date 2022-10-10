@@ -7,16 +7,19 @@ import { Section } from "../data/DataDefinition/SectionDD";
  * @param losw 
  */
 export const fetchParallel = async (losw: SearchWord[]) => {
-  let acc: Section[] = []
+  let sections: Section[][] = [];
+  let receipt:string[] = [];
   await Promise.all(losw.map(async(sw) => { 
       const data = await fetchSection(sw)
-      acc.push(...data.sections);
+      sections.push(data.sections);
+      receipt.push(sw.replace("/", " "));
   }))
-  return acc
+  return {sections, receipt}
 }
 
 /**
  * fetch available sections for given losw
+ * more info @: https://stackoverflow.com/questions/35612428/call-async-await-functions-in-parallel
  * @param {SearchWord[]} losw
  * @returns {Section[]}
  */
@@ -26,8 +29,6 @@ export const fetchParallel = async (losw: SearchWord[]) => {
     const data = await fetchSection(sw);
     acc.push(...data.sections);
   }
-
-  // https://stackoverflow.com/questions/35612428/call-async-await-functions-in-parallel
   return acc;
 };
 /**

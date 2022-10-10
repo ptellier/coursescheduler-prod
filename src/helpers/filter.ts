@@ -4,19 +4,25 @@ import {
 } from "../data/DataDefinition/SectionDD";
 
 /** filter out sections with !=term, waiting list, full - currently turned off for test
- * @param {Section[]} los
- * @returns {Section[]}
+ * @param {Section[][]} groupOfSections
+ * @returns {Section[][]}
  */
-export const filter_term_avail_waitlist = (
-  los: Section[],
+export const filterByTermStatusActivity = (
+  groupOfSections: Section[][],
   term: string
-): Section[] => {
-  return los.filter(
-    (s) =>
-      // s.status !== "Full" &&
-      s.term === term &&
-      s.activity !== "Waiting List"
-  );
+): Section[][] => {
+  let acc = []
+  for (let sections of groupOfSections) {
+    const filtered = sections.filter(
+      (s) =>
+        // s.status !== "Full" &&
+        s.term === term &&
+        s.activity !== "Waiting List"
+    );
+    acc.push(filtered)
+  }
+
+  return acc
 };
 
 /**
@@ -24,7 +30,7 @@ export const filter_term_avail_waitlist = (
  * @param {*} los
  * @returns
  */
-export const filter_duplicate_schedules = (los: Section[]): Section[] => {
+export const filterDuplicatedSchedules = (los: Section[]): Section[] => {
   return los.filter(
     (s1, index, self) =>
       index ===

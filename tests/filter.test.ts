@@ -1,8 +1,8 @@
 import React from "react";
 import { Section } from "../src/data/DataDefinition/SectionDD";
 import {
-  filter_duplicate_schedules,
-  filter_term_avail_waitlist,
+  filterDuplicatedSchedules,
+  filterByTermStatusActivity,
 } from "../src/helpers/filter";
 
 // TODO: Run tests ASAP
@@ -71,14 +71,14 @@ const CPSC110_L1G:Section = {
   };
 
 test("filter_term_avail_waitlist", () => {
-  expect(filter_term_avail_waitlist([], "1")).toEqual([]);
+  expect(filterByTermStatusActivity([], "1")).toEqual([]);
 });
 
 test("filter_duplicate_schedules", () => {
-  expect(filter_duplicate_schedules(
+  expect(filterDuplicatedSchedules(
       [CPSC110_L12, CPSC110_L1A]
       )).toEqual([CPSC110_L12]);
-  expect(filter_duplicate_schedules(
+  expect(filterDuplicatedSchedules(
       [CPSC110_101, CPSC110_102, CPSC110_L12, CPSC110_L1A, CPSC110_L1G]))
       .toEqual([CPSC110_101, CPSC110_102, CPSC110_L12, CPSC110_L1G]);
 });

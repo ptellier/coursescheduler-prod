@@ -8,9 +8,9 @@ import {
 } from "@mui/material";
 import ChosenCourse from "./ChosenCourse";
 import { fetchCourseDesc } from "../../helpers/fetch";
-import TriggerAPI from "../TriggerAPI";
+import Generate from "../Generate";
 import { CourseColorMap } from "../../data/DataDefinition/CourseColorMap";
-import { FormControl } from "react-bootstrap";
+import { FormLabel } from "react-bootstrap";
 
 const CourseSearchPaper = ({
   coursesToFetch,
@@ -168,10 +168,7 @@ const CourseSearchPaper = ({
             />
           );
         })}
-
-
-
-        <TriggerAPI
+        <Generate
           loc={coursesToFetch}
           set_recommended={set_recommended}
           setSections={setSections}
