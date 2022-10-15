@@ -1,10 +1,7 @@
 import { Course } from "../../data/DataDefinition/SearchWordDD";
 import { Section } from "../../data/DataDefinition/SectionDD";
 import { fetchParallel } from "../../helpers/fetch";
-import {
-  filterByTermStatusActivity,
-  filterDuplicatedSchedules,
-} from "../../helpers/filter";
+import { filterByTermStatusActivity, filterDuplicatedSchedules} from "../../helpers/filter";
 import { solve } from "../../helpers/solve_newengine";
 import { groupSections } from "../../helpers/groupby";
 import { useState } from "react";
@@ -16,24 +13,15 @@ import { PartitallyEmptySearchResult } from "../../exceptions/PartiallyEmptySear
 
 export interface GenerateProps {
   loc: Course[];
-  set_recommended: Function;
-  userTerm: string;
-  setUserTerm: Function;
+  setRecommended: Function;
   setSections: Function;
 }
 
-// Warning:fast, but too much load on the server
-// const sections_api = await fetchSections(loc.map((c) => c.sw));
-export const Generate = ({
-  loc,
-  set_recommended,
-  userTerm,
-  setUserTerm,
-  setSections,
-}: GenerateProps) => {
+export const Generate = ({loc, setRecommended, setSections}: GenerateProps) => {
 
-  const [status, setStatus] = useState<string[]>(["Full", "Blocked", "Restricted", "STT"]);
+  const [status, setStatus] = useState<string[]>(["Available", "Full", "Blocked", "Restricted", "STT"]);
   const [mode, setMode] = useState<string[]>(["In-Person", "Online", "Hybrid"]);
+  const [term, setTerm] = useState<string>("1");
 
   /** If true, show loading icon (pulse) on the generate schedule btn */
   const [loading, setLoading] = useState(false);
@@ -41,9 +29,8 @@ export const Generate = ({
   /** States containing error, warning message created from exceptions */
   const [errorMessage, setErrorMessage] = useState('');
   const [warnMessage, setWarnMessage] = useState('');
-  
 
-  /** update los with fetched data when a user clicks Generate Schedule btn
+  /** Update 'los' state with fetched data when a user generates schedule
    * @setLoading (true): turns oj loading icon
    * @invokeAPI : invoke API and process returned data
    * @setLoading (false): turns off loading icon
@@ -69,6 +56,8 @@ export const Generate = ({
   };
 
   /** Invoke API to fetch and process course section data
+   *   Warning: fetchParallel is fast, but may strain the api server
+   *            less risky with using: 'fetchSections(loc.map((c) => c.sw))'
    * @sectionsFiltered
    * @sectionsNoDuplicate
    * @sectionsGroup
@@ -76,45 +65,52 @@ export const Generate = ({
    * @sectionsRecommended
    */
   const invokeAPI = async() => {
-    const {sections, receipt} = await fetchParallel(loc.map((c) => c.sw));
-
-    let sectionsFiltered = filterByTermStatusActivity(sections, userTerm, status, mode);
-    checkEmptySearchResult(sectionsFiltered)
-
-    const sectionsFilteredFlat = sectionsFiltered.flatMap(group => group)
-    console.log(sections)
-    console.log(sectionsFiltered)
-    checkSectionWithoutName(sectionsFilteredFlat)
-
-    const sectionsNoDuplicate = filterDuplicatedSchedules(sectionsFilteredFlat);
+    const {sectionsBatch, receipt} = await fetchParallel(loc.map((c) => c.sw));
+    checkEmptySearchResult(sectionsBatch)
+    let sectionsFiltered:Section[] = [];
+    let sectionsFilteredNested:Section[][] = [];
+    for (let sections of sectionsBatch) {
+      checkSectionWithoutName(sections)
+      //TODO: enable these after implementation
+      //checkAbnormalTerm(sections)
+      //checkAbnormalDay(sections)
+      const filtered = filterByTermStatusActivity(sections, term, status, mode);
+      sectionsFiltered = [...sectionsFiltered, ...filtered]
+      sectionsFilteredNested.push(filtered)
+    }
+    const sectionsNoDuplicate = filterDuplicatedSchedules(sectionsFiltered);
     const sectionsGroup = groupSections(sectionsNoDuplicate);
     const sectionsSolved = solve(sectionsGroup);
     const sectionsRecommended = recommend(sectionsSolved);
 
     setSections(sectionsGroup.flatMap((section) => section));
-    set_recommended(sectionsRecommended);
+    setRecommended(sectionsRecommended);
 
-    checkPartiallyEmptySearchResult(sectionsFiltered, receipt)
-    successfulInvoke();
+    checkPartiallyEmptySearchResult(sectionsFilteredNested, receipt)
+    signalInvokeSuccess();
   }
 
-  // Empty Search Result
+  /** Throws excpetion if all arrays in sectionsGroup have length of zero */
   const checkEmptySearchResult = (sectionsGroup: Section[][]) => {
     if (sectionsGroup.every(sections => sections.length === 0)) {
       throw new EmptySearchResult();
     }
   }
 
-  // Section has no name
+  /* Roll back a section without name to previous section with name
+   * Note: If a section has no name, this implicitly means that 
+   *       the section is related to immediate previous section
+   *       that has the same. CPSC 210 104 is an exmaple of this.
+   */
   const checkSectionWithoutName = (sections: Section[]) => {
     let next = 1;
     for (let curr = 0; curr < sections.length - 1; curr++) {
-      if (sections[next].name === '') {
-        // transfer schedule from next to curr 
+      if (!sections[next].name) {
+        // pick the schedule from next and merge with curr's 
         const schedulePopped = sections[next].schedule;
         sections[curr].schedule.push(...schedulePopped); 
         // remove next time from the sections
-        sections.splice(next,1);
+        sections.splice(next, 1);
         next++;
         curr++;
       }
@@ -122,7 +118,7 @@ export const Generate = ({
     }
   }
 
-  // Partially Empty Search Result
+  /* Throws exception if one of arrays in sectionsGroup is empty */
   const checkPartiallyEmptySearchResult = (sectionsGroup: Section[][], receipt: string[]) => {
     let emptyCourses = [];
     let triggerException = false;
@@ -139,11 +135,6 @@ export const Generate = ({
     }
   };
 
-  /** TODO: Implement this */
-  const checkTermIssues = () => {
-   
-  }
-
   // TODO: Implement this
   // example: 'Term 1-2'
   const checkAbnormalTerm = () => {
@@ -151,7 +142,6 @@ export const Generate = ({
     //.      convert 1-2 to 1
     //.      duplicate to 2
   }
-  
 
   // TODO: Implement this
   // example: '^Fri'
@@ -160,6 +150,9 @@ export const Generate = ({
   }
 
   // TODO: Implement this
+  // example: CPSC 110 has both lecture and lab,
+  //          but say all lectures are full, some labs are available
+  //          in this case you want to reject all CPSC 110, and raise warning.
   const checkIncompleteSchedule = () => {
 
   }
@@ -174,7 +167,7 @@ export const Generate = ({
       return <Alert severity="warning">{warnMessage}</Alert>
   }
 
-  const successfulInvoke = () => {
+  const signalInvokeSuccess = () => {
     setErrorMessage('')
     setWarnMessage('')
   }
@@ -186,8 +179,8 @@ export const Generate = ({
         id="term-choice-field"
         select
         label="Term"
-        value={userTerm}
-        onChange={(event) => setUserTerm(event.target.value)}
+        value={term}
+        onChange={(event) => setTerm(event.target.value)}
         sx={{
           [`& fieldset`]: { borderRadius: "10px" },
           width: "100%",
@@ -211,16 +204,15 @@ export const Generate = ({
             marginTop: "20px",
             width: "100%"
           }}
-          
         >
-          <MenuItem key={3} value={"Full"}>Full</MenuItem>
-          <MenuItem key={4} value={"Blocked"}>Blocked</MenuItem>
-          <MenuItem key={5} value={"Restricted"}>Restricted</MenuItem>
-          <MenuItem key={6} value={"STT"}>STT</MenuItem>
+          <MenuItem disabled key={3} value={"Available"}>Available</MenuItem>
+          <MenuItem key={4} value={"Full"}>Full</MenuItem>
+          <MenuItem key={5} value={"Blocked"}>Blocked</MenuItem>
+          <MenuItem key={6} value={"Restricted"}>Restricted</MenuItem>
+          <MenuItem key={7} value={"STT"}>STT</MenuItem>
 
           {/* TODO: include waitlist */}
           {/* <MenuItem key={2} value={"2"}> Waitlist </MenuItem> */}
-
         </Select>
       </FormControl>
       
@@ -237,9 +229,9 @@ export const Generate = ({
             marginTop: "20px",
           }}
         >
-          <MenuItem key={7} value={"In-Person"}>In-Person</MenuItem>
-          <MenuItem key={8} value={"Online"}>Online</MenuItem>
-          <MenuItem key={9} value={"Hybrid"}>Hybrid</MenuItem>
+          <MenuItem key={8} value={"In-Person"}>In-Person</MenuItem>
+          <MenuItem key={9} value={"Online"}>Online</MenuItem>
+          <MenuItem key={10} value={"Hybrid"}>Hybrid</MenuItem>
         </Select>
       </FormControl>
      

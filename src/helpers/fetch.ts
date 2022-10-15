@@ -7,14 +7,14 @@ import { Section } from "../data/DataDefinition/SectionDD";
  * @param losw 
  */
 export const fetchParallel = async (losw: SearchWord[]) => {
-  let sections: Section[][] = [];
+  let sectionsBatch: Section[][] = [];
   let receipt:string[] = [];
   await Promise.all(losw.map(async(sw) => { 
       const data = await fetchSection(sw)
-      sections.push(data.sections);
+      sectionsBatch.push(data.sections);
       receipt.push(sw.replace("/", " "));
   }))
-  return {sections, receipt}
+  return {sectionsBatch, receipt}
 }
 
 /**
@@ -31,14 +31,15 @@ export const fetchParallel = async (losw: SearchWord[]) => {
   }
   return acc;
 };
+
 /**
  * fetches sections that corresponds to given sw
  * @param sw; i.e CPSC/110
  */
 export const fetchSection = async (sw: SearchWord) => {
   const [subject, number] = sw.split("/")
-  const url = `http://localhost:3002/api/sections?subject=${subject}&number=${number}`
-  // const url = `https://busy-jade-toad-toga.cyclic.app/api/sections?subject=${subject}&number=${number}`
+  // const url = `http://localhost:3002/api/sections?subject=${subject}&number=${number}`
+  const url = `https://busy-jade-toad-toga.cyclic.app/api/sections?subject=${subject}&number=${number}`
   // const url = `https://ubcscheduler-api.onrender.com/api/sections?subject=${subject}&number=${number}`
   const res = await fetch(url);
   const data = await res.json();

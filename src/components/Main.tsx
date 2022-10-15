@@ -35,7 +35,7 @@ const Main: FC = () => {
   const [sections, setSections] = useState<Section[]>([]);
 
   /** sections that were recommended, each array is a recommendation */
-  const [recommended, set_recommended] = useState<Recommendation>(
+  const [recommended, setRecommended] = useState<Recommendation>(
     {
       compact: [], consistent: [], scatter: [], earlyStart: [], 
       lateStart: [], earlyEnd: [], lateEnd: [], freeDay: [],
@@ -44,9 +44,6 @@ const Main: FC = () => {
 
   /** courses that users looked up and want to get scheduled */
   const [coursesToFetch, setCoursesToFetch] = useState<Course[]>([]);
-
-  /** raw user input from search bar and term selection components */
-  const [userTerm, setUserTerm] = useState<string>("1");
 
   /** indicates the current category of recommendation that user selected*/
   const [selectedRecommended, setSelectedRecommended] = useState<Recommended>(Recommended.compact)
@@ -84,9 +81,7 @@ const Main: FC = () => {
                 <Stack direction="column" spacing={2}>
                   <CourseSearchPaper coursesToFetch={coursesToFetch}
                                      setCoursesToFetch={setCoursesToFetch}
-                                     set_recommended={set_recommended}
-                                     userTerm={userTerm}
-                                     setUserTerm={setUserTerm}
+                                     setRecommended={setRecommended}
                                      setSections={setSections}
                   />
                   <OptionsPaper setSelectedRecommended={setSelectedRecommended}/>

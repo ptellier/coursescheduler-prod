@@ -8,24 +8,19 @@ import {
  * @returns {Section[][]}
  */
 export const filterByTermStatusActivity = (
-  groupOfSections: Section[][],
+  sections: Section[],
   term: string,
   status: string[],
   mode: string[]
-): Section[][] => {
-  let acc = []
-  for (let sections of groupOfSections) {
+): Section[] => {
     const filtered = sections.filter(
-      (s) =>
+      (s:Section) =>
         s.term === term &&
         s.activity !== "Waiting List" &&
         status.includes(s.status) &&
         mode.includes(s.mode)
     );
-    acc.push(filtered)
-  }
-
-  return acc
+  return filtered
 };
 
 /**

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import {
   Autocomplete,
   Box,
@@ -14,9 +14,7 @@ import { CourseColorMap } from "../../data/DataDefinition/CourseColorMap";
 const CourseSearchPaper = ({
   coursesToFetch,
   setCoursesToFetch,
-  set_recommended,
-  userTerm,
-  setUserTerm,
+  setRecommended,
   setSections,
 }) => {
   const theme = useTheme();
@@ -46,7 +44,8 @@ const CourseSearchPaper = ({
    * Note4: fetches from Ben Cheung's API (so much more efficient than Liang's)
    * @param searchWord
    */
-  const loadCourseOptions = async (event) => {
+  let loadCourseOptions = async (event) => {
+    //TODO: Debounce
     if (event.nativeEvent.type === "input") {
       const searchWord = event.target.value;
       const data = await fetchCourseDesc(searchWord);
@@ -59,6 +58,28 @@ const CourseSearchPaper = ({
       setCourseOptions(options);
     }
   };
+
+  /**
+   * Debounce function
+   * @param {*} callback 
+   * @param {*} delay 
+   * @returns 
+   */
+  const debounce = (callback, delay = 500) => {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+        callback(...args)
+      }, delay)
+    }
+  }
+
+  /**
+   * Debounce 
+   */
+  const debounceLoadCourseOptions = debounce((e) => {loadCourseOptions(e)}, 500)
+
 
   /**
    * push user selected course option to coursesChosen and keep track of
@@ -123,14 +144,13 @@ const CourseSearchPaper = ({
     <Paper className="Paper" elevation={0} style={{minWidth:'20rem'}} sx={{ borderRadius: "20px" }}>
       <Box p={4}>
         <Autocomplete
-          // disablePortal
           options={courseOptions}
           sx={{ [`& fieldset`]: { borderRadius: "10px" } }}
           renderInput={(params) => (
             <TextField {...params} label="Search Courses" />
           )}
           onChange={handleChange}
-          onInputChange={loadCourseOptions}
+          onInputChange={(e) => debounceLoadCourseOptions(e)}
         />
         {coursesChosen.courseColors.map((courseColorPair) => {
           const deleteSelf = () => {
@@ -169,10 +189,8 @@ const CourseSearchPaper = ({
         })}
         <Generate
           loc={coursesToFetch}
-          set_recommended={set_recommended}
+          setRecommended={setRecommended}
           setSections={setSections}
-          userTerm={userTerm}
-          setUserTerm={setUserTerm}
         />
       </Box>
     </Paper>
