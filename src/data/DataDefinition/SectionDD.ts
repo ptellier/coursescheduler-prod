@@ -61,7 +61,7 @@ export type Time = number;
  * @typedef {string} Day
  * @todo
  */
-export type Day = "Mon" | "Tue" | "Wed" | "Thu" | "Fri" //is it "Thur" or "Thurs"?
+export type Day = "Mon" | "Tue" | "Wed" | "Thu" | "Fri"  //is it "Thur" or "Thurs"?
 
 /**
  * Term a course is offered: "1", "2", or "summer"

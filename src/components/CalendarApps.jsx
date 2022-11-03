@@ -5,11 +5,7 @@ export const CalendarApps = ({setSelectedRecommended}) => {
   return (
     <div className='d-flex'>
         <Box p={1}>       
-
-
-     
             <History />
-
             {/* ETA calculation */}
             {/* https://developers.google.com/maps/documentation/routes/demo */}
             {/* <ButtonGroup>

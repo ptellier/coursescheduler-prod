@@ -2,20 +2,60 @@ import { SearchWord } from "../data/DataDefinition/SearchWordDD";
 import { Section } from "../data/DataDefinition/SectionDD";
 // Note: Functions in this file fetches data from Course API
 
+
+// set to true in development => uses internal server at port:8000
+const dev = true;
+
+export const createURLs = (losw: SearchWord[], session:string, year:string) => {
+  let urls:string[] = []
+  for (let sw of losw) {
+    let url = ``
+    const [subject, number] = parseSubjectNumber(sw)
+    if (dev) {
+      url = `http://localhost:8000/`
+    } else {
+      url = `https://busy-jade-toad-toga.cyclic.app/`
+    }
+    url += `api/${session}/sections?subject=${subject}&number=${number}`
+
+    if (session === 'S') {
+      url += `&year=${year}`
+    }
+    urls.push(url)
+  }
+  return urls;
+}
+
+const parseSubjectNumber = (sw:string) => {
+  const [subject, number] = sw.split("/")
+  return [subject, number]
+}
+
 /**
- * fetch sections from API in parallel
+ * fetch sections from API in parallel, returns sections as batch, and receipt
+ * that contains info about each batch
  * @param losw 
  */
-export const fetchParallel = async (losw: SearchWord[]) => {
+export const fetchParallel = async (losw: SearchWord[], urls:string[]) => {
   let sectionsBatch: Section[][] = [];
   let receipt:string[] = [];
-  await Promise.all(losw.map(async(sw) => { 
-      const data = await fetchSection(sw)
+  await Promise.all(losw.map(async(sw, idx) => { 
+      const data = await fetchSection(urls[idx])
       sectionsBatch.push(data.sections);
       receipt.push(sw.replace("/", " "));
   }))
   return {sectionsBatch, receipt}
 }
+
+/**
+ * fetches sections that corresponds to given sw
+ * @param sw; i.e CPSC/110
+ */
+export const fetchSection = async (url:string) => {
+  const res = await fetch(url);
+  const data = await res.json();
+  return data;
+};
 
 /**
  * fetch available sections for given losw
@@ -30,20 +70,6 @@ export const fetchParallel = async (losw: SearchWord[]) => {
     acc.push(...data.sections);
   }
   return acc;
-};
-
-/**
- * fetches sections that corresponds to given sw
- * @param sw; i.e CPSC/110
- */
-export const fetchSection = async (sw: SearchWord) => {
-  const [subject, number] = sw.split("/")
-  // const url = `http://localhost:3002/api/sections?subject=${subject}&number=${number}`
-  const url = `https://busy-jade-toad-toga.cyclic.app/api/sections?subject=${subject}&number=${number}`
-  // const url = `https://ubcscheduler-api.onrender.com/api/sections?subject=${subject}&number=${number}`
-  const res = await fetch(url);
-  const data = await res.json();
-  return data;
 };
 
 /**

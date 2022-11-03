@@ -35,7 +35,7 @@ interface Node {
  * @returns
  */
 export const solve = (los: Section[][]): Schedule[] => {
-  const LIMIT = 50000 // up to 3,000,000 or 3 million potential results. 
+  const LIMIT = 50000 * 2 // cap to 100,000 potential results. 
   let n_wl: Node[] = []; //node worklist
   let node: Node; //current node
   let rsf: Schedule[] = [];

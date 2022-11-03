@@ -1,6 +1,6 @@
-import { Course } from "../../data/DataDefinition/SearchWordDD";
+import { Course, SearchWord } from "../../data/DataDefinition/SearchWordDD";
 import { Section } from "../../data/DataDefinition/SectionDD";
-import { fetchParallel } from "../../helpers/fetch";
+import { createURLs, fetchParallel } from "../../helpers/fetch";
 import { filterByTermStatusActivity, filterDuplicatedSchedules} from "../../helpers/filter";
 import { solve } from "../../helpers/solve_newengine";
 import { groupSections } from "../../helpers/groupby";
@@ -10,6 +10,7 @@ import { Alert, FormControl, InputLabel, MenuItem, Select, TextField } from "@mu
 import LoadingButton from "@mui/lab/LoadingButton";
 import { EmptySearchResult } from "../../exceptions/EmptySearchResult";
 import { PartitallyEmptySearchResult } from "../../exceptions/PartiallyEmptySearchResult";
+import { IncompleteSchedule } from "../../exceptions/IncompleteSchedule";
 
 export interface GenerateProps {
   loc: Course[];
@@ -22,6 +23,8 @@ export const Generate = ({loc, setRecommended, setSections}: GenerateProps) => {
   const [status, setStatus] = useState<string[]>(["Available", "Full", "Blocked", "Restricted", "STT"]);
   const [mode, setMode] = useState<string[]>(["In-Person", "Online", "Hybrid"]);
   const [term, setTerm] = useState<string>("1");
+  const [session, setSession] = useState<string>("W");
+  const [year, SetYear] = useState<string>("2022");
 
   /** If true, show loading icon (pulse) on the generate schedule btn */
   const [loading, setLoading] = useState(false);
@@ -31,8 +34,8 @@ export const Generate = ({loc, setRecommended, setSections}: GenerateProps) => {
   const [warnMessage, setWarnMessage] = useState('');
 
   /** Update 'los' state with fetched data when a user generates schedule
-   * @setLoading (true): turns oj loading icon
    * @invokeAPI : invoke API and process returned data
+   * @setLoading (true): turns on loading icon
    * @setLoading (false): turns off loading icon
    */
   const handleGenerate = async() => {
@@ -49,6 +52,10 @@ export const Generate = ({loc, setRecommended, setSections}: GenerateProps) => {
             setWarnMessage(error.message)
             setErrorMessage('')
             break;
+          case (error instanceof IncompleteSchedule) :
+            setWarnMessage(error.message)
+            setErrorMessage('')
+            break;
         }
     } finally {
       setLoading(false);
@@ -58,26 +65,22 @@ export const Generate = ({loc, setRecommended, setSections}: GenerateProps) => {
   /** Invoke API to fetch and process course section data
    *   Warning: fetchParallel is fast, but may strain the api server
    *            less risky with using: 'fetchSections(loc.map((c) => c.sw))'
-   * @sectionsFiltered
-   * @sectionsNoDuplicate
-   * @sectionsGroup
-   * @sectionsSolved
-   * @sectionsRecommended
+   * @sectionBatch
+   * @sectionGroup
    */
   const invokeAPI = async() => {
-    const {sectionsBatch, receipt} = await fetchParallel(loc.map((c) => c.sw));
+    const {sectionsBatch, receipt} = await getData(loc.map((c) => c.sw));
     checkEmptySearchResult(sectionsBatch)
     let sectionsFiltered:Section[] = [];
     let sectionsFilteredNested:Section[][] = [];
     for (let sections of sectionsBatch) {
-      checkSectionWithoutName(sections)
-      //TODO: enable these after implementation
-      //checkAbnormalTerm(sections)
-      //checkAbnormalDay(sections)
+      checkSectionWithoutName(sections);
+      checkAbnormalEntry(sections)
       const filtered = filterByTermStatusActivity(sections, term, status, mode);
-      sectionsFiltered = [...sectionsFiltered, ...filtered]
-      sectionsFilteredNested.push(filtered)
+      sectionsFiltered = [...sectionsFiltered, ...filtered];
+      sectionsFilteredNested.push(filtered);
     }
+    checkEmptyAfterFilterResult(sectionsFiltered)
     const sectionsNoDuplicate = filterDuplicatedSchedules(sectionsFiltered);
     const sectionsGroup = groupSections(sectionsNoDuplicate);
     const sectionsSolved = solve(sectionsGroup);
@@ -87,12 +90,20 @@ export const Generate = ({loc, setRecommended, setSections}: GenerateProps) => {
     setRecommended(sectionsRecommended);
 
     checkPartiallyEmptySearchResult(sectionsFilteredNested, receipt)
+    checkIncompleteSchedule(sectionsBatch, sectionsFilteredNested, receipt)
     signalInvokeSuccess();
   }
 
   /** Throws excpetion if all arrays in sectionsGroup have length of zero */
   const checkEmptySearchResult = (sectionsGroup: Section[][]) => {
     if (sectionsGroup.every(sections => sections.length === 0)) {
+      throw new EmptySearchResult();
+    }
+  }
+
+  /** Throws excpetion if array in sectionsFiltered have length of zero */
+  const checkEmptyAfterFilterResult = (sectionsFiltered: Section[]) => {
+    if (sectionsFiltered.length === 0) {
       throw new EmptySearchResult();
     }
   }
@@ -130,31 +141,63 @@ export const Generate = ({loc, setRecommended, setSections}: GenerateProps) => {
     }
     if (triggerException === true) {
       const initialMessage = "Following courses are not offered: "
-      const message = emptyCourses.reduce((msg, course) => msg + " " + course, initialMessage)
+      const message = emptyCourses.reduce((msg, course) => 
+        msg + " " + course, initialMessage
+      )
       throw new PartitallyEmptySearchResult(message)
     }
   };
 
   // TODO: Implement this
-  // example: 'Term 1-2'
-  const checkAbnormalTerm = () => {
-    // Loop: if section.term.includes(1) ^ section.term.includes(2) 
-    //.      convert 1-2 to 1
-    //.      duplicate to 2
+  // example: 'Term 1-2', '^Fri', empty Days, Start Time, End Time, Missing Term, Missing Activity
+  const checkAbnormalEntry = (sections:Section[]) => {
+
+    const fixAbnormalDay = (section:Section) => {
+      section.schedule.forEach(sch => {
+          if (sch.day.includes("^")) sch.day.replace("^", "")
+        }
+      )
+    }
+
+    const dropAbnormalTerm = (section:Section) => {
+      if (section.term.includes("1") && section.term.includes("2")) {
+        // section offered term 1-2
+      }
+    }
+
+    for (const section of sections) {
+      // Drop schedule with empty day
+      if (!section.schedule[0].day) {
+          //TODO: remove this section
+      }
+    }
   }
 
-  // TODO: Implement this
-  // example: '^Fri'
-  const checkAbnormalDay = () => {
-
-  }
-
-  // TODO: Implement this
+  // Checks for incomplete schedule and raise warning to user if found
   // example: CPSC 110 has both lecture and lab,
   //          but say all lectures are full, some labs are available
   //          in this case you want to reject all CPSC 110, and raise warning.
-  const checkIncompleteSchedule = () => {
+  const checkIncompleteSchedule = (original:Section[][], filtered:Section[][], receipt:string[]) => {
+    let issue = false;
+    let message = `Following sections are full: `;
+    const required = original.map(sections => new Set(sections.map(sec => sec.activity))) 
+    const available = filtered.map(sections => new Set(sections.map(sec => sec.activity)))
+    for (let i = 0; i < receipt.length; i++) {
+      const course = receipt[i];
+      const requiredSet = required[i];
+      requiredSet.delete("Waiting List")
+      const availableSet = available[i];
 
+      if (requiredSet.size !== availableSet.size) {
+        issue = true;
+        availableSet.forEach(removing => requiredSet.delete(removing) )
+        const missing = Array.from(requiredSet)
+        const msg = `${course} ${missing.map((x, idx) => idx === missing.length - 1 ? `${x}` : `,${x} `)}`
+        message += msg + " "
+      }
+    }
+    if (issue) 
+      throw new IncompleteSchedule(message);
   }
 
   const provideErrorAlertUI = () => {
@@ -172,6 +215,18 @@ export const Generate = ({loc, setRecommended, setSections}: GenerateProps) => {
     setWarnMessage('')
   }
 
+  const setTermAndSession = (val:string) => {
+    const sess = val[0]
+    const term = val[1]
+    setSession(sess)
+    setTerm(term)
+  }
+
+  // get course section data
+  const getData = async(losw: SearchWord[]) => {
+    const urls = createURLs(losw, session, year)
+    return await fetchParallel(losw, urls);
+  }
 
   return (
     <>
@@ -179,16 +234,18 @@ export const Generate = ({loc, setRecommended, setSections}: GenerateProps) => {
         id="term-choice-field"
         select
         label="Term"
-        value={term}
-        onChange={(event) => setTerm(event.target.value)}
+        value={session + term}
+        onChange={(e) => setTermAndSession(e.target.value)}
         sx={{
           [`& fieldset`]: { borderRadius: "10px" },
           width: "100%",
           marginTop: "20px",
         }}
       >
-        <MenuItem key={1} value={"1"}> #1 Winter (Sept - Dec)</MenuItem>
-        <MenuItem key={2} value={"2"}> #2 Winter (Jan - Apr) </MenuItem>
+        <MenuItem key={1} value={"W1"}> Winter 1 (2022 Sept - Dec)</MenuItem>
+        <MenuItem key={2} value={"W2"}> Winter 2 (2022 Jan - Apr)</MenuItem>
+        <MenuItem key={3} value={"S1"}> Summer 1 (2022 May - Jun)</MenuItem>
+        <MenuItem key={4} value={"S2"}> Summer 2 (2022 Jul - Aug)</MenuItem>
       </TextField>
 
       <FormControl fullWidth>
@@ -205,11 +262,11 @@ export const Generate = ({loc, setRecommended, setSections}: GenerateProps) => {
             width: "100%"
           }}
         >
-          <MenuItem disabled key={3} value={"Available"}>Available</MenuItem>
-          <MenuItem key={4} value={"Full"}>Full</MenuItem>
-          <MenuItem key={5} value={"Blocked"}>Blocked</MenuItem>
-          <MenuItem key={6} value={"Restricted"}>Restricted</MenuItem>
-          <MenuItem key={7} value={"STT"}>STT</MenuItem>
+          <MenuItem disabled key={5} value={"Available"}>Available</MenuItem>
+          <MenuItem key={6} value={"Full"}>Full</MenuItem>
+          <MenuItem key={7} value={"Blocked"}>Blocked</MenuItem>
+          <MenuItem key={8} value={"Restricted"}>Restricted</MenuItem>
+          <MenuItem key={9} value={"STT"}>STT</MenuItem>
 
           {/* TODO: include waitlist */}
           {/* <MenuItem key={2} value={"2"}> Waitlist </MenuItem> */}
@@ -229,9 +286,9 @@ export const Generate = ({loc, setRecommended, setSections}: GenerateProps) => {
             marginTop: "20px",
           }}
         >
-          <MenuItem key={8} value={"In-Person"}>In-Person</MenuItem>
-          <MenuItem key={9} value={"Online"}>Online</MenuItem>
-          <MenuItem key={10} value={"Hybrid"}>Hybrid</MenuItem>
+          <MenuItem key={10} value={"In-Person"}>In-Person</MenuItem>
+          <MenuItem key={11} value={"Online"}>Online</MenuItem>
+          <MenuItem key={12} value={"Hybrid"}>Hybrid</MenuItem>
         </Select>
       </FormControl>
      
@@ -243,7 +300,7 @@ export const Generate = ({loc, setRecommended, setSections}: GenerateProps) => {
           onClick={handleGenerate}
           loading={loading}
         >
-          Generate
+          Run
         </LoadingButton>
       </div>
       {provideErrorAlertUI()}
