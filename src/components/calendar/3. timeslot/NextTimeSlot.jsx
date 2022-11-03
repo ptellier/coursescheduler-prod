@@ -71,7 +71,8 @@ const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
             gridRow: timeToGridRow(timeSlot.start_time) + " / " 
                     + timeToGridRow(timeSlot.end_time),
             gridColumn:timeSlot.day,
-            border: isHoverTheSameSection() && ("2px dashed " + dropAcceptedColor),
+            borderStyle: isHoverTheSameSection() && ("dashed"),
+            borderWidth: isHoverTheSameSection() && "2px",
             color: isHoverTheSameSection() && dropAcceptedColor,
             transform: isHoverTheSameSection() && "scale(1.05)",
             borderColor : textColors[timeSlot.colorIndex],

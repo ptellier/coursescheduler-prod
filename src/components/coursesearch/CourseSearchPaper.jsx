@@ -1,25 +1,15 @@
 import { useCallback, useState } from "react";
-import {
-  Autocomplete,
-  Box,
-  Paper,
-  TextField,
-  useTheme,
-} from "@mui/material";
+import {Autocomplete,Box,Paper,TextField,useTheme} from "@mui/material";
 import ChosenCourse from "./ChosenCourse";
 import { fetchCourseDesc } from "../../helpers/fetch";
 import Generate from "./Generate";
 import { CourseColorMap } from "../../data/DataDefinition/CourseColorMap";
+import { debounce } from "../../helpers/debounce";
 
-const CourseSearchPaper = ({
-  coursesToFetch,
-  setCoursesToFetch,
-  setRecommended,
-  setSections,
-}) => {
+const CourseSearchPaper = ({coursesToFetch, setCoursesToFetch, setRecommended, setSections}) => {
   const theme = useTheme();
-  const chosenCourseBackgroundColors =
-    theme.palette.calendarTimeSlotBackgroundColors;
+  const chosenCourseBackgroundColors = theme.palette.calendarTimeSlotBackgroundColors;
+  
   function getThemeBackgroundColor(index) {
     return chosenCourseBackgroundColors[
       index % chosenCourseBackgroundColors.length
@@ -31,9 +21,7 @@ const CourseSearchPaper = ({
   }
 
   const [courseOptions, setCourseOptions] = useState([]);
-  const [coursesChosen, setCoursesChosen] = useState(
-    new CourseColorMap(chosenCourseBackgroundColors.length)
-  );
+  const [coursesChosen, setCoursesChosen] = useState(new CourseColorMap(chosenCourseBackgroundColors.length));
   const [totalCredits, setTotalCredits] = useState(0);
 
   /**
@@ -49,31 +37,17 @@ const CourseSearchPaper = ({
     if (event.nativeEvent.type === "input") {
       const searchWord = event.target.value;
       const data = await fetchCourseDesc(searchWord);
+      console.log({data});
       const options = data.map((c) => ({
         key: c.code,
         label: c.code + " - " + c.name,
         cred: c.cred,
         desc: c.desc,
+        name: c.name,
       }));
       setCourseOptions(options);
     }
   };
-
-  /**
-   * Debounce function
-   * @param {*} callback 
-   * @param {*} delay 
-   * @returns 
-   */
-  const debounce = (callback, delay = 500) => {
-    let timer;
-    return (...args) => {
-      clearTimeout(timer)
-      timer = setTimeout(() => {
-        callback(...args)
-      }, delay)
-    }
-  }
 
   /**
    * Debounce 
@@ -91,13 +65,11 @@ const CourseSearchPaper = ({
     if (option === null) {
       return;
     } else if (exceededCredLimit(option)) {
-      alert(
-        "You exceeded maximum (18) credits per term. Remove some courses before adding more"
-      );
+      alert("You exceeded maximum (18) credits per term. Remove some courses before adding more");
     } else if (selectedDuplicate(option)) {
       alert(`You already selected ${option.key}`);
     } else {
-      selectCourseDesc(option.key, option.cred, option.desc);
+      selectCourseDesc(option.key, option.cred, option.name);
       setTotalCredits(totalCredits + option.cred);
     }
   };
@@ -139,7 +111,7 @@ const CourseSearchPaper = ({
     const pos = removedSpace.search(/\d/);
     return removedSpace.substring(0, pos) + "/" + removedSpace.substring(pos);
   };
-
+  console.log({coursesChosen})
   return (
     <Paper className="Paper" elevation={0} style={{minWidth:'20rem'}} sx={{ borderRadius: "20px" }}>
       <Box p={4}>

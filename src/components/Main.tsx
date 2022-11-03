@@ -69,8 +69,6 @@ const Main: FC = () => {
     }
   }, [selectedRecommended, recommended])
 
- 
-
   return (
       <ThemeProvider theme={theme}>
         <div className="Page">
