@@ -9,6 +9,7 @@ export const SectionsContext = createContext();
  */
 export const SectionsProvider = (props) => {
     
+    
     /**
      * currentSections: sections that are displayed on the calendar
      * setCurrentSections: sets current sections; common usage includes
