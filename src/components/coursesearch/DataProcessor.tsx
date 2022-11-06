@@ -1,12 +1,25 @@
 
+import React from 'react'
 
-export const prcocess = () => {
+type DataProcessorProps = {
+    children: React.ReactNode,
+}
+
+export const DataProcessor = ({children}:DataProcessorProps) => {
+
+const prcocess = () => {
     filterByTerm()
     filterByStatus()
     filterByActivity()
     checkExceptions()
     
 }
+  return (
+    <>{children}</>
+  )
+}
+
+
 
 const filterByTerm = () => {
 

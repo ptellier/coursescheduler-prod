@@ -8,6 +8,7 @@ import { checkCourseCreditLimit, checkDuplicateCourse } from "./Exceptions";
 import CourseInfo from "./3. CourseInfo";
 import { SectionsContext } from "../../context/SectionsContext";
 import { createURL, fetchSection } from "../../helpers/fetch";
+import { DataProcessor } from "./DataProcessor";
 
 /**
  * delete function
@@ -79,10 +80,12 @@ const CoursePanel = () => {
 
         {courses.map(
           (course) => (
-            //<DataProcessor >
-            <CourseInfo key={course.courseName} course={course} />
+
+            // sections data enter DataProcessor
+            <DataProcessor >
+              <CourseInfo key={course.courseName} course={course} />
+            </DataProcessor>
           )
-          //</>
         )}
 
         <Generate loc={courses} />
