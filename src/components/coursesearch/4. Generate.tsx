@@ -4,24 +4,27 @@ import { createURLs, fetchParallel } from "../../helpers/fetch";
 import { filterByTermStatusActivity, filterDuplicatedSchedules} from "../../helpers/filter";
 import { solve } from "../../helpers/solve_newengine";
 import { groupSections } from "../../helpers/groupby";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { recommend } from "../../helpers/recommend";
 import { Alert, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { EmptySearchResult } from "../../exceptions/EmptySearchResult";
 import { PartitallyEmptySearchResult } from "../../exceptions/PartiallyEmptySearchResult";
 import { IncompleteSchedule } from "../../exceptions/IncompleteSchedule";
+import { SectionsContext } from "../../context/SectionsContext";
 
-export interface GenerateProps {
+interface GenerateProps {
   loc: Course[];
-  setRecommended: Function;
-  setSections: Function;
 }
 
-export const Generate = ({loc, setRecommended, setSections}: GenerateProps) => {
+export const Generate = ({loc}: GenerateProps) => {
+
+  const {setSections, setRecommended} = useContext(SectionsContext);
 
   const [status, setStatus] = useState<string[]>(["Available", "Full", "Blocked", "Restricted", "STT"]);
   const [mode, setMode] = useState<string[]>(["In-Person", "Online", "Hybrid"]);
+
+  //TODO: move them to CourseSearchpaper
   const [term, setTerm] = useState<string>("1");
   const [session, setSession] = useState<string>("W");
   const [year, SetYear] = useState<string>("2022");
@@ -69,7 +72,9 @@ export const Generate = ({loc, setRecommended, setSections}: GenerateProps) => {
    * @sectionGroup
    */
   const invokeAPI = async() => {
-    const {sectionsBatch, receipt} = await getData(loc.map((c) => c.sw));
+    const {sectionsBatch, receipt} = await getData(loc.map((course) => course.department + "/" + course.courseNumber));
+    
+    //Data Processing move to ???.tsx line 34
     checkEmptySearchResult(sectionsBatch)
     let sectionsFiltered:Section[] = [];
     let sectionsFilteredNested:Section[][] = [];
@@ -81,6 +86,8 @@ export const Generate = ({loc, setRecommended, setSections}: GenerateProps) => {
       sectionsFilteredNested.push(filtered);
     }
     checkEmptyAfterFilterResult(sectionsFiltered)
+
+    // Keep below here
     const sectionsNoDuplicate = filterDuplicatedSchedules(sectionsFiltered);
     const sectionsGroup = groupSections(sectionsNoDuplicate);
     const sectionsSolved = solve(sectionsGroup);

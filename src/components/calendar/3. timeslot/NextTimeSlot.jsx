@@ -1,22 +1,25 @@
 import { useContext, useEffect } from 'react'
 import {useDrop} from "react-dnd";
 import { timeToGridRow } from '../CalendarConstants';
-import { SectionsContext } from '../context/SectionsContext';
+import { SectionsContext } from '../../../context/SectionsContext';
 import { useTheme } from '@mui/material';
-import { HistoryContext } from '../../context/HistoryContext';
+import { HistoryContext } from '../../../context/HistoryContext';
+import { CourseColorContext } from '../../../context/CourseColorContext';
 
 
 const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
 
+    const courseName = section.subject + " " + section.course
     const {focusedNextSection, focusNextSection, blurNextSection} = useContext(SectionsContext);
     const {currentSections, setCurrentSections} = useContext(SectionsContext);
     const {addToHistory} = useContext(HistoryContext);
+
+    const {getColor, getBackgroundColor} = useContext(CourseColorContext)
 
     const theme = useTheme();
     const textColors = theme.palette.calendarTimeSlotTextColors;
     const dropAcceptedColor = theme.palette.calendarTimeSlotDropAccepted;
     
-
     const [{ isOver }, drop] = useDrop(() => ({
         accept: "calendarTimeSlot",
         drop: (item) => {
@@ -74,8 +77,8 @@ const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
             borderStyle: isHoverTheSameSection() && ("dashed"),
             borderWidth: isHoverTheSameSection() && "2px",
             color: isHoverTheSameSection() && dropAcceptedColor,
-            transform: isHoverTheSameSection() && "scale(1.05)",
-            borderColor : textColors[timeSlot.colorIndex],
+            transform: isHoverTheSameSection() && "scale(1.10)",
+            borderColor : getColor(courseName),
 
         }
         const overlapGroupStyle = {

@@ -1,17 +1,17 @@
 import {useContext, useEffect} from "react";
 import {timeToGridRow} from "../CalendarConstants";
 import {useDrag} from "react-dnd";
-import { SectionsContext } from "../context/SectionsContext";
+import { SectionsContext } from "../../../context/SectionsContext";
 import { useTheme } from '@mui/material';
 import ReportIcon from '@mui/icons-material/Report';
+import { CourseColorContext } from "../../../context/CourseColorContext";
 
 
 const CurrentTimeSlot = ({section, timeSlot, isInOverlapGroup}) => {
-    const {showNextSections, hideNextSections, nextSections} = useContext(SectionsContext);
-    const theme = useTheme();
-    const backgroundColors = theme.palette.calendarTimeSlotBackgroundColors;
-    const textColors = theme.palette.calendarTimeSlotTextColors;
-
+    const {showNextSections, hideNextSections} = useContext(SectionsContext);
+    const {getColor, getBackgroundColor} = useContext(CourseColorContext)
+    const courseName = section.subject + " " + section.course
+    
     /**
      * EFFECTS: set isDragging to true when drag start
      *          invoke hideNextSections when drag ends
@@ -46,8 +46,8 @@ const CurrentTimeSlot = ({section, timeSlot, isInOverlapGroup}) => {
             gridRow: timeToGridRow(timeSlot.start_time) + " / " 
                     + timeToGridRow(timeSlot.end_time),
             gridColumn:timeSlot.day,   
-            color: textColors[timeSlot.colorIndex],
-            backgroundColor: backgroundColors[timeSlot.colorIndex],
+            color: getColor(courseName),
+            backgroundColor: getBackgroundColor(courseName),
         }
         const overlapGroupStyle = {
             height: (timeSlot.end_time - timeSlot.start_time)

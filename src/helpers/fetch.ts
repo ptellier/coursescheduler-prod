@@ -9,21 +9,25 @@ const dev = true;
 export const createURLs = (losw: SearchWord[], session:string, year:string) => {
   let urls:string[] = []
   for (let sw of losw) {
-    let url = ``
-    const [subject, number] = parseSubjectNumber(sw)
-    if (dev) {
-      url = `http://localhost:8000/`
-    } else {
-      url = `https://busy-jade-toad-toga.cyclic.app/`
-    }
-    url += `api/${session}/sections?subject=${subject}&number=${number}`
-
-    if (session === 'S') {
-      url += `&year=${year}`
-    }
-    urls.push(url)
+    urls.push(createURL(sw, session, year))
   }
   return urls;
+}
+
+export const createURL = (sw: SearchWord, session:string, year:string) => {
+  let url = ``
+  const [subject, number] = parseSubjectNumber(sw)
+  if (dev) {
+    url = `http://localhost:8000/`
+  } else {
+    url = `https://busy-jade-toad-toga.cyclic.app/`
+  }
+  url += `api/${session}/sections?subject=${subject}&number=${number}`
+
+  if (session === 'S') {
+    url += `&year=${year}`
+  }
+  return url;
 }
 
 const parseSubjectNumber = (sw:string) => {

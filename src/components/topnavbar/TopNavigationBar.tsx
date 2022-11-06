@@ -1,9 +1,6 @@
 import {Paper} from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import PaletteIcon from "@mui/icons-material/Palette";
-
-import NavButton from "./NavButton";
+import { Button } from "react-bootstrap";
 
 
 const TopNavigationBar = () => {
@@ -15,10 +12,7 @@ const TopNavigationBar = () => {
                     <div>course</div><div>scheduler</div>
                 </div>
             </div>
-            <div id="nav-actions">
-                <NavButton text="About" icon={<InfoOutlinedIcon/>}></NavButton>
-                <NavButton href="https://github.com/limseung1/coursescheduler" text="GitHub" icon={<GitHubIcon/>}></NavButton>
-            </div>
+            <div id="nav-actions"></div>
         </Paper>
     );
 }

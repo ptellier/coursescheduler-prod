@@ -93,7 +93,6 @@ export const subGroupByNonOverlap = (group: Cell_display[]) => {
 
   for (const cell of group) {
     if (worklist.length === 0) {break}
-    // console.log(worklist)
       let list = [cell];
       for (const wrk of worklist) {
         if (list.every(l => !overlapCells(l, wrk))) {

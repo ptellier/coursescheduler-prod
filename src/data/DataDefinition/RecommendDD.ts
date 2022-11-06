@@ -3,8 +3,4 @@ export enum Recommended {
     consistent,
     scattered,
     freeDays,
-    earlyStart,
-    lateStart,
-    earlyEnd,
-    lateEnd,
 }
