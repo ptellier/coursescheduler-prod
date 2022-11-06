@@ -8,8 +8,8 @@ import { checkCourseCreditLimit, checkDuplicateCourse } from "./Exceptions";
 import CourseInfo from "./3. CourseInfo";
 import { SectionsContext } from "../../context/SectionsContext";
 import { createURL, fetchSection } from "../../helpers/fetch";
-import { DataProcessor } from "./DataProcessor";
 import { Section } from "../../data/DataDefinition/SectionDD";
+import { Term } from "./1. Term";
 
 /**
  * delete function
@@ -28,38 +28,40 @@ import { Section } from "../../data/DataDefinition/SectionDD";
  */
 
 const CoursePanel = () => {
-
-  const { setSections } = useContext(SectionsContext);
-
   /** courses that users looked up and want to get schedule */
+  const year = "2022"
+  const [term, setTerm] = useState<string>("1");
+  const [session, setSession] = useState<string>("W");
   const [courses, setCourses] = useState<Course[]>([]);
-
   const [totalCredits, setTotalCredits] = useState<number>(0);
-
+  const { setSections } = useContext(SectionsContext);
   const { addCourseColor, removeCourseColor } = useContext(CourseColorContext);
-
-  // const [term, setTerm] = useState<string>("1");
-  // const [session, setSession] = useState<string>("W");
-  // const [year, SetYear] = useState<string>("2022");
+  
 
   const addCourse = async(courseOption: any) => {
     if (courseOption === null) throw Error("NULL");
     checkCourseCreditLimit(courseOption, totalCredits);
     checkDuplicateCourse(courseOption, courses);
     addCourseColor(courseOption.key)
-    const newCourse: Course = {
-      department: courseOption.department,
-      courseNumber: courseOption.courseNumber,
-      courseName: courseOption.courseName,
-      credit: courseOption.credit,
-    };
+    const newCourse = createNewCourse(courseOption);
     const searchWord = newCourse.department + "/" + newCourse.courseNumber
-    const newSections = await fetchSection(createURL(searchWord, "W", "2022"))
-    // setSections((sections:Section[]) => [...sections, newSections.sections])
+
+    const newSections = await fetchSection(createURL(searchWord, session, year))
+    
+    setSections((sections:Section[]) => [...sections, newSections.sections])
     setCourses((courses:Course[]) => [...courses, newCourse]);
     setTotalCredits(totalCredits => totalCredits + newCourse.credit);
     
   };
+
+  const createNewCourse = (courseOption: any) => {
+    return {
+        department: courseOption.department,
+        courseNumber: courseOption.courseNumber,
+        courseName: courseOption.courseName,
+        credit: courseOption.credit,
+    };
+  }
 
   //TODO:
   const removeCourse = () => {
@@ -78,22 +80,15 @@ const CoursePanel = () => {
       sx={{ borderRadius: "20px" }}
     >
       <Box p={4}>
-        
+        <Term term={term} setTerm={setTerm} session={session} setSession={setSession} />
         <CourseSearchBar addCourse={addCourse} />
-
         {courses.map(
           (course) => (
-            // sections.filter(section => ...section ...course)
-            // send filtered sections data to DataProcessor
-            // CourseInfo consumed clean sections data
-            <DataProcessor>
-              <CourseInfo key={course.courseName} course={course} />
-            </DataProcessor>
+            // Analyze.ts +
+            <CourseInfo key={course.courseName} course={course} />
           )
         )}
-
-        <Generate loc={courses} />
-
+        <Generate />
       </Box>
     </Paper>
   );

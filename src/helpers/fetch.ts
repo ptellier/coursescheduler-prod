@@ -59,6 +59,7 @@ export const fetchSection = async (url:string) => {
   const res = await fetch(url);
   const data = await res.json();
   return data;
+  // return cleanData(data)
 };
 
 /**
