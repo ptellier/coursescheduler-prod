@@ -9,6 +9,7 @@ import CourseInfo from "./3. CourseInfo";
 import { SectionsContext } from "../../context/SectionsContext";
 import { createURL, fetchSection } from "../../helpers/fetch";
 import { DataProcessor } from "./DataProcessor";
+import { Section } from "../../data/DataDefinition/SectionDD";
 
 /**
  * delete function
@@ -28,7 +29,7 @@ import { DataProcessor } from "./DataProcessor";
 
 const CoursePanel = () => {
 
-  const { sections, setSections } = useContext(SectionsContext);
+  const { setSections } = useContext(SectionsContext);
 
   /** courses that users looked up and want to get schedule */
   const [courses, setCourses] = useState<Course[]>([]);
@@ -45,18 +46,19 @@ const CoursePanel = () => {
     if (courseOption === null) throw Error("NULL");
     checkCourseCreditLimit(courseOption, totalCredits);
     checkDuplicateCourse(courseOption, courses);
+    addCourseColor(courseOption.key)
     const newCourse: Course = {
       department: courseOption.department,
       courseNumber: courseOption.courseNumber,
       courseName: courseOption.courseName,
       credit: courseOption.credit,
     };
-    // const searchWord = courseOption.department + "/" + courseOption.courseNumber
-    // const newSections = await fetchSection(createURL(searchWord, "W", "2022"))
-    // setSections(...sections, newSections)
-    setCourses([...courses, newCourse]);
-    setTotalCredits(totalCredits + newCourse.credit);
-    addCourseColor(courseOption.key)
+    const searchWord = newCourse.department + "/" + newCourse.courseNumber
+    const newSections = await fetchSection(createURL(searchWord, "W", "2022"))
+    // setSections((sections:Section[]) => [...sections, newSections.sections])
+    setCourses((courses:Course[]) => [...courses, newCourse]);
+    setTotalCredits(totalCredits => totalCredits + newCourse.credit);
+    
   };
 
   //TODO:
@@ -81,9 +83,10 @@ const CoursePanel = () => {
 
         {courses.map(
           (course) => (
-
-            // sections data enter DataProcessor
-            <DataProcessor >
+            // sections.filter(section => ...section ...course)
+            // send filtered sections data to DataProcessor
+            // CourseInfo consumed clean sections data
+            <DataProcessor>
               <CourseInfo key={course.courseName} course={course} />
             </DataProcessor>
           )

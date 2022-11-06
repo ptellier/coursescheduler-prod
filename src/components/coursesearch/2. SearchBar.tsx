@@ -11,7 +11,7 @@ const SearchBar = ({addCourse} : SearchBarProps) => {
 
   const handleUserSelectCourse = async(event:any, courseOption:any) => {
     try {
-      addCourse(courseOption)
+      await addCourse(courseOption)
     } catch (e: any) {
       if (e.message === "NULL") return;
       alert(e)
