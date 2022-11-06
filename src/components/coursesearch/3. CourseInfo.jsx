@@ -4,25 +4,26 @@ import { red, pink, green, lime, lightGreen, lightBlue, grey, purple, yellow, or
 import { CourseColorContext } from "../../context/CourseColorContext";
 import { useContext } from "react";
 
-const ChosenCourse = ({subject, courseNum, description, credits, deleteSelfFunc}) => {
+const CourseInfo = ({course}) => {
     
-    const courseName = `${subject} ${courseNum}`
+    const name = `${course.department} ${course.courseNumber}`
     const {getColor, getBackgroundColor} = useContext(CourseColorContext)
 
     return (<div className="chosen-course">
         <span className="chosen-course-start" style={{
-            color:getColor(courseName), 
-            backgroundColor:getBackgroundColor(courseName)
+            color:getColor(name), 
+            backgroundColor:getBackgroundColor(name)
             }}>
-            <div className="chosen-course-start-top">{subject}</div>
-            <div className="chosen-course-start-bottom">{courseNum}</div>
+            <div className="chosen-course-start-top">{course.department}</div>
+            <div className="chosen-course-start-bottom">{course.courseNumber}</div>
         </span>
         <span className="chosen-course-mid">
-            <div className="chosen-course-mid-top">{description}</div>
-            <div className="chosen-course-mid-bottom">{credits + " Credits"}</div>
+            <div className="chosen-course-mid-top">{course.courseName}</div>
+            <div className="chosen-course-mid-bottom">{course.credit + " Credits"}</div>
         </span>
         <span className="chosen-course-end">
-            <IconButton aria-label="delete" onClick={deleteSelfFunc}>
+            {/* TODO: need delete function here */}
+            <IconButton aria-label="delete">
                 <ClearIcon />
             </IconButton>
         </span>
@@ -30,4 +31,4 @@ const ChosenCourse = ({subject, courseNum, description, credits, deleteSelfFunc}
 }
 
 
-export default ChosenCourse;
+export default CourseInfo;

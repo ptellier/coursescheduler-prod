@@ -5,14 +5,12 @@ import React from "react";
 /**
  * User selected course description
  * @typedef  {Object}   Course
- * @property {SearchWord}   sw        - "CPSC/110"
- * @property {number}   credit    - 4
- * @property {string}   desc      - This course is about function programming ...
  */
 export interface Course {
-  sw: SearchWord;
-  cred: number;
-  desc: string;
+  department: string;
+  courseNumber: string;
+  courseName: string;
+  credit: number;
 }
 
 /**

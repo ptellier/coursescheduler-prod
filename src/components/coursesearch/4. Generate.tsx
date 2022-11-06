@@ -23,6 +23,8 @@ export const Generate = ({loc}: GenerateProps) => {
 
   const [status, setStatus] = useState<string[]>(["Available", "Full", "Blocked", "Restricted", "STT"]);
   const [mode, setMode] = useState<string[]>(["In-Person", "Online", "Hybrid"]);
+
+  //TODO: move them to CourseSearchpaper
   const [term, setTerm] = useState<string>("1");
   const [session, setSession] = useState<string>("W");
   const [year, SetYear] = useState<string>("2022");
@@ -70,7 +72,9 @@ export const Generate = ({loc}: GenerateProps) => {
    * @sectionGroup
    */
   const invokeAPI = async() => {
-    const {sectionsBatch, receipt} = await getData(loc.map((c) => c.sw));
+    const {sectionsBatch, receipt} = await getData(loc.map((course) => course.department + "/" + course.courseNumber));
+    
+    //Data Processing move to ???.tsx line 34
     checkEmptySearchResult(sectionsBatch)
     let sectionsFiltered:Section[] = [];
     let sectionsFilteredNested:Section[][] = [];
@@ -82,6 +86,8 @@ export const Generate = ({loc}: GenerateProps) => {
       sectionsFilteredNested.push(filtered);
     }
     checkEmptyAfterFilterResult(sectionsFiltered)
+
+    // Keep below here
     const sectionsNoDuplicate = filterDuplicatedSchedules(sectionsFiltered);
     const sectionsGroup = groupSections(sectionsNoDuplicate);
     const sectionsSolved = solve(sectionsGroup);

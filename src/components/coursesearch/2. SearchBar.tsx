@@ -1,26 +1,21 @@
 import { Autocomplete, debounce, TextField } from '@mui/material';
-import React, { useContext, useState } from 'react'
-import { CourseColorContext } from '../../context/CourseColorContext';
-import { SectionsContext } from '../../context/SectionsContext';
+import { useState } from 'react'
 import { fetchCourseDesc } from '../../helpers/fetch';
 
-interface CourseSearchBarProps {
-  handleChange: Function;
+interface SearchBarProps {
+  addCourse: Function;
 }
 
-const CourseSearchBar = ({handleChange} : CourseSearchBarProps) => {
+const SearchBar = ({addCourse} : SearchBarProps) => {
   const [courseOptions, setCourseOptions] = useState([]);
-  const {addCourseColor} = useContext(CourseColorContext)
 
-  const handleUserSelectCourse = (event:any, option:any) => {
-    //fetch
-
-    //change state
-    // setSections()
-
-    //handleChange
-    handleChange(option)
-    addCourseColor(option.key)
+  const handleUserSelectCourse = async(event:any, courseOption:any) => {
+    try {
+      addCourse(courseOption)
+    } catch (e: any) {
+      if (e.message === "NULL") return;
+      alert(e)
+    }
   }
 
   /**
@@ -38,9 +33,10 @@ const CourseSearchBar = ({handleChange} : CourseSearchBarProps) => {
         const options = data.map((c:any) => ({
           key: c.code,
           label: c.code + " - " + c.name,
-          cred: c.cred,
-          desc: c.desc,
-          name: c.name,
+          department: c.dept,
+          courseNumber: c.code.split(" ")[1],
+          courseName: c.name,
+          credit: c.cred,
         }));
         setCourseOptions(options);
       }
@@ -65,4 +61,4 @@ const CourseSearchBar = ({handleChange} : CourseSearchBarProps) => {
   )
 }
 
-export default CourseSearchBar
+export default SearchBar

@@ -5,12 +5,13 @@ import { SectionsContext, SectionsProvider } from "../context/SectionsContext";
 import { Box, Stack } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import TopNavigationBar from "./topnavbar/TopNavigationBar";
-import CourseSearchPaper from "./coursesearch/CourseSearchPaper";
+
 import Calendar from "./calendar/1. calendar/Calendar";
 import { theme } from "./Theme";
 import { HistoryProvider } from "../context/HistoryContext";
 import { CalandarMenu } from "./calendar/0. menu/CalandarMenu";
 import { CourseColorProvider } from "../context/CourseColorContext";
+import CourseSearchPaper from "./coursesearch/0. CoursePanel";
 
 /**
  * User selected course description
@@ -24,8 +25,6 @@ export interface Recommendation {
 }
 
 const Main: FC = () => {
-  /** courses that users looked up and want to get scheduled */
-  const [coursesToFetch, setCoursesToFetch] = useState<Course[]>([]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -37,10 +36,7 @@ const Main: FC = () => {
               <div className="main-page-flexbox">
                 <div className="main-page-left">
                   <Stack direction="column" spacing={2}>
-                    <CourseSearchPaper
-                      coursesToFetch={coursesToFetch}
-                      setCoursesToFetch={setCoursesToFetch}
-                    />
+                    <CourseSearchPaper />
                   </Stack>
                 </div>
                 <div className="main-page-right">

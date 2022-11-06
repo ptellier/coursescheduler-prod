@@ -45,7 +45,7 @@ export const SectionsProvider = (props) => {
     }, [selectedRecommended, recommended])
 
     /** all sections that were fetched from web scrapper */
-    const [sections, setSections] = useState([]);
+    const [sections, setSections] = useState([]); 
     
     /**
      * currentSections: sections that are displayed on the calendar
