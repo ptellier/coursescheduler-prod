@@ -76,6 +76,7 @@ const CoursePanel = () => {
       sx={{ borderRadius: "20px" }}
     >
       <Box p={4}>
+        
         <CourseSearchBar addCourse={addCourse} />
 
         {courses.map(
@@ -89,6 +90,7 @@ const CoursePanel = () => {
         )}
 
         <Generate loc={courses} />
+
       </Box>
     </Paper>
   );
