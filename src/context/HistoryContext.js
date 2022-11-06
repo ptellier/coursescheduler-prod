@@ -1,6 +1,6 @@
 
 import { useState, createContext, useContext } from 'react'
-import { SectionsContext } from '../calendar/context/SectionsContext';
+import { SectionsContext } from './SectionsContext';
 
 export const HistoryContext = createContext();
 

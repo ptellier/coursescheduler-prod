@@ -1,14 +1,51 @@
-import { useState, createContext } from 'react'
+import { useState, useEffect,createContext, useContext } from 'react'
+import { Recommended } from '../data/DataDefinition/RecommendDD';
 
 export const SectionsContext = createContext();
-
 /**
  * 
  * @param {*} props allSections, CalandarPaper and its children
  * @returns all logic related to current and next sections and states
  */
+
 export const SectionsProvider = (props) => {
-    
+
+    const removeCourse = (courseName) => {
+        // remove course from sections:
+
+        // remove course from recommended:
+    }
+
+    /** sections that were recommended, each array is a recommendation */
+    const [recommended, setRecommended] = useState (
+        {
+            compact: [], consistent: [], scatter: [], freeDay: [],
+        }
+    );
+
+    /** indicates the current category of recommendation that user has selected */
+    const [selectedRecommended, setSelectedRecommended] = useState(Recommended.compact)
+
+    /** Change currentSections according to user's selection of recommendation */
+    useEffect(() => {
+        switch (selectedRecommended) {
+            case Recommended.compact:
+                setCurrentSections(recommended.compact)
+                break;
+            case Recommended.scattered:
+                setCurrentSections(recommended.scatter)
+                break;
+            case Recommended.consistent:
+                setCurrentSections(recommended.consistent)
+                break;
+            default:
+                setCurrentSections(recommended.freeDay)
+                break;
+        }
+    }, [selectedRecommended, recommended])
+
+    /** all sections that were fetched from web scrapper */
+    const [sections, setSections] = useState([]);
     
     /**
      * currentSections: sections that are displayed on the calendar
@@ -49,12 +86,12 @@ export const SectionsProvider = (props) => {
      * @returns 
      */
     const getNextSections = (section) => {
-        const nextSections = props.allSections.filter(fetchedSection => 
-            fetchedSection.subject === section.subject && 
+        const nextSections = sections.filter(fetchedSection =>
+            fetchedSection.subject === section.subject &&
             fetchedSection.course === section.course &&
             fetchedSection.activity === section.activity
         );
-        const excludeThisSections = nextSections.filter(nextSection => 
+        const excludeThisSections = nextSections.filter(nextSection =>
             !(nextSection.name === section.name)
         )
         return excludeThisSections
@@ -86,21 +123,30 @@ export const SectionsProvider = (props) => {
         setFocusedNextSection({});
     }
 
-  return (
-    <SectionsContext.Provider value={{
-        currentSections: currentSections,
-        setCurrentSections: setCurrentSections,
+    return (
+        <SectionsContext.Provider value={{
+            recommended:recommended,
+            setRecommended:setRecommended,
 
-        nextSections: nextSections,
-        showNextSections: showNextSections,
-        getNextSections: getNextSections,
-        hideNextSections: hideNextSections,
+            selectedRecommended:selectedRecommended,
+            setSelectedRecommended:setSelectedRecommended,
 
-        focusedNextSection: focusedNextSection,
-        focusNextSection: focusNextSection,
-        blurNextSection: blurNextSection,
-    }} >
-        {props.children}
-    </SectionsContext.Provider>
-  )
+            sections: sections,
+            setSections: setSections,
+
+            currentSections: currentSections,
+            setCurrentSections: setCurrentSections,
+
+            nextSections: nextSections,
+            showNextSections: showNextSections,
+            getNextSections: getNextSections,
+            hideNextSections: hideNextSections,
+
+            focusedNextSection: focusedNextSection,
+            focusNextSection: focusNextSection,
+            blurNextSection: blurNextSection,
+        }} >
+            {props.children}
+        </SectionsContext.Provider>
+    )
 }
