@@ -1,6 +1,6 @@
 import { Autocomplete, debounce, TextField } from '@mui/material';
 import { useState } from 'react'
-import { fetchCourseDesc } from '../../helpers/fetch';
+import { fetchCourseDesc } from '../../api/fetch';
 
 interface SearchBarProps {
   addCourse: Function;
@@ -11,7 +11,7 @@ const SearchBar = ({addCourse} : SearchBarProps) => {
 
   const handleUserSelectCourse = async(event:any, courseOption:any) => {
     try {
-      addCourse(courseOption)
+      await addCourse(courseOption)
     } catch (e: any) {
       if (e.message === "NULL") return;
       alert(e)

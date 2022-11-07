@@ -1,7 +1,6 @@
 import { useState, FC, useEffect, useContext } from "react";
 import { Course } from "../data/DataDefinition/SearchWordDD";
 import { Section } from "../data/DataDefinition/SectionDD";
-import { SectionsContext, SectionsProvider } from "../context/SectionsContext";
 import { Box, Stack } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import TopNavigationBar from "./topnavbar/TopNavigationBar";
@@ -11,7 +10,9 @@ import { theme } from "./Theme";
 import { HistoryProvider } from "../context/HistoryContext";
 import { CalandarMenu } from "./calendar/0. menu/CalandarMenu";
 import { CourseColorProvider } from "../context/CourseColorContext";
-import CourseSearchPaper from "./coursesearch/0. CoursePanel";
+import { SectionsProvider } from "../context/SectionsContext";
+import CoursePanel from "./coursesearch/0. CoursePanel";
+
 
 /**
  * User selected course description
@@ -36,7 +37,7 @@ const Main: FC = () => {
               <div className="main-page-flexbox">
                 <div className="main-page-left">
                   <Stack direction="column" spacing={2}>
-                    <CourseSearchPaper />
+                    <CoursePanel />
                   </Stack>
                 </div>
                 <div className="main-page-right">

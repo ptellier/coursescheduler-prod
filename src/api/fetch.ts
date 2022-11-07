@@ -1,39 +1,16 @@
 import { SearchWord } from "../data/DataDefinition/SearchWordDD";
 import { Section } from "../data/DataDefinition/SectionDD";
-// Note: Functions in this file fetches data from Course API
 
+/**
+ * fetches sections from given url
+ * @param url
+ */
+ export const fetchSection = async (url:string) => {
+  const res = await fetch(url);
+  const data = await res.json();
+  return data.sections;
+};
 
-// set to true in development => uses internal server at port:8000
-const dev = true;
-
-export const createURLs = (losw: SearchWord[], session:string, year:string) => {
-  let urls:string[] = []
-  for (let sw of losw) {
-    urls.push(createURL(sw, session, year))
-  }
-  return urls;
-}
-
-export const createURL = (sw: SearchWord, session:string, year:string) => {
-  let url = ``
-  const [subject, number] = parseSubjectNumber(sw)
-  if (dev) {
-    url = `http://localhost:8000/`
-  } else {
-    url = `https://busy-jade-toad-toga.cyclic.app/`
-  }
-  url += `api/${session}/sections?subject=${subject}&number=${number}`
-
-  if (session === 'S') {
-    url += `&year=${year}`
-  }
-  return url;
-}
-
-const parseSubjectNumber = (sw:string) => {
-  const [subject, number] = sw.split("/")
-  return [subject, number]
-}
 
 /**
  * fetch sections from API in parallel, returns sections as batch, and receipt
@@ -51,15 +28,7 @@ export const fetchParallel = async (losw: SearchWord[], urls:string[]) => {
   return {sectionsBatch, receipt}
 }
 
-/**
- * fetches sections that corresponds to given sw
- * @param sw; i.e CPSC/110
- */
-export const fetchSection = async (url:string) => {
-  const res = await fetch(url);
-  const data = await res.json();
-  return data;
-};
+
 
 /**
  * fetch available sections for given losw
