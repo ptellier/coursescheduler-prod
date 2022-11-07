@@ -3,7 +3,8 @@
 import { Section } from "../data/DataDefinition/SectionDD"
 
 export const cleanSections = (sections: Section[]) => {
-  return sections;
+  checkSectionWithoutName(sections)
+  return filterWaitlist(sections);
 }
 
 
@@ -50,4 +51,11 @@ const checkAbnormalEntry = (sections:Section[]) => {
       }
       next++;
     }
+  }
+
+  const filterWaitlist = (sections:Section[]) => {
+    // s.activity !== "Waiting List"
+    return sections.filter(section => 
+      section.activity !== "Waiting List"  
+    )
   }

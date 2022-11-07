@@ -33,19 +33,22 @@ const CoursePanel = () => {
   const [totalCredits, setTotalCredits] = useState<number>(0);
   const { setSections } = useContext(SectionsContext);
   const { addCourseColor, removeCourseColor } = useContext(CourseColorContext);
+  const [fetchReady, setFetchReady] = useState(false);
   
 
   const addCourse = async(courseOption: any) => {
     if (courseOption === null) throw Error("NULL");
     checkCourseCreditLimit(courseOption, totalCredits);
     checkDuplicateCourse(courseOption, courses);
+
     addCourseColor(courseOption.key)
     const newCourse = createNewCourse(courseOption);
+    setFetchReady(false);
     const newSections = await getSectionData(newCourse, term, session)
+    setFetchReady(true);
     setSections((sections:Section[]) => [...sections, newSections])
     setCourses((courses:Course[]) => [...courses, newCourse]);
     setTotalCredits(totalCredits => totalCredits + newCourse.credit);
-    
   };
 
   const createNewCourse = (courseOption: any) => {
@@ -82,7 +85,7 @@ const CoursePanel = () => {
             <CourseInfo key={course.courseName} course={course} />
           )
         )}
-        <Generate />
+        <Generate fetchReady={fetchReady} />
       </Box>
     </Paper>
   );

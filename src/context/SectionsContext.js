@@ -10,12 +10,6 @@ export const SectionsContext = createContext();
 
 export const SectionsProvider = (props) => {
 
-    const removeCourse = (courseName) => {
-        // remove course from sections:
-
-        // remove course from recommended:
-    }
-
     /** sections that were recommended, each array is a recommendation */
     const [recommended, setRecommended] = useState (
         {
