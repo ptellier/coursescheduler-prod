@@ -34,7 +34,6 @@ export const Generate = ({fetchReady}: GenerateProp) => {
   return (
     <>
       <LoadingButton
-        sx={{mb:2}}
         loading={loading}
         disabled={!fetchReady}
         className="w-100"

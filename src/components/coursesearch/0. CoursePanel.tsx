@@ -11,7 +11,6 @@ import { Section } from "../../data/DataDefinition/SectionDD";
 import { Term } from "./1. Term";
 import { getSectionData } from "../../api/GetSectionData";
 
-
 /**
  * Fetch
  * CourseSearchPaper: fetchedSections = [ [...121] [...110] [...210] ] ... 2DArray
@@ -24,41 +23,39 @@ import { getSectionData } from "../../api/GetSectionData";
  * delete function
  */
 
-
 const CoursePanel = () => {
   /** courses that users looked up and want to get schedule */
   const [term, setTerm] = useState<string>("1");
   const [session, setSession] = useState<string>("W");
   const [courses, setCourses] = useState<Course[]>([]);
   const [totalCredits, setTotalCredits] = useState<number>(0);
-  const { setSections } = useContext(SectionsContext);
+  const { sections, setSections } = useContext(SectionsContext);
   const { addCourseColor, removeCourseColor } = useContext(CourseColorContext);
   const [fetchReady, setFetchReady] = useState(false);
-  
 
-  const addCourse = async(courseOption: any) => {
+  const addCourse = async (courseOption: any) => {
     if (courseOption === null) throw Error("NULL");
     checkCourseCreditLimit(courseOption, totalCredits);
     checkDuplicateCourse(courseOption, courses);
 
-    addCourseColor(courseOption.key)
+    addCourseColor(courseOption.key);
     const newCourse = createNewCourse(courseOption);
     setFetchReady(false);
-    const newSections = await getSectionData(newCourse, term, session)
+    const newSections = await getSectionData(newCourse, term, session);
     setFetchReady(true);
-    setSections((sections:Section[]) => [...sections, newSections])
-    setCourses((courses:Course[]) => [...courses, newCourse]);
-    setTotalCredits(totalCredits => totalCredits + newCourse.credit);
+    setSections((sections: Section[]) => [...sections, newSections]);
+    setCourses((courses: Course[]) => [...courses, newCourse]);
+    setTotalCredits((totalCredits) => totalCredits + newCourse.credit);
   };
 
   const createNewCourse = (courseOption: any) => {
     return {
-        department: courseOption.department,
-        courseNumber: courseOption.courseNumber,
-        courseName: courseOption.courseName,
-        credit: courseOption.credit,
+      department: courseOption.department,
+      courseNumber: courseOption.courseNumber,
+      courseName: courseOption.courseName,
+      credit: courseOption.credit,
     };
-  }
+  };
 
   //TODO:
   const removeCourse = () => {
@@ -70,25 +67,40 @@ const CoursePanel = () => {
   };
 
   return (
-    <Paper
-      className="Paper"
-      elevation={0}
-      style={{ minWidth: "20rem" }}
-      sx={{ borderRadius: "20px" }}
-    >
-      <Box p={3}>
-        <Term term={term} setTerm={setTerm} session={session} setSession={setSession} />
-        <CourseSearchBar addCourse={addCourse} />
-        <Generate fetchReady={fetchReady} />
-        {courses.map(
-          (course) => (
+    <>
+      <Paper
+        className="Paper"
+        elevation={0}
+        style={{ minWidth: "20rem" }}
+        sx={{ borderRadius: "20px" }}
+      >
+        <Box p={3}>
+          <Term
+            term={term}
+            setTerm={setTerm}
+            session={session}
+            setSession={setSession}
+          />
+          <CourseSearchBar addCourse={addCourse} />
+          <Generate fetchReady={fetchReady} />
+        </Box>
+      </Paper>
+      {courses.length > 0 &&
+      <Paper
+        className="Paper"
+        elevation={0}
+        style={{ minWidth: "20rem" }}
+        sx={{ borderRadius: "20px" }}
+      >
+        <Box p={3}>
+          {courses.map((course) => (
             // Analyze.ts +
             <CourseInfo key={course.courseName} course={course} />
-          )
-        )}
-        
-      </Box>
-    </Paper>
+          ))}
+        </Box>
+      </Paper>
+      }
+    </>
   );
 };
 
