@@ -7,17 +7,10 @@ import { Course } from "../../data/DataDefinition/SearchWordDD";
 import { checkCourseCreditLimit, checkDuplicateCourse } from "./Exceptions";
 import CourseInfo from "./3. CourseInfo";
 import { SectionsContext } from "../../context/SectionsContext";
-import { createURL, fetchSection } from "../../helpers/fetch";
 import { Section } from "../../data/DataDefinition/SectionDD";
 import { Term } from "./1. Term";
+import { getSectionData } from "../../api/GetSectionData";
 
-/**
- * delete function
- */
-
-/**
- * terms, session, year move them to here.
- */
 
 /**
  * Fetch
@@ -27,9 +20,13 @@ import { Term } from "./1. Term";
  *  - Generate <- sectionsGlobal.flatMap(x => x), [ ...121 ...110 ...210 ]
  */
 
+/**
+ * delete function
+ */
+
+
 const CoursePanel = () => {
   /** courses that users looked up and want to get schedule */
-  const year = "2022"
   const [term, setTerm] = useState<string>("1");
   const [session, setSession] = useState<string>("W");
   const [courses, setCourses] = useState<Course[]>([]);
@@ -44,11 +41,8 @@ const CoursePanel = () => {
     checkDuplicateCourse(courseOption, courses);
     addCourseColor(courseOption.key)
     const newCourse = createNewCourse(courseOption);
-    const searchWord = newCourse.department + "/" + newCourse.courseNumber
-
-    const newSections = await fetchSection(createURL(searchWord, session, year))
-    
-    setSections((sections:Section[]) => [...sections, newSections.sections])
+    const newSections = await getSectionData(newCourse, term, session)
+    setSections((sections:Section[]) => [...sections, newSections])
     setCourses((courses:Course[]) => [...courses, newCourse]);
     setTotalCredits(totalCredits => totalCredits + newCourse.credit);
     

@@ -1,17 +1,15 @@
 import { Course } from "../../data/DataDefinition/SearchWordDD";
-import { filterDuplicatedSchedules} from "../../helpers/filter";
+import { filterDuplicatedSchedules } from "../../helpers/filter";
 import { solve } from "../../helpers/solve_newengine";
 import { groupSections } from "../../helpers/groupby";
 import { useContext, useState } from "react";
 import { recommend } from "../../helpers/recommend";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { SectionsContext } from "../../context/SectionsContext";
-
-
+import { getSectionData } from "../../api/GetSectionData";
 
 export const Generate = () => {
-
-  const {sections, setSections, setRecommended} = useContext(SectionsContext);
+  const { sections, setSections, setRecommended } = useContext(SectionsContext);
   const [loading, setLoading] = useState(false);
 
   /** Update 'los' state with fetched data when a user generates schedule
@@ -22,31 +20,36 @@ export const Generate = () => {
    * @setLoading (true): turns on loading icon
    * @setLoading (false): turns off loading icon
    */
-  const handleGenerate = async() => {
-      setLoading(true);
-      const sectionsNoDuplicate = filterDuplicatedSchedules(sections);
-      const sectionsGroup = groupSections(sectionsNoDuplicate);
-      const sectionsSolved = solve(sectionsGroup);
-      const sectionsRecommended = recommend(sectionsSolved);
-
-      setSections(sectionsGroup.flatMap((section) => section));
-      setRecommended(sectionsRecommended);
-      setLoading(false);
-    }
+  const handleGenerate = async () => {
+    // const c:Course = {
+    //   department: "CPSC",
+    //   courseNumber: "110",
+    //   courseName: "--",
+    //   credit: 4,
+    // }
+    // const temp = await getSectionData(c, "2", "W")
+    setLoading(true);
+    const sectionsNoDuplicate = filterDuplicatedSchedules(sections);
+    const sectionsGroup = groupSections(sectionsNoDuplicate);
+    const sectionsSolved = solve(sectionsGroup);
+    const sectionsRecommended = recommend(sectionsSolved);
+    setSections(sectionsGroup.flatMap((section) => section));
+    setRecommended(sectionsRecommended);
+    setLoading(false);
+  };
 
   return (
-      <div className="d-flex justify-content-center">
-        <LoadingButton
-          className="w-100"
-          variant="contained"
-          color="primary"
-          onClick={handleGenerate}
-          loading={loading}
-        >
-          Run
-        </LoadingButton>
-      </div>
-    
+    <div className="d-flex justify-content-center">
+      <LoadingButton
+        className="w-100"
+        variant="contained"
+        color="primary"
+        onClick={() => handleGenerate()}
+        loading={loading}
+      >
+        Run
+      </LoadingButton>
+    </div>
   );
 };
 

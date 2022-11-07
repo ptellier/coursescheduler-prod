@@ -1,11 +1,12 @@
   // TODO: Implement this
 
-import { Section } from "../../data/DataDefinition/SectionDD"
+import { Section } from "../data/DataDefinition/SectionDD"
 
-
-export const cleanData = () => {
-
+export const cleanSections = (sections: Section[]) => {
+  return sections;
 }
+
+
 // example: 'Term 1-2', '^Fri', empty Days, Start Time, End Time, Missing Term, Missing Activity
 const checkAbnormalEntry = (sections:Section[]) => {
 
