@@ -52,7 +52,7 @@ const SearchBar = ({ addCourse }: SearchBarProps) => {
   return (
     <Autocomplete
       options={courseOptions}
-      sx={{ [`& fieldset`]: { borderRadius: "10px" }, mb: 1 }}
+      sx={{ [`& fieldset`]: { borderRadius: "10px" }, mb: 2 }}
       renderInput={(params) => <TextField {...params} label="Search Courses" />}
       onChange={(e, option) => handleUserSelectCourse(e, option)}
       onInputChange={(e) => debounceLoadCourseOptions(e)}

@@ -79,13 +79,14 @@ const CoursePanel = () => {
       <Box p={3}>
         <Term term={term} setTerm={setTerm} session={session} setSession={setSession} />
         <CourseSearchBar addCourse={addCourse} />
+        <Generate fetchReady={fetchReady} />
         {courses.map(
           (course) => (
             // Analyze.ts +
             <CourseInfo key={course.courseName} course={course} />
           )
         )}
-        <Generate fetchReady={fetchReady} />
+        
       </Box>
     </Paper>
   );

@@ -26,7 +26,7 @@ export const Term = ({term, setTerm, session, setSession}: TermProps) => {
     sx={{
       [`& fieldset`]: { borderRadius: "10px" },
       width: "100%",
-      mb:1
+      mb:2
     }}
   >
     <MenuItem key={1} value={"W1"}> Winter 1 (Sep - Dec)</MenuItem>

@@ -83,7 +83,7 @@ import React from "react";
 //     for (let sections of sectionsBatch) {
 //       checkSectionWithoutName(sections);
 //       checkAbnormalEntry(sections)
-    //   const filtered = filterByTermStatusActivity(sections, term, status, mode);
+//       const filtered = filterByTermStatusActivity(sections, term, status, mode);
 //       sectionsFiltered = [...sectionsFiltered, ...filtered];
 //       sectionsFilteredNested.push(filtered);
 //     }
