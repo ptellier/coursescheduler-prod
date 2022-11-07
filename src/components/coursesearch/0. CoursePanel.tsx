@@ -76,7 +76,7 @@ const CoursePanel = () => {
       style={{ minWidth: "20rem" }}
       sx={{ borderRadius: "20px" }}
     >
-      <Box p={4}>
+      <Box p={3}>
         <Term term={term} setTerm={setTerm} session={session} setSession={setSession} />
         <CourseSearchBar addCourse={addCourse} />
         {courses.map(
