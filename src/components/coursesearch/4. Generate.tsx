@@ -22,7 +22,7 @@ export const Generate = ({fetchReady}: GenerateProp) => {
    * @setLoading (false): turns off loading icon
    */
   const handleGenerate = () => {
-    const sectionsNoDuplicate = filterDuplicatedSchedules(sections.flatMap((s:Section) => s));
+    const sectionsNoDuplicate = filterDuplicatedSchedules(sections);
     const sectionsGroup = groupSections(sectionsNoDuplicate);
     const sectionsSolved = solve(sectionsGroup);
     const sectionsRecommended = recommend(sectionsSolved);

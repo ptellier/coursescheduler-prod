@@ -43,7 +43,7 @@ const CoursePanel = () => {
     setFetchReady(false);
     const newSections = await getSectionData(newCourse, term, session);
     setFetchReady(true);
-    setSections((sections: Section[]) => [...sections, newSections]);
+    setSections((sections: Section[]) => [...sections, ...newSections]);
     setCourses((courses: Course[]) => [...courses, newCourse]);
     setTotalCredits((totalCredits) => totalCredits + newCourse.credit);
   };
