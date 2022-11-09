@@ -5,8 +5,6 @@ import { useContext, useState } from "react";
 import { recommend } from "../../helpers/recommend";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { SectionsContext } from "../../context/SectionsContext";
-import { Section } from "../../data/DataDefinition/SectionDD";
-import { CircularProgress } from "@mui/material";
 
 type GenerateProp = {
   fetchReady: boolean
