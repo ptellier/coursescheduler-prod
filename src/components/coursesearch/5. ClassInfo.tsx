@@ -5,7 +5,7 @@ interface IProps {
     courseNumber?: string
 }
 
-export default function ClassInfo({ classType, courseNumber }: IProps) {
+export default function ClassInfo({ classType, courseNumber}: IProps) {
     return (
         <div style={{ display: 'flex', paddingBottom: '0.5rem', fontSize: '0.8rem' }}>
             <div className="leftBox" style={{ width: '50%' }}>

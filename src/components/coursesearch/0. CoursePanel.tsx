@@ -58,12 +58,18 @@ const CoursePanel = () => {
     }
 
     //TODO:
-    const removeCourse = () => {
+    const removeCourse = (course: Course) => {
+        const courseName = course.department + " " + course.courseNumber
         //setRecommended <- should be handled in context api when sections state change
         //setSections()
-        //setCourses()
         //setTotalCredits()
-        //removeCourseColor()
+        setCourses((courses:Course[]) => 
+          courses.filter((existingCourse: Course) => {
+            return ((existingCourse.department + " " + existingCourse.courseNumber) !== courseName)
+           }
+          )
+        );
+        removeCourseColor(courseName);
     }
 
     return (
@@ -80,7 +86,7 @@ const CoursePanel = () => {
                     <Box p={3}>
                         {courses.map((course) => (
                             // Analyze.ts +
-                            <CourseInfo key={course.courseName} course={course} />
+                            <CourseInfo key={course.courseNumber} course={course} removeCourse={removeCourse} />
                         ))}
                     </Box>
                 </Paper>
