@@ -9,6 +9,7 @@ import { CalandarMenu } from "./calendar/0. menu/CalandarMenu";
 import { CourseColorProvider } from "../context/CourseColorContext";
 import { SectionsProvider } from "../context/SectionsContext";
 import CoursePanel from "./coursesearch/0. CoursePanel";
+import { UndoRedoProvider } from "../context/UndoRedoContext";
 
 
 const Main: FC = () => {
@@ -17,6 +18,7 @@ const Main: FC = () => {
     <ThemeProvider theme={theme}>
       <SectionsProvider>
         <CourseColorProvider>
+          <UndoRedoProvider>
           <div className="Page">
             <TopNavigationBar />
             <Box m={2} sx={{ height: "100%" }}>
@@ -37,6 +39,7 @@ const Main: FC = () => {
               </div>
             </Box>
           </div>
+          </UndoRedoProvider>
         </CourseColorProvider>
       </SectionsProvider>
     </ThemeProvider>

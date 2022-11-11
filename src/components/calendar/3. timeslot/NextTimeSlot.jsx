@@ -5,6 +5,7 @@ import { SectionsContext } from '../../../context/SectionsContext';
 import { useTheme } from '@mui/material';
 import { HistoryContext } from '../../../context/HistoryContext';
 import { CourseColorContext } from '../../../context/CourseColorContext';
+import { UndoRedoContext } from '../../../context/UndoRedoContext';
 
 
 const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
@@ -13,7 +14,7 @@ const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
     const {focusedNextSection, focusNextSection, blurNextSection} = useContext(SectionsContext);
     const {currentSections, setCurrentSections} = useContext(SectionsContext);
     const {addToHistory} = useContext(HistoryContext);
-
+    const {record} = useContext(UndoRedoContext)
     const {getColor, getBackgroundColor} = useContext(CourseColorContext)
 
     const theme = useTheme();
@@ -63,9 +64,9 @@ const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
      const handleDrop = (from, to) => {
           const replacementIndex = currentSections.findIndex(section => section.id === from.id);
           let newCurrentSections = currentSections;
+          record(newCurrentSections);
           newCurrentSections.splice(replacementIndex, 1, to);
           setCurrentSections(newCurrentSections);
-          addToHistory(newCurrentSections);
       }
 
     
