@@ -10,18 +10,17 @@ import { SectionsContext } from '../../context/SectionsContext'
 import { Section } from '../../data/DataDefinition/SectionDD'
 import { Term } from './1. Term'
 import { getSectionData } from '../../api/GetSectionData'
+import { Recommendation } from '../../data/DataDefinition/Recommendation'
+import { Recommended } from '../../data/DataDefinition/RecommendDD'
 
 /**
- * Fetch
- * CourseSearchPaper: fetchedSections = [ [...121] [...110] [...210] ] ... 2DArray
- *  - CourseSearchBar : Trigger fetch
- *  - fetchedSections.map((idx, sections) =>  <ChosenCourse prop={...} >) ChosenCourse (Ryan)
- *  - Generate <- sectionsGlobal.flatMap(x => x), [ ...121 ...110 ...210 ]
+ * TODO:
+ * 1. Prevent user from exceeding over 18 credits
+ * 2. Fix Run button to have spinner/loading icon working
+ * 3. Enable history
+ * 4. Width of window
  */
 
-/**
- * delete function
- */
 
 const CoursePanel = () => {
     /** courses that users looked up and want to get schedule */
@@ -29,9 +28,9 @@ const CoursePanel = () => {
     const [session, setSession] = useState<string>('W')
     const [courses, setCourses] = useState<Course[]>([])
     const [totalCredits, setTotalCredits] = useState<number>(0)
-    const { sections, setSections } = useContext(SectionsContext)
-    const { addCourseColor, removeCourseColor } = useContext(CourseColorContext)
     const [fetchReady, setFetchReady] = useState(false)
+    const {setSections, recommended, setRecommended, changeCurrentSections } = useContext(SectionsContext)
+    const {addCourseColor, removeCourseColor } = useContext(CourseColorContext)
 
     const addCourse = async (courseOption: any) => {
         if (courseOption === null) throw Error('NULL')
@@ -57,18 +56,30 @@ const CoursePanel = () => {
         }
     }
 
-    //TODO:
     const removeCourse = (course: Course) => {
         const courseName = course.department + " " + course.courseNumber
-        //setRecommended <- should be handled in context api when sections state change
-        //setSections()
-        //setTotalCredits()
+        
+        setSections((sections:Section[]) => 
+          sections.filter(section => section.subject + " " + section.course !== courseName)
+        )
+
+        let recommended_:Recommendation = {compact: [], consistent: [], scatter: [], freeDay: []}
+        for (let [t, sections] of Object.entries<any>(recommended)) {
+          const newSections = sections.filter((section:Section) =>
+           section.subject + " " + section.course !== courseName
+           )
+           recommended_[t as keyof Recommendation] = newSections
+        }
+
+        setRecommended(recommended_)
+        changeCurrentSections(recommended_)
         setCourses((courses:Course[]) => 
           courses.filter((existingCourse: Course) => {
             return ((existingCourse.department + " " + existingCourse.courseNumber) !== courseName)
            }
           )
         );
+        setTotalCredits(credits => credits + course.credit)
         removeCourseColor(courseName);
     }
 
@@ -94,14 +105,4 @@ const CoursePanel = () => {
         </>
     )
 }
-
-//       // <Paper
-//       //   className="Paper"
-//       //   elevation={0}
-//       //   style={{ minWidth: "20rem" }}
-//       //   sx={{ borderRadius: "20px" }}
-//       // >
-//       <Box p={3}>
-// </Box>
-//       // </Paper>
 export default CoursePanel

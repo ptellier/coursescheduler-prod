@@ -1,10 +1,7 @@
-import { useState, FC, useEffect, useContext } from "react";
-import { Course } from "../data/DataDefinition/SearchWordDD";
-import { Section } from "../data/DataDefinition/SectionDD";
+import {  FC } from "react";
 import { Box, Stack } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import TopNavigationBar from "./topnavbar/TopNavigationBar";
-
 import Calendar from "./calendar/1. calendar/Calendar";
 import { theme } from "./Theme";
 import { HistoryProvider } from "../context/HistoryContext";
@@ -13,17 +10,6 @@ import { CourseColorProvider } from "../context/CourseColorContext";
 import { SectionsProvider } from "../context/SectionsContext";
 import CoursePanel from "./coursesearch/0. CoursePanel";
 
-
-/**
- * User selected course description
- * @typedef  {Object}   Course
- */
-export interface Recommendation {
-  compact: Section[];
-  consistent: Section[];
-  scatter: Section[];
-  freeDay: Section[];
-}
 
 const Main: FC = () => {
 
