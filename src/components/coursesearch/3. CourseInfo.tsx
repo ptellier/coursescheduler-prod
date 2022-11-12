@@ -10,9 +10,10 @@ import ClassInfo from './5. ClassInfo'
 
 type CourseInfoProp = {
     course: Course
+    removeCourse: Function
 }
 
-const CourseInfo = memo(({ course }: CourseInfoProp) => {
+const CourseInfo = (({ course, removeCourse }: CourseInfoProp) => {
     const [status, setStatus] = useState<string[]>(['Available', 'Full', 'Blocked', 'Restricted', 'STT'])
     const [mode, setMode] = useState<string[]>(['In-Person', 'Online', 'Hybrid'])
     const { sections } = useContext(SectionsContext)
@@ -31,6 +32,7 @@ const CourseInfo = memo(({ course }: CourseInfoProp) => {
             {/* {classTypes.lecture &&  */}
             <div style={{ backgroundColor: getBackgroundColor(name), overflow: 'hidden' }}>
                 {course.department} {course.courseNumber}
+                <IconButton onClick={() => removeCourse(course)} aria-label="delete"><ClearIcon fontSize='small' /></IconButton>
             </div>
             <Box>
                 {classTypes.lecture && <ClassInfo classType={'Lecture'} />}

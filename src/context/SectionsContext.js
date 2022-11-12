@@ -20,24 +20,6 @@ export const SectionsProvider = (props) => {
     /** indicates the current category of recommendation that user has selected */
     const [selectedRecommended, setSelectedRecommended] = useState(Recommended.compact)
 
-    /** Change currentSections according to user's selection of recommendation */
-    useEffect(() => {
-        switch (selectedRecommended) {
-            case Recommended.compact:
-                setCurrentSections(recommended.compact)
-                break;
-            case Recommended.scattered:
-                setCurrentSections(recommended.scatter)
-                break;
-            case Recommended.consistent:
-                setCurrentSections(recommended.consistent)
-                break;
-            default:
-                setCurrentSections(recommended.freeDay)
-                break;
-        }
-    }, [selectedRecommended, recommended])
-
     /** all sections that were fetched from web scrapper */
     const [sections, setSections] = useState([]); 
     
@@ -59,6 +41,28 @@ export const SectionsProvider = (props) => {
      * setFocusedNextSection: sets focused next section
      */
     const [focusedNextSection, setFocusedNextSection] = useState({})
+
+    /** Change currentSections according to user's selection of recommendation */
+    useEffect(() => {
+        changeCurrentSections(recommended)
+    }, [selectedRecommended, recommended])
+
+    const changeCurrentSections = (recommended) => {
+        switch (selectedRecommended) {
+            case Recommended.compact:
+                setCurrentSections(recommended.compact)
+                break;
+            case Recommended.scattered:
+                setCurrentSections(recommended.scatter)
+                break;
+            case Recommended.consistent:
+                setCurrentSections(recommended.consistent)
+                break;
+            default:
+                setCurrentSections(recommended.freeDay)
+                break;
+        }
+    }
 
     /**
      * MODIFIES: nextSections
@@ -123,6 +127,7 @@ export const SectionsProvider = (props) => {
             setRecommended:setRecommended,
 
             selectedRecommended:selectedRecommended,
+            changeCurrentSections: changeCurrentSections,
             setSelectedRecommended:setSelectedRecommended,
 
             sections: sections,
