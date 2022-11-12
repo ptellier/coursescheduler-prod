@@ -2,8 +2,6 @@ import { useContext, useEffect } from 'react'
 import {useDrop} from "react-dnd";
 import { timeToGridRow } from '../CalendarConstants';
 import { SectionsContext } from '../../../context/SectionsContext';
-import { useTheme } from '@mui/material';
-import { HistoryContext } from '../../../context/HistoryContext';
 import { CourseColorContext } from '../../../context/CourseColorContext';
 import { UndoRedoContext } from '../../../context/UndoRedoContext';
 
@@ -13,14 +11,9 @@ const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
     const courseName = section.subject + " " + section.course
     const {focusedNextSection, focusNextSection, blurNextSection} = useContext(SectionsContext);
     const {currentSections, setCurrentSections} = useContext(SectionsContext);
-    const {addToHistory} = useContext(HistoryContext);
     const {record} = useContext(UndoRedoContext)
-    const {getColor, getBackgroundColor} = useContext(CourseColorContext)
+    const {getColor} = useContext(CourseColorContext)
 
-    const theme = useTheme();
-    const textColors = theme.palette.calendarTimeSlotTextColors;
-    const dropAcceptedColor = theme.palette.calendarTimeSlotDropAccepted;
-    
     const [{ isOver }, drop] = useDrop(() => ({
         accept: "calendarTimeSlot",
         drop: (item) => {
@@ -77,7 +70,6 @@ const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
             gridColumn:timeSlot.day,
             borderStyle: isHoverTheSameSection() && ("dashed"),
             borderWidth: isHoverTheSameSection() && "2px",
-            color: isHoverTheSameSection() && dropAcceptedColor,
             transform: isHoverTheSameSection() && "scale(1.10)",
             borderColor : getColor(courseName),
 
@@ -92,8 +84,7 @@ const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
       <div className="outlined-cal-slot cal-slot"
           ref={drop}
           style={provideStyle()}
-      >
-          
+      >   
           <div>{section.subject}</div>
           <div>{section.course + " " + section.section}</div>
       </div>

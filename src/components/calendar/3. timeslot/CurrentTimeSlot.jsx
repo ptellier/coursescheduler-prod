@@ -2,7 +2,6 @@ import {useContext, useEffect} from "react";
 import {timeToGridRow} from "../CalendarConstants";
 import {useDrag} from "react-dnd";
 import { SectionsContext } from "../../../context/SectionsContext";
-import { useTheme } from '@mui/material';
 import ReportIcon from '@mui/icons-material/Report';
 import { CourseColorContext } from "../../../context/CourseColorContext";
 
@@ -61,7 +60,7 @@ const CurrentTimeSlot = ({section, timeSlot, isInOverlapGroup}) => {
              ref={drag}
              style={provideStyle()}
         >   
-            {isInOverlapGroup && <ReportIcon />}
+            {isInOverlapGroup && <ReportIcon fontSize="small" />}
             <div>{section.subject}</div>
             <div>{section.course + " " + section.section}</div>
         </div>
