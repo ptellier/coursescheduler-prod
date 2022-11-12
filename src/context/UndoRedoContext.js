@@ -1,21 +1,22 @@
 
-import { useState, createContext, useContext } from 'react'
+import { createContext, useContext } from 'react'
 import { SectionsContext } from './SectionsContext';
 
 export const UndoRedoContext = createContext();
 
 let undos = []
 let redos = []
-/**
- * 
- * @param {*} props allSections, CalandarPaper and its children
- * @returns all logic related to current and next sections and states
- */
+
+/*
+ * TODO: remame record => recordUndoRedo
+* TODO: remame clear => clearUndoRedo
+*/
+
 export const UndoRedoProvider = (props) => {
     const { currentSections, setCurrentSections } = useContext(SectionsContext);
     
     // invoked every drag & drop event
-    const record = (sections) => {
+    const recordUndo = (sections) => {
         undos.push([...sections])
     }
     
@@ -43,14 +44,20 @@ export const UndoRedoProvider = (props) => {
         return redos.length > 0;
     }
 
+    const clearUndoRedo = () => {
+        undos = []
+        redos = []
+    }
+
   
     return (
         <UndoRedoContext.Provider value={{
-            record:record,
+            record:recordUndo,
             undo: undo,
             redo: redo,
             canUndo:canUndo,
             canRedo:canRedo,
+            clearUndoRedo:clearUndoRedo
         }} >
             {props.children}
         </UndoRedoContext.Provider>

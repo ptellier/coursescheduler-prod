@@ -15,15 +15,15 @@ interface HistoryProps {
 
 
 const History = ({ prevent }: HistoryProps) => {
+
   const {undo, redo, canUndo, canRedo} = useContext(UndoRedoContext)
+  
   return (
     <ButtonGroup>
       <Tooltip title="Undo">
         <IconButton
           disabled={prevent || !canUndo() ? true : false}
           onClick={() => undo()}
-          // disabled={prevent || pointer === 0 ? true : false}
-          // onClick={() => showPrevInHistory()}
         >
           <UndoIcon fontSize="small" />
         </IconButton>
@@ -33,8 +33,6 @@ const History = ({ prevent }: HistoryProps) => {
         <IconButton
           disabled={prevent || !canRedo() ? true : false}
           onClick={() => redo()}
-          // disabled={prevent || pointer === history.length - 1 ? true : false}
-          // onClick={() => showNextInHistory()}
         >
           <RedoIcon fontSize="small" />
         </IconButton>
