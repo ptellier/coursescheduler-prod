@@ -1,13 +1,11 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import {Paper} from "@mui/material";
 import TopDayCells from "../layout/TopDayCells";
 import LeftTimeCells from "../layout/LeftTimeCells";
 import MainCells from "../layout/MainCells";
 import ConvertToTimeSlot from "../2. converter/ConvertToTimeSlot";
 import { SectionsContext } from "../../../context/SectionsContext";
-import { HistoryContext } from "../../../context/HistoryContext";
 import {useDrop} from "react-dnd";
-import { Recommended } from "../../../data/DataDefinition/RecommendDD";
 
 const Calendar = () => {
     const { currentSections, nextSections } = useContext(SectionsContext);

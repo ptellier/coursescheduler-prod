@@ -1,13 +1,14 @@
 import { useState, createContext } from 'react'
-import { red, pink, green, lime, lightGreen, lightBlue, grey, purple, yellow, orange, brown, teal, deepOrange } from '@mui/material/colors';
-import { useColorScheme } from '@mui/material';
+import { red, pink, green, lime, lightBlue, grey, purple, yellow, orange, brown, teal, deepOrange } from '@mui/material/colors';
 
 export const CourseColorContext = createContext();
 
-// let colors = [red[900], lightBlue[900], green[900], purple[900], orange[900], brown[900], teal[900]]
-// let backgroundColors = [red[100], lightBlue[100], green[100], purple[100], orange[100], brown[100], teal[100]]
-
 let availableColors = [
+    {colorName : "lime" , "color":lime[900], "backgroundColor":lime[100]},
+    {colorName : "pink" , "color":pink[900], "backgroundColor":pink[100]},
+    {colorName : "grey" , "color":grey[900], "backgroundColor":grey[100]},
+    {colorName : "deepOrange" , "color":deepOrange[900], "backgroundColor":deepOrange[100]},
+    {colorName : "yellow" , "color":yellow[900], "backgroundColor":yellow[100]},
     {colorName : "teal" , "color":teal[900], "backgroundColor":teal[100]},
     {colorName : "brown" , "color":brown[900], "backgroundColor":brown[100]},
     {colorName : "orange" , "color":orange[900], "backgroundColor":orange[100]},
@@ -22,7 +23,6 @@ let usedColors = []
 export const CourseColorProvider = (props) => {
 
     const [courseColors, setCourseColors] = useState({})
-    // const [usedColors, setUsedColors] = useState([])
 
     const addCourseColor = (courseName) => {
         let addingCourseColor = {}
@@ -38,11 +38,6 @@ export const CourseColorProvider = (props) => {
     const removeCourseColor = (courseName) => {  
         if (courseName in courseColors) {
             const removedColor = courseColors[courseName]
-            // remove color from usedColors
-            // setUsedColors(usedColors => 
-            //     usedColors.filter(color => 
-            //         color.colorName !== removedColor.colorName)
-            // )
             usedColors = usedColors.filter(usedColor => 
                 usedColor.colorName !== removedColor.colorName
             )

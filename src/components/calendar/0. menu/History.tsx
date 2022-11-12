@@ -21,21 +21,25 @@ const History = ({ prevent }: HistoryProps) => {
   return (
     <ButtonGroup>
       <Tooltip title="Undo">
+        <span>
         <IconButton
           disabled={prevent || !canUndo() ? true : false}
           onClick={() => undo()}
         >
           <UndoIcon fontSize="small" />
         </IconButton>
+        </span>
       </Tooltip>
 
       <Tooltip title="Redo">
+      <span>
         <IconButton
           disabled={prevent || !canRedo() ? true : false}
           onClick={() => redo()}
         >
           <RedoIcon fontSize="small" />
         </IconButton>
+        </span>
       </Tooltip>
     </ButtonGroup>
   );

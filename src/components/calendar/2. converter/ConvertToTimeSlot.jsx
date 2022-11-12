@@ -1,7 +1,4 @@
-import React from 'react'
-import useUniqueID from '../hook/useUniqueID';
 import HandleOverlapTimeSlots from './HandleOverlapTimeSlots';
-import { findCircularColorIndex } from '../../Theme';
 
 
 /**
@@ -38,7 +35,8 @@ const ConvertToTimeSlot = ({ currentSections, nextSections }) => {
       const timeSlots = [];
       for (const [index, section] of sections.entries()) {
           for (const time of section.schedule) {
-              timeSlots.push(createTimeSlot(section, time, isNext, findCircularColorIndex(index)));
+              // timeSlots.push(createTimeSlot(section, time, isNext, findCircularColorIndex(index)));
+              timeSlots.push(createTimeSlot(section, time, isNext));
           };
       };
       return timeSlots;
@@ -51,14 +49,14 @@ const ConvertToTimeSlot = ({ currentSections, nextSections }) => {
    * @param {boolean} isNext 
    * @returns {TimeSlot}
    */
-  const createTimeSlot = (section, time, isNext, colorIndex) => {
+  const createTimeSlot = (section, time, isNext) => {
       const timeSlot = {
           section: section,
           day: time.day,
           start_time: time.start_time,
           end_time: time.end_time,
           isNextTimeSlot: isNext,
-          colorIndex: colorIndex,
+          // colorIndex: colorIndex,
       };
       return timeSlot;
   }
