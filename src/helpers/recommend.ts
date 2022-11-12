@@ -20,10 +20,6 @@ import { convertToTimeSlot } from "./time";
     scatter: schedules.sort((sch1, sch2) => sch1.timeGap < sch2.timeGap ? 1 : -1)[0].sections,
     consistent: schedules.sort((sch1, sch2) => sch1.startVariance > sch2.startVariance ? 1 : -1)[0].sections,
     freeDay: schedules.sort((sch1, sch2) => sch1.numFreeDays < sch2.numFreeDays ? 1 : -1)[0].sections,
-    earlyStart: [],
-    lateStart: [],
-    earlyEnd: [],
-    lateEnd: [],
   }
   return result
 }

@@ -4,6 +4,7 @@ import { Section } from "../data/DataDefinition/SectionDD"
 
 export const cleanSections = (sections: Section[]) => {
   checkSectionWithoutName(sections)
+
   return filterWaitlist(sections);
 }
 
@@ -54,7 +55,6 @@ const checkAbnormalEntry = (sections:Section[]) => {
   }
 
   const filterWaitlist = (sections:Section[]) => {
-    // s.activity !== "Waiting List"
     return sections.filter(section => 
       section.activity !== "Waiting List"  
     )

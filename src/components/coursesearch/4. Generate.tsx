@@ -6,7 +6,6 @@ import { recommend } from "../../helpers/recommend";
 import { LoadingButton } from '@mui/lab';
 import { SectionsContext } from "../../context/SectionsContext";
 import { UndoRedoContext } from "../../context/UndoRedoContext";
-import { CircularProgress } from "@mui/material";
 
 type GenerateProp = {
   fetchReady: boolean
@@ -18,10 +17,7 @@ export const Generate = ({fetchReady}: GenerateProp) => {
   const { clearUndoRedo } = useContext(UndoRedoContext);
   const [loading, setLoading] = useState(false);
 
-  /** Update 'los' state with fetched data when a user generates schedule
-   * @setLoading (true): turns on loading icon
-   * @setLoading (false): turns off loading icon
-   */
+  /** solve and generate schedule recommendation */
   const handleGenerate = () => {
     const sectionsNoDuplicate = filterDuplicatedSchedules(sections);
     const sectionsGroup = groupSections(sectionsNoDuplicate);
