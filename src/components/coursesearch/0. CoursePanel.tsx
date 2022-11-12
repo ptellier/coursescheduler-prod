@@ -11,7 +11,7 @@ import { Section } from '../../data/DataDefinition/SectionDD'
 import { Term } from './1. Term'
 import { getSectionData } from '../../api/GetSectionData'
 import { Recommendation } from '../../data/DataDefinition/Recommendation'
-import { Recommended } from '../../data/DataDefinition/RecommendDD'
+import { UndoRedoContext } from '../../context/UndoRedoContext'
 
 /**
  * TODO:
@@ -31,6 +31,7 @@ const CoursePanel = () => {
     const [fetchReady, setFetchReady] = useState(false)
     const {setSections, recommended, setRecommended, changeCurrentSections } = useContext(SectionsContext)
     const {addCourseColor, removeCourseColor } = useContext(CourseColorContext)
+    const { clearUndoRedo } = useContext(UndoRedoContext);
 
     const addCourse = async (courseOption: any) => {
         if (courseOption === null) throw Error('NULL')
@@ -81,6 +82,7 @@ const CoursePanel = () => {
         );
         setTotalCredits(credits => credits + course.credit)
         removeCourseColor(courseName);
+        clearUndoRedo()
     }
 
     return (
