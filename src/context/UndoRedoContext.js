@@ -7,11 +7,6 @@ export const UndoRedoContext = createContext();
 let undos = []
 let redos = []
 
-/*
- * TODO: remame record => recordUndoRedo
-* TODO: remame clear => clearUndoRedo
-*/
-
 export const UndoRedoProvider = (props) => {
     const { currentSections, setCurrentSections } = useContext(SectionsContext);
     
