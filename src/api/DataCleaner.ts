@@ -3,9 +3,8 @@
 import { Section } from "../data/DataDefinition/SectionDD"
 
 export const cleanSections = (sections: Section[]) => {
-  checkSectionWithoutName(sections)
-
-  return filterWaitlist(sections);
+  const amendedSections = mergeSeparateSections(sections)
+  return filterWaitlist(amendedSections);
 }
 
 
@@ -33,26 +32,21 @@ const checkAbnormalEntry = (sections:Section[]) => {
     }
 }
 
-  /* Roll back a section without name to previous section with name
-   * Note: If a section has no name, this implicitly means that 
-   *       the section is related to immediate previous section
-   *       that has the same. CPSC 210 104 is an exmaple of this.
-   */
-  const checkSectionWithoutName = (sections: Section[]) => {
-    let next = 1;
-    for (let curr = 0; curr < sections.length - 1; curr++) {
-      if (!sections[next].name) {
-        // pick the schedule from next and merge with curr's 
-        const schedulePopped = sections[next].schedule;
-        sections[curr].schedule.push(...schedulePopped); 
-        // remove next time from the sections
-        sections.splice(next, 1);
-        next++;
-        curr++;
-      }
-      next++;
+const mergeSeparateSections = (sections:Section[]) => {
+  let curr = 0;
+  let next = 1;
+  while (curr < sections.length && next < sections.length) {
+    if (!sections[next].name) {
+      const schedulePopped = sections[next].schedule;
+      sections[curr].schedule.push(...schedulePopped); 
+    } else {
+      curr = next;  
     }
+    next++; 
   }
+  return sections.filter(s => s.name);
+}
+
 
   const filterWaitlist = (sections:Section[]) => {
     return sections.filter(section => 
