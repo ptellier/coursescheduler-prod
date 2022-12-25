@@ -5,7 +5,7 @@ import { fetchSection } from "./fetch";
 export const getSectionData = async(course:Course, term:string, session:string) => {
     const url:string = getURL(course, term, session);
     const sections = await fetchSection(url);
-    return cleanSections(sections);
+    return cleanSections(sections, {"term": term});
   }
 
   const getURL = (course:Course, term:string, session:string) => {

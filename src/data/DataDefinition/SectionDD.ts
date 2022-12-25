@@ -67,7 +67,7 @@ export type Day = "Mon" | "Tue" | "Wed" | "Thu" | "Fri"  //is it "Thur" or "Thur
  * Term a course is offered: "1", "2", or "summer"
  * @typedef {string} Term
  */
-export type Term = "1" | "2" | "1 - 2";
+export type Term = "1" | "2" | "1-2";
 
 /**
  * Registration availability: "Available", "Full", or "Restricted"

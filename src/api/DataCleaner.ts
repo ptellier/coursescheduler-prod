@@ -1,61 +1,77 @@
-  // TODO: Implement this
+import { Section, Timeslot } from "../data/DataDefinition/SectionDD"
 
-import { Section } from "../data/DataDefinition/SectionDD"
+export function cleanSections(sections:Section[], info:any) {
+  
+  const sectionsTobeCleaned = {
 
-export const cleanSections = (sections: Section[]) => {
-  checkSectionWithoutName(sections)
+    _sections: sections,
 
-  return filterWaitlist(sections);
-}
-
-
-// example: 'Term 1-2', '^Fri', empty Days, Start Time, End Time, Missing Term, Missing Activity
-const checkAbnormalEntry = (sections:Section[]) => {
-
-    const fixAbnormalDay = (section:Section) => {
-        section.schedule.forEach(sch => {
-            if (sch.day.includes("^")) sch.day.replace("^", "")
+    mergeSeparateSections() {
+      let curr = 0;
+      let next = 1;
+      while (curr < this._sections.length && next < this._sections.length) {
+        let currentSchedule = this._sections[curr].schedule;
+        let nextSchedule = this._sections[next].schedule;
+        if (!this._sections[next].name && 
+            !this._hasSameSchedules(currentSchedule, nextSchedule)) {
+          currentSchedule.push(...nextSchedule); 
+        } else {
+          curr = next;  
         }
-        )
-    }
-
-    const dropAbnormalTerm = (section:Section) => {
-        if (section.term.includes("1") && section.term.includes("2")) {
-        // section offered term 1-2
-        }
-    }
-
-    for (const section of sections) {
-        // Drop schedule with empty day
-        if (!section.schedule[0].day) {
-            //TODO: remove this section
-        }
-    }
-}
-
-  /* Roll back a section without name to previous section with name
-   * Note: If a section has no name, this implicitly means that 
-   *       the section is related to immediate previous section
-   *       that has the same. CPSC 210 104 is an exmaple of this.
-   */
-  const checkSectionWithoutName = (sections: Section[]) => {
-    let next = 1;
-    for (let curr = 0; curr < sections.length - 1; curr++) {
-      if (!sections[next].name) {
-        // pick the schedule from next and merge with curr's 
-        const schedulePopped = sections[next].schedule;
-        sections[curr].schedule.push(...schedulePopped); 
-        // remove next time from the sections
-        sections.splice(next, 1);
         next++;
-        curr++;
       }
-      next++;
-    }
-  }
+      this._sections = this._sections.filter(s => s.name);
+      return this;
+    },
 
-  const filterWaitlist = (sections:Section[]) => {
-    return sections.filter(section => 
-      section.activity !== "Waiting List"  
-    )
-  }
+    handleYearLongSections() {
+      for (let section of this._sections) {
+        if (section.term === "1-2") {
+          section.term = info.term;
+          section.schedule.forEach(timeslot => timeslot.term = info.term);
+        };
+      };
+      return this;
+    },
+
+    dropEmptyDaySections() {
+      this._sections = this._sections.filter(section => 
+        section.schedule.every(timeslot => timeslot.day)
+      );
+      return this;
+    },
+
+    dropEmptyTimeSections() {
+      this._sections = this._sections.filter(section => 
+        section.schedule.every(timeslot => 
+          timeslot.start_time &&
+          timeslot.end_time 
+        ));
+      return this;
+    },
+
+    dropWaitListSections() {
+      this._sections = this._sections.filter(section => 
+        section.activity !== "Waiting List"
+      );
+      return this;
+    },
+
+    getResult() {
+      return this._sections;
+    },
+
+    _hasSameSchedules(currentSchedule:Timeslot[], nextSchedule:Timeslot[]) {
+      return JSON.stringify(currentSchedule) === JSON.stringify(nextSchedule);
+    },
+
+  };
+
+  return sectionsTobeCleaned
+          .handleYearLongSections()
+          .mergeSeparateSections()
+          .dropEmptyDaySections()
+          .dropEmptyTimeSections()
+          .dropWaitListSections()
+          .getResult();
+};
