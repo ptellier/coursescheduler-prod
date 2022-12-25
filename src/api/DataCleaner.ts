@@ -1,55 +1,77 @@
-  // TODO: Implement this
+import { Section, Timeslot } from "../data/DataDefinition/SectionDD"
 
-import { Section } from "../data/DataDefinition/SectionDD"
+export function cleanSections(sections:Section[], info:any) {
+  
+  const sectionsTobeCleaned = {
 
-export const cleanSections = (sections: Section[]) => {
-  const amendedSections = mergeSeparateSections(sections)
-  return filterWaitlist(amendedSections);
-}
+    _sections: sections,
 
-
-// example: 'Term 1-2', '^Fri', empty Days, Start Time, End Time, Missing Term, Missing Activity
-const checkAbnormalEntry = (sections:Section[]) => {
-
-    const fixAbnormalDay = (section:Section) => {
-        section.schedule.forEach(sch => {
-            if (sch.day.includes("^")) sch.day.replace("^", "")
+    mergeSeparateSections() {
+      let curr = 0;
+      let next = 1;
+      while (curr < this._sections.length && next < this._sections.length) {
+        let currentSchedule = this._sections[curr].schedule;
+        let nextSchedule = this._sections[next].schedule;
+        if (!this._sections[next].name && 
+            !this._hasSameSchedules(currentSchedule, nextSchedule)) {
+          currentSchedule.push(...nextSchedule); 
+        } else {
+          curr = next;  
         }
-        )
-    }
+        next++;
+      }
+      this._sections = this._sections.filter(s => s.name);
+      return this;
+    },
 
-    const dropAbnormalTerm = (section:Section) => {
-        if (section.term.includes("1") && section.term.includes("2")) {
-        // section offered term 1-2
-        }
-    }
+    handleYearLongSections() {
+      for (let section of this._sections) {
+        if (section.term === "1-2") {
+          section.term = info.term;
+          section.schedule.forEach(timeslot => timeslot.term = info.term);
+        };
+      };
+      return this;
+    },
 
-    for (const section of sections) {
-        // Drop schedule with empty day
-        if (!section.schedule[0].day) {
-            //TODO: remove this section
-        }
-    }
-}
+    dropEmptyDaySections() {
+      this._sections = this._sections.filter(section => 
+        section.schedule.every(timeslot => timeslot.day)
+      );
+      return this;
+    },
 
-const mergeSeparateSections = (sections:Section[]) => {
-  let curr = 0;
-  let next = 1;
-  while (curr < sections.length && next < sections.length) {
-    if (!sections[next].name) {
-      const schedulePopped = sections[next].schedule;
-      sections[curr].schedule.push(...schedulePopped); 
-    } else {
-      curr = next;  
-    }
-    next++; 
-  }
-  return sections.filter(s => s.name);
-}
+    dropEmptyTimeSections() {
+      this._sections = this._sections.filter(section => 
+        section.schedule.every(timeslot => 
+          timeslot.start_time &&
+          timeslot.end_time 
+        ));
+      return this;
+    },
 
+    dropWaitListSections() {
+      this._sections = this._sections.filter(section => 
+        section.activity !== "Waiting List"
+      );
+      return this;
+    },
 
-  const filterWaitlist = (sections:Section[]) => {
-    return sections.filter(section => 
-      section.activity !== "Waiting List"  
-    )
-  }
+    getResult() {
+      return this._sections;
+    },
+
+    _hasSameSchedules(currentSchedule:Timeslot[], nextSchedule:Timeslot[]) {
+      return JSON.stringify(currentSchedule) === JSON.stringify(nextSchedule);
+    },
+
+  };
+
+  return sectionsTobeCleaned
+          .handleYearLongSections()
+          .mergeSeparateSections()
+          .dropEmptyDaySections()
+          .dropEmptyTimeSections()
+          .dropWaitListSections()
+          .getResult();
+};
