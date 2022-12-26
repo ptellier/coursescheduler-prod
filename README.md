@@ -1,6 +1,6 @@
 # UBC Scheduler
 
-UBC Scheduler is the ultimate scheduling web application for UBC Students. Using this awesome app, you can generate number of recommended schedules.
+UBC Scheduler is the ultimate course scheduling web app for UBC Students. Using this app, you can generate number of recommended schedules.
 
 
 ## Real-time course schedule data
@@ -20,7 +20,5 @@ You can choose among most consistent, compact, scattered or most free days sched
 Not satisfied with our recommendations? UBC Scheduler still got you.
 You can drag a timeslot from any recommended schedule to see the next possible slot you can move to.
 Explore different schedules unitl you find that just works for you!
-
-### Developed by Phillip Tellier and Seungwon Lim
 
 
