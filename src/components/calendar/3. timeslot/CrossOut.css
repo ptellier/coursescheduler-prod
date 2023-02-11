@@ -1,0 +1,30 @@
+.cross-out {
+    z-index:10;
+    /* background-image: repeating-linear-gradient(
+        -45deg,
+        transparent 0 20px,
+        rgb(218, 33, 33) 20px 40px
+    ); */
+    animation: glow 1s infinite alternate;
+    border-radius: 5px;
+}
+
+/* 
+@keyframes glow {
+    from {
+      box-shadow: 0 0 5px -2px red;
+    }
+    to {
+      box-shadow: 0 0 5px 2px red;
+    }
+} */
+@keyframes glow {
+    from {
+      box-shadow: 0 0 -4px -2px red;
+    }
+    to {
+      box-shadow: 0 0 5px 2px red;
+    }
+}
+
+
