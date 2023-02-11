@@ -60,7 +60,6 @@ const CurrentTimeSlot = ({section, timeSlot, isInOverlapGroup}) => {
              ref={drag}
              style={provideStyle()}
         >   
-            {isInOverlapGroup && <ReportIcon fontSize="small" />}
             <div>{section.subject}</div>
             <div>{section.course + " " + section.section}</div>
         </div>
