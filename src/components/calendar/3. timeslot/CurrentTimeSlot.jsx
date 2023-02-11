@@ -49,7 +49,7 @@ const CurrentTimeSlot = ({section, timeSlot, isInOverlapGroup}) => {
             backgroundColor: getBackgroundColor(courseName),
         }
         const overlapGroupStyle = {
-            height: (timeSlot.end_time - timeSlot.start_time)
+            height: (timeSlot.end_time - timeSlot.start_time - 4)
         }
         return isInOverlapGroup ? {...gridStyle, ...overlapGroupStyle} : gridStyle
     }

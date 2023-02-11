@@ -75,7 +75,7 @@ const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
 
         }
         const overlapGroupStyle = {
-            height: (timeSlot.end_time - timeSlot.start_time)
+            height: (timeSlot.end_time - timeSlot.start_time - 4)
         }
         return isInOverlapGroup ? {...gridStyle, ...overlapGroupStyle} : gridStyle
     }
