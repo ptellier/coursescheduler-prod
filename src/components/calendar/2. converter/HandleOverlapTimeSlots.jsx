@@ -1,7 +1,6 @@
 import { groupTimeSlotsByDays } from '../../../helpers/groupby';
 import OverlapTimeSlot from '../3. timeslot/OverlapTimeSlot';
 import useSortTimeSlots from '../hook/useSortTimeSlots';
-import useUniqueID from '../hook/useUniqueID';
 import SplitCurrentNextTimeSlot from './SplitCurrentNextTimeSlot'
 
 
@@ -19,6 +18,7 @@ const HandleOverlapTimeSlots = ({ timeSlots }) => {
             const sorted = sortTimeSlotsByStartTime(timeSlots)
             const groupByDay = groupTimeSlotsByDays(sorted)
             const groupByOverlap = groupByDay.map(group => groupOverlap(group));
+            console.log(groupByOverlap)
             const ungroupFromDay = groupByOverlap.flatMap(group => group);
             return ungroupFromDay
         } else {

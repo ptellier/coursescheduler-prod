@@ -12,7 +12,7 @@ const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
     const {focusedNextSection, focusNextSection, blurNextSection} = useContext(SectionsContext);
     const {currentSections, setCurrentSections} = useContext(SectionsContext);
     const {record} = useContext(UndoRedoContext)
-    const {getColor} = useContext(CourseColorContext)
+    const {getColor, getBackgroundColor} = useContext(CourseColorContext)
 
     const [{ isOver }, drop] = useDrop(() => ({
         accept: "calendarTimeSlot",
@@ -70,8 +70,10 @@ const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
             gridColumn:timeSlot.day,
             borderStyle: isHoverTheSameSection() && ("dashed"),
             borderWidth: isHoverTheSameSection() && "2px",
-            transform: isHoverTheSameSection() && "scale(1.10)",
+            backgroundColor: isHoverTheSameSection() && getBackgroundColor(courseName),
+            transition: "0.25s",
             borderColor : getColor(courseName),
+            color: getColor(courseName),
 
         }
         const overlapGroupStyle = {

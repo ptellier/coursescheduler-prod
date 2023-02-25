@@ -2,12 +2,11 @@ import {useContext, useEffect} from "react";
 import {timeToGridRow} from "../CalendarConstants";
 import {useDrag} from "react-dnd";
 import { SectionsContext } from "../../../context/SectionsContext";
-import ReportIcon from '@mui/icons-material/Report';
 import { CourseColorContext } from "../../../context/CourseColorContext";
 
 
 const CurrentTimeSlot = ({section, timeSlot, isInOverlapGroup}) => {
-    const {showNextSections, hideNextSections} = useContext(SectionsContext);
+    const {showNextSections, hideNextSections, greyout} = useContext(SectionsContext);
     const {getColor, getBackgroundColor} = useContext(CourseColorContext)
     const courseName = section.subject + " " + section.course
     
@@ -47,6 +46,8 @@ const CurrentTimeSlot = ({section, timeSlot, isInOverlapGroup}) => {
             gridColumn:timeSlot.day,   
             color: getColor(courseName),
             backgroundColor: getBackgroundColor(courseName),
+            opacity: greyout && 0.4
+            
         }
         const overlapGroupStyle = {
             height: (timeSlot.end_time - timeSlot.start_time - 4)

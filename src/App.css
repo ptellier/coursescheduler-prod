@@ -247,7 +247,11 @@ div.cal-background-grid.last-col.last-row {
     transition: transform 0.2s linear 0s;
 }
 .solid-cal-slot:hover {
-    transform: scale(1.1);
+    transform: scale(0.95);
+    cursor: move; /* fallback if grab cursor is unsupported */
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
 }
 
 .mini-map {
