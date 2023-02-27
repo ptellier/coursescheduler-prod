@@ -4,7 +4,6 @@ import { cleanSections } from './DataCleaner'
 
 export const getSections = async (department: string, courseNumber: string, term: string, session: string) => {
     const res = await fetch(`${process.env.REACT_APP_API_URL}api/${session}/sections?subject=${department}&number=${courseNumber}&term=${term}`)
-    console.log('res', res)
     const data = await res.json()
     return cleanSections(data.sections, { term: term })
 }
