@@ -5,7 +5,7 @@ import { Course } from '../../data/DataDefinition/SearchWordDD'
 import { ExpandMore, Clear } from '@mui/icons-material'
 import { convertTimeslotsToTime } from './generateSchedule/time'
 import { Section } from '../../data/DataDefinition/SectionDD'
-import { getSection } from '../../api/ApiWebCrawler'
+import { getSection } from '../../api/APIWebCrawler'
 import { BiBuildings, BiTime, BiUser, BiDoorOpen, BiMap } from 'react-icons/bi'
 
 // interface IProps {

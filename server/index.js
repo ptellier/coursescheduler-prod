@@ -44,14 +44,14 @@ app.get('/api/W/sections/detail', async (req, res) => {
  */
 app.get('/api/S/sections', async (req, res) => {
     const { subject, number, term, section } = req.query
-    const year = '2022'
+    const year = '2023'
     let data = await ubcCrawler.ubcCrawlCourse(`https://courses.students.ubc.ca/cs/courseschedule?tname=subj-course&course=${number}&sessyr=${year}&sesscd=S&dept=${subject}&pname=subjarea&section=${section}`, term)
     res.status(200).json({ sections: data })
 })
 
 app.get('/api/S/sections/detail', async (req, res) => {
     const { subject, number, section } = req.query //TODO => fix year
-    const year = '2022'
+    const year = '2023'
     const data = await ubcCrawler.ubcCrawlCourseSection(`https://courses.students.ubc.ca/cs/courseschedule?tname=subj-section&course=${number}&sessyr=${year}&sesscd=S&dept=${subject}&pname=subjarea&section=${section}`)
 
     res.status(200).json({ sections: data })
