@@ -9,7 +9,7 @@ import CourseInfo from './3. CourseInfo'
 import { SectionsContext } from '../../context/SectionsContext'
 import { Section } from '../../data/DataDefinition/SectionDD'
 import { Term } from './1. Term'
-import { getSectionData } from '../../api/GetSectionData'
+import { getSections } from '../../api/APIWebCrawler'
 import { Recommendation } from '../../data/DataDefinition/Recommendation'
 import { UndoRedoContext } from '../../context/UndoRedoContext'
 
@@ -21,7 +21,6 @@ import { UndoRedoContext } from '../../context/UndoRedoContext'
  * 4. Width of window
  */
 
-
 const CoursePanel = () => {
     /** courses that users looked up and want to get schedule */
     const [term, setTerm] = useState<string>('1')
@@ -29,9 +28,9 @@ const CoursePanel = () => {
     const [courses, setCourses] = useState<Course[]>([])
     const [totalCredits, setTotalCredits] = useState<number>(0)
     const [fetchReady, setFetchReady] = useState(false)
-    const {setSections, recommended, setRecommended, changeCurrentSections } = useContext(SectionsContext)
-    const {addCourseColor, removeCourseColor } = useContext(CourseColorContext)
-    const { clearUndoRedo } = useContext(UndoRedoContext);
+    const { setSections, recommended, setRecommended, changeCurrentSections } = useContext(SectionsContext)
+    const { addCourseColor, removeCourseColor } = useContext(CourseColorContext)
+    const { clearUndoRedo } = useContext(UndoRedoContext)
 
     const addCourse = async (courseOption: any) => {
         if (courseOption === null) throw Error('NULL')
@@ -41,7 +40,7 @@ const CoursePanel = () => {
         addCourseColor(courseOption.key)
         const newCourse = createNewCourse(courseOption)
         setFetchReady(false)
-        const newSections = await getSectionData(newCourse, term, session)
+        const newSections = await getSections(newCourse.department, newCourse.courseNumber, term, session)
         setFetchReady(true)
         setSections((sections: Section[]) => [...sections, ...newSections])
         setCourses((courses: Course[]) => [...courses, newCourse])
@@ -58,30 +57,25 @@ const CoursePanel = () => {
     }
 
     const removeCourse = (course: Course) => {
-        const courseName = course.department + " " + course.courseNumber
-        
-        setSections((sections:Section[]) => 
-          sections.filter(section => section.subject + " " + section.course !== courseName)
-        )
+        const courseName = course.department + ' ' + course.courseNumber
 
-        let recommended_:Recommendation = {compact: [], consistent: [], scatter: [], freeDay: []}
+        setSections((sections: Section[]) => sections.filter((section) => section.subject + ' ' + section.course !== courseName))
+
+        let recommended_: Recommendation = { compact: [], consistent: [], scatter: [], freeDay: [] }
         for (let [t, sections] of Object.entries<any>(recommended)) {
-          const newSections = sections.filter((section:Section) =>
-           section.subject + " " + section.course !== courseName
-           )
-           recommended_[t as keyof Recommendation] = newSections
+            const newSections = sections.filter((section: Section) => section.subject + ' ' + section.course !== courseName)
+            recommended_[t as keyof Recommendation] = newSections
         }
 
         setRecommended(recommended_)
         changeCurrentSections(recommended_)
-        setCourses((courses:Course[]) => 
-          courses.filter((existingCourse: Course) => {
-            return ((existingCourse.department + " " + existingCourse.courseNumber) !== courseName)
-           }
-          )
-        );
-        setTotalCredits(credits => credits + course.credit)
-        removeCourseColor(courseName);
+        setCourses((courses: Course[]) =>
+            courses.filter((existingCourse: Course) => {
+                return existingCourse.department + ' ' + existingCourse.courseNumber !== courseName
+            })
+        )
+        setTotalCredits((credits) => credits + course.credit)
+        removeCourseColor(courseName)
         clearUndoRedo()
     }
 
