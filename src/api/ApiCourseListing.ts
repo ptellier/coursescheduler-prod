@@ -12,7 +12,7 @@ export const fetchCourseDesc = async (sw: SearchWord) => {
     const data = await res.json()
     return data
 }
-
+//
 /**
  * a helper for fetchCourseDesc, needed for url format
  * parse user's raw input of search word then return
