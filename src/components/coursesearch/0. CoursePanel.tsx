@@ -9,7 +9,7 @@ import CourseInfo from './3. CourseInfo'
 import { SectionsContext } from '../../context/SectionsContext'
 import { Section } from '../../data/DataDefinition/SectionDD'
 import { Term } from './1. Term'
-import { getSections } from '../../api/APIWebCrawler'
+import { getSections } from '../../api/APIWebCrawlers'
 import { Recommendation } from '../../data/DataDefinition/Recommendation'
 import { UndoRedoContext } from '../../context/UndoRedoContext'
 

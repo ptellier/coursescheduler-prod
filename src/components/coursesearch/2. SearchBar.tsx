@@ -1,6 +1,6 @@
 import { Autocomplete, debounce, TextField } from '@mui/material'
 import { useState } from 'react'
-import { fetchCourseDesc } from '../../api/APICourseListing'
+import { fetchCourseDesc } from '../../api/APICourseListings'
 
 interface SearchBarProps {
     addCourse: Function
