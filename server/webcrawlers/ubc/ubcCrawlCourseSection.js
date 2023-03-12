@@ -14,8 +14,8 @@ const ubcCrawlCourseSection = async (url, term) => {
     let html = await helperFn.retrieveHTML(url)
     const $ = cheerio.load(html)
     // const course = $('body > div.container > div.content.expand > h4').text()
-    const building = $('body > div.container > div.content.expand > table.table.table-striped:not(.sortable) > tbody > tr > td:nth-child(5)').text()
-    const room = $('body > div.container > div.content.expand > table.table.table-striped:not(.sortable) > tbody > tr > td:nth-child(6) > a').text()
+    const building = $('body > div.container > div.content.expand > table.table.table-striped:not(.sortable) > tbody > tr > td:nth-child(5)').first().text()
+    const room = $('body > div.container > div.content.expand > table.table.table-striped:not(.sortable) > tbody > tr > td:nth-child(6) > a').first().text()
     const roomUrl = $('body > div.container > div.content.expand > table.table.table-striped:not(.sortable) > tbody > tr > td:nth-child(6) > a').attr('href')
 
     const totalSeatsRemaining = $('body > div.container > div.content.expand > table:not(.table) > tbody > tr:nth-child(1) > td > strong').html()
