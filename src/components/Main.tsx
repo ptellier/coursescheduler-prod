@@ -28,7 +28,7 @@ const Main: FC = () => {
                                         <Stack direction="column" spacing={0.5} style={{position: "relative"}}>
                                             <CalandarMenu />
                                             <Calendar />
-                                            <DragDropDialog open={true} />
+                                            <DragDropDialog />
                                         </Stack>
                                     </div>
                                 </div>

@@ -1,58 +1,148 @@
-import React, { ReactChildren } from 'react'
-import dndGIF from './generate.gif';
+import React, { useContext, useEffect, useState } from 'react'
+import { SectionsContext } from '../../context/SectionsContext';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Checkbox from '@mui/material/Checkbox';
+import dndGIF from './DragDrop.gif';
+import { Button, FormControlLabel } from '@mui/material';
 
-type DragDropDialogProps = {
-  open: boolean
+
+type CloseButtonProps = {
+  fnClose: Function
+  variant: string
 }
 
-type ContentProps = {
-  children: JSX.Element
+type DoNotShowAgainProps = {
+  disableDialog:boolean,
+  setDisableDialog:Function
 }
 
-export const DragDropDialog = (props: DragDropDialogProps) => {
-  const {open} = props;
+type Wrapper = {
+  children: JSX.Element[]
+}
 
-  if (open) {
-    return ( 
-      <Content>
-        <GIF />
-      </Content>
-    )
+
+export const DragDropDialog = () => {
+
+  const { recommended } = useContext(SectionsContext);
+  const [isOpen, setIsOpen] = useState(false);
+  const [disableDialog, setDisableDialog] = useState(false);
+
+  useEffect(() => {
+    let doNotshowDialog = "disable-dnd-dialog" in window.sessionStorage || "disable-dnd-dialog" in window.localStorage;
+    setTimeout(() => {
+      (!doNotshowDialog && recommended.compact.length > 0) && setIsOpen(true);
+    }, 1000)
+  }, [recommended]);
+
+  function closeDialog() {
+    setIsOpen(false);
+    if (disableDialog) {
+      window.localStorage["disable-dnd-dialog"] = true;
+    } else {
+      window.sessionStorage["disable-dnd-dialog"] = true;
+    }
   }
-  return <></>
+  
+  if (isOpen) {
+    return ( 
+      <Layout>
+        <CloseButton variant="icon" fnClose={closeDialog}/>
+        <GIF />
+        <Content >
+          <Message />
+          <Controls >
+            <DoNotShowAgain disableDialog={disableDialog} setDisableDialog={setDisableDialog}/>
+            <CloseButton variant="button" fnClose={closeDialog}/>
+          </Controls>
+        </Content>
+      </Layout>
+    );
+  };
+  return <></>;
 }
 
 const GIF = () => {
-  return ( 
-    <img style={{}} height={"90%"} width={"100%"} src={dndGIF} /> 
-    
-  )
+  return  <img style={GIFstyle} src={dndGIF} />;
 }
 
-const Content = ({children}:ContentProps) => {
+const CloseButton = ({fnClose, variant} : CloseButtonProps) => {
   return (
-    <div style={{position: "absolute", ...contentStyle}} >
+    <div style={CloseButtonStyle}>
+      {variant === 'icon'   && <IconButton onClick={() => fnClose()}><CloseIcon /></IconButton>}
+      {variant === 'button' && <Button variant="contained" onClick={() => fnClose()} >Close</Button>}
+    </div>
+  );
+}
+
+
+const DoNotShowAgain = ({disableDialog, setDisableDialog}: DoNotShowAgainProps) => {
+  return (
+      <FormControlLabel 
+        control={<Checkbox checked={disableDialog} onChange={() => setDisableDialog(!disableDialog)}/>} 
+        label="Do not show me this again" 
+      />
+  );
+}
+const Message = () => {
+  return <p style={MessageStyle}>See other available sections by drag and drop</p>;
+}
+
+
+const Layout = ({children} : Wrapper) => {
+  return (
+    <div className="layout" style={{position: "absolute", ...LayoutStyle}}>
       {children}
      </div>
-  )
+  );
+}
+
+const Content = ({children}: Wrapper) => {
+  return <div style={ContentStyle}>{children}</div>;
+}
+
+const Controls = ({children}: Wrapper) => {
+  return <div style={ControlsStyle}>{children}</div>;
 }
 
 
 // Styles:
-const contentStyle = {
-  height: "40%",
-  width: "40%",
+const MessageStyle = {
+  fontSize: 'calc(10px + 2vmin)'
+}
+
+const ContentStyle = {
+  marginTop: 15
+}
+
+const ControlsStyle = {
+  display: 'flex',
+  justifyContent: 'space-between'
+}
+
+
+// if mobile, left: 10%, width 300px height 500px
+const LayoutStyle = {
+  height: 500,
+  width: 400,
   backgroundColor: 'white',
   padding: 10,
   border: '5px solid #c4c4c4',
   borderRadius: 10,
   zIndex:10,
-  top: "20%",
-  left: "30%"
+  top: "50%",
+  left: "50%",
+  transform: 'translate(-50%, -50%)'
 }
 
-const gifStyle = {
+const GIFstyle = {
   borderRadius: 10,
-  height: '85%',
-  width: '100%'
+  height: '60%',
+  width: '100%',
+}
+
+const CloseButtonStyle = {
+  display:'flex', 
+  justifyContent: 'end', 
+  alignItems: 'center',
 }
