@@ -89,6 +89,8 @@ const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
       >   
           <div>{section.subject}</div>
           <div>{section.course + " " + section.section}</div>
+          {section.status !== "Available" && <span style={{fontSize:'calc(1px + 1vmin)'}}>{section.status}</span>}
+
       </div>
     )
 }

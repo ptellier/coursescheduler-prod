@@ -18,7 +18,6 @@ const HandleOverlapTimeSlots = ({ timeSlots }) => {
             const sorted = sortTimeSlotsByStartTime(timeSlots)
             const groupByDay = groupTimeSlotsByDays(sorted)
             const groupByOverlap = groupByDay.map(group => groupOverlap(group));
-            console.log(groupByOverlap)
             const ungroupFromDay = groupByOverlap.flatMap(group => group);
             return ungroupFromDay
         } else {
