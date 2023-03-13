@@ -31,7 +31,7 @@ export const DragDropDialog = () => {
   useEffect(() => {
     let doNotshowDialog = "disable-dnd-dialog" in window.sessionStorage || "disable-dnd-dialog" in window.localStorage;
     setTimeout(() => {
-      (!doNotshowDialog && recommended.compact.length > 0) && setIsOpen(true);
+      (!doNotshowDialog && recommended.compact.length > 0 && !disableDialog) && setIsOpen(true);
     }, 1000)
   }, [recommended]);
 
@@ -40,7 +40,7 @@ export const DragDropDialog = () => {
     if (disableDialog) {
       window.localStorage["disable-dnd-dialog"] = true;
     } else {
-      window.sessionStorage["disable-dnd-dialog"] = true;
+      setDisableDialog(true);
     }
   }
   
@@ -102,29 +102,29 @@ const Content = ({children}: Wrapper) => {
 }
 
 const Controls = ({children}: Wrapper) => {
-  return <div style={ControlsStyle}>{children}</div>;
+  return <div style={{position:'absolute', ...ControlsStyle}}>{children}</div>;
 }
 
 
 // Styles:
 const MessageStyle = {
-  fontSize: 'calc(10px + 2vmin)'
+  fontSize: 20,
 }
 
 const ContentStyle = {
-  marginTop: 15
+  marginTop: 10
 }
 
 const ControlsStyle = {
   display: 'flex',
-  justifyContent: 'space-between'
+  justifyContent: 'space-between',
+  minWidth: '95%',
+  bottom:0,
 }
 
-
-// if mobile, left: 10%, width 300px height 500px
 const LayoutStyle = {
   height: 500,
-  width: 400,
+  width: 450,
   backgroundColor: 'white',
   padding: 10,
   border: '5px solid #c4c4c4',
