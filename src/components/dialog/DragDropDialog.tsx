@@ -91,7 +91,7 @@ const Message = () => {
 
 const Layout = ({children} : Wrapper) => {
   return (
-    <div className="layout" style={{position: "absolute", ...LayoutStyle}}>
+    <div style={{position: "absolute", ...LayoutStyle}}>
       {children}
      </div>
   );
