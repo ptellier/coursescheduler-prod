@@ -124,7 +124,7 @@ const ControlsStyle = {
 
 const LayoutStyle = {
   height: 500,
-  width: 450,
+  width: 'calc(100px + 50vmin)',
   backgroundColor: 'white',
   padding: 10,
   border: '5px solid #c4c4c4',
