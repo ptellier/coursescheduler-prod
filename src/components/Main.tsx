@@ -8,6 +8,7 @@ import { CourseColorProvider } from '../context/CourseColorContext'
 import { SectionsProvider } from '../context/SectionsContext'
 import CoursePanel from './coursesearch/0. CoursePanel'
 import { UndoRedoProvider } from '../context/UndoRedoContext'
+import { DragDropDialog } from './dialog/DragDropDialog'
 
 const Main: FC = () => {
     return (
@@ -24,9 +25,10 @@ const Main: FC = () => {
                                         </Stack>
                                     </div>
                                     <div className="main-page-right">
-                                        <Stack direction="column" spacing={0.5}>
+                                        <Stack direction="column" spacing={0.5} style={{position: "relative"}}>
                                             <CalandarMenu />
                                             <Calendar />
+                                            <DragDropDialog />
                                         </Stack>
                                     </div>
                                 </div>
