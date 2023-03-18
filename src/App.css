@@ -311,7 +311,6 @@ div.cal-background-grid.last-col.last-row {
     display: inline-flex;
 }
 
-
 ::-webkit-scrollbar-track {
     background-color: transparent;
 }
@@ -330,4 +329,17 @@ div.cal-background-grid.last-col.last-row {
 .schedule-options-container {
     margin: auto;
     width: min-content;
+}
+
+/* Class Info */
+.flex-space-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+.instruction-info {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200;
 }
