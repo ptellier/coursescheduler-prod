@@ -1,7 +1,6 @@
 import { groupTimeSlotsByDays } from '../../../helpers/groupby';
 import OverlapTimeSlot from '../3. timeslot/OverlapTimeSlot';
 import useSortTimeSlots from '../hook/useSortTimeSlots';
-import useUniqueID from '../hook/useUniqueID';
 import SplitCurrentNextTimeSlot from './SplitCurrentNextTimeSlot'
 
 

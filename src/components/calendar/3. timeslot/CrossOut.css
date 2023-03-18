@@ -1,0 +1,29 @@
+.cross-out {
+    z-index: 15;
+    /* background-image: repeating-linear-gradient(
+        -45deg,
+        transparent 0 20px,
+        rgb(218, 33, 33) 20px 40px
+    ); */
+    /* animation: glow 2s infinite alternate; */
+    /* border: 3px solid red; */
+    /* border-color: rgba(255, 10, 10, 0.84); */
+    /* border: 3px solid red; */
+    background-color: rgba(233, 0, 0, 0.4);
+    /* box-shadow: 0 0 2px 2px red; */
+    border-radius: 5px;
+}
+
+@keyframes glow {
+    from {
+      /* box-shadow: 0 0 -4px -2px red; */
+      background-color: rgba(255, 0, 0, 0);
+    }
+    to {
+      /* box-shadow: 0 0 5px 2px red; */
+      background-color: rgba(255, 10, 10, 0.84);
+
+    }
+}
+
+

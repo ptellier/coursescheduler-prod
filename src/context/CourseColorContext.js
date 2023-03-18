@@ -4,8 +4,8 @@ import { red, pink, green, lime, lightBlue, grey, purple, yellow, orange, brown,
 export const CourseColorContext = createContext();
 
 let availableColors = [
-    {colorName : "lime" , "color":lime[900], "backgroundColor":lime[100]},
     {colorName : "pink" , "color":pink[900], "backgroundColor":pink[100]},
+    {colorName : "lime" , "color":lime[900], "backgroundColor":lime[100]},
     {colorName : "grey" , "color":grey[900], "backgroundColor":grey[100]},
     {colorName : "deepOrange" , "color":deepOrange[900], "backgroundColor":deepOrange[100]},
     {colorName : "yellow" , "color":yellow[900], "backgroundColor":yellow[100]},
@@ -15,7 +15,6 @@ let availableColors = [
     {colorName : "purple" , "color":purple[900], "backgroundColor":purple[100]},
     {colorName : "green" , "color":green[900], "backgroundColor":green[100]},
     {colorName : "lightBlue" , "color":lightBlue[900], "backgroundColor":lightBlue[100]},
-    {colorName : "red" , "color":red[900], "backgroundColor":red[100]},
  ]
 
 let usedColors = []

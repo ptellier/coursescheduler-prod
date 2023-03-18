@@ -10,6 +10,8 @@ export const SectionsContext = createContext();
 
 export const SectionsProvider = (props) => {
 
+    const [greyout, setGreyout] = useState(false);
+
     /** sections that were recommended, each array is a recommendation */
     const [recommended, setRecommended] = useState (
         {
@@ -73,6 +75,7 @@ export const SectionsProvider = (props) => {
      */
     const showNextSections = (section) => {
         const sections = getNextSections(section)
+        setGreyout(true);
         setNextSections(sections)
     }
 
@@ -100,6 +103,8 @@ export const SectionsProvider = (props) => {
      *          by setting it to empty array
      */
     const hideNextSections = () => {
+        // TODO3: stop grey out, give back colors
+        setGreyout(false);
         setNextSections([])
     }
 
@@ -144,6 +149,8 @@ export const SectionsProvider = (props) => {
             focusedNextSection: focusedNextSection,
             focusNextSection: focusNextSection,
             blurNextSection: blurNextSection,
+
+            greyout:greyout,
         }} >
             {props.children}
         </SectionsContext.Provider>

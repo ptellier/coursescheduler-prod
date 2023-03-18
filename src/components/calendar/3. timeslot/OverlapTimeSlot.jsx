@@ -4,8 +4,7 @@ import { timeToGridRow } from '../CalendarConstants'
 import useSortTimeSlots from '../hook/useSortTimeSlots';
 import useUniqueID from '../hook/useUniqueID';
 import { getGapTimes, gapTimesToTimeSlots } from './useGap';
-
-
+import './CrossOut.css'
 
 const OverlapTimeSlot = ({ group }) => {
     
@@ -110,12 +109,13 @@ const OverlapTimeSlot = ({ group }) => {
     }
 
     return (
-        <div style={{
-             display:'flex',
-             gridRow: timeToGridRow(groupStartTime) 
-                    + " / " 
-                    + timeToGridRow(groupEndTime),
-             gridColumn:day,
+        <div className="cross-out"
+             style={{
+                display:'flex',
+                gridRow: timeToGridRow(groupStartTime) 
+                        + " / " 
+                        + timeToGridRow(groupEndTime),
+                gridColumn:day,
             }}
         >
             {/* create a column <div> that holds timeslots vertically for each subgroup,
