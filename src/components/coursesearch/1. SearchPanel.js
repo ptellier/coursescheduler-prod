@@ -49,6 +49,7 @@ const SearchPanel = memo(({ coursesInfo, setCoursesInfo }) => {
             setSections((sections) => [...sections, ...newSections])
 
             // Sort Sections into labs, lectures, tutorial etc...
+            // Add Property "selected" to Sections
             const organizedSections = organizeSections(newSections)
 
             // Get Total Credits
