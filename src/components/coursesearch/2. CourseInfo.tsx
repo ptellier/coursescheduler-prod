@@ -12,13 +12,15 @@ import CoPresentIcon from '@mui/icons-material/CoPresent'
 import ClassIcon from '@mui/icons-material/Class'
 import { Section } from '../../data/DataDefinition/SectionDD'
 import { UndoRedoContext } from '../../context/UndoRedoContext'
+import { tCoursesInfo, tCourseInfo } from '../../data/DataDefinition/CourseInfoDD'
+import { removeCourse } from './removeCourse/removeCourse'
 
-// type CourseInfoProp = {
-//     course: Course
-//     removeCourse: Function
-// }
+type CourseInfoProps = {
+    course: tCourseInfo
+    setCoursesInfo: React.Dispatch<React.SetStateAction<tCoursesInfo>>
+}
 
-const CourseInfo = memo(({ course, setCoursesInfo }) => {
+const CourseInfo = memo(({ course, setCoursesInfo }: CourseInfoProps) => {
     const name = `${course.department} ${course.courseNumber}`
     return (
         <div style={{ paddingBottom: 15 }}>
@@ -49,48 +51,18 @@ const CourseInfo = memo(({ course, setCoursesInfo }) => {
 
 export default CourseInfo
 
-const RemoveCourseButton = memo(({ course, setCoursesInfo }) => {
-    const { setSections, recommended, setRecommended, changeCurrentSections } = useContext(SectionsContext)
-    const { clearUndoRedo } = useContext(UndoRedoContext)
-    const { removeCourseColor } = useContext(CourseColorContext)
+type RemoveCourseButtonProps = {
+    course: tCourseInfo
+    setCoursesInfo: React.Dispatch<React.SetStateAction<tCoursesInfo>>
+}
 
-    const removeCourse = (course) => {
-        // Get Course Name Course
-        const courseName = course.department + ' ' + course.courseNumber
-
-        // Filter Removed Course from Sections
-        setSections((sections) => sections.filter((section) => section.subject + ' ' + section.course !== courseName))
-
-        // Set New Recommended Sections
-        let recommended_ = { compact: [], consistent: [], scatter: [], freeDay: [] }
-        for (let [t, sections] of Object.entries(recommended)) {
-            const newSections = sections.filter((section) => section.subject + ' ' + section.course !== courseName)
-            recommended_[t] = newSections
-        }
-
-        setRecommended(recommended_)
-        changeCurrentSections(recommended_)
-
-        // Set Courses Info -> local state
-        // 1. Get new total credits
-        // 2. Get filter out removed course
-        setCoursesInfo((coursesInfo) => {
-            const courses = coursesInfo.courses.filter((existingCourse) => {
-                return existingCourse.department + ' ' + existingCourse.courseNumber !== courseName
-            })
-            const totalCredits = coursesInfo.credits - course.credit
-
-            return { ...coursesInfo, totalCredits, courses }
-        })
-
-        // Remove Course Color
-        removeCourseColor(courseName)
-
-        clearUndoRedo()
-    }
+const RemoveCourseButton = memo(({ course, setCoursesInfo }: RemoveCourseButtonProps) => {
+    const sectionsContextValues = useContext(SectionsContext)
+    const undoRedoContextValues = useContext(UndoRedoContext)
+    const courseColorContextValues = useContext(CourseColorContext)
 
     return (
-        <IconButton onClick={() => removeCourse(course)} aria-label="delete">
+        <IconButton onClick={() => removeCourse({ course, setCoursesInfo, sectionsContextValues, undoRedoContextValues, courseColorContextValues })} aria-label="delete">
             <ClearIcon fontSize="small" />
         </IconButton>
     )

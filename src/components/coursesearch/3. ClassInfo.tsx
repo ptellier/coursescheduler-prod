@@ -36,7 +36,7 @@ const ClassInfo = memo(({ classType, course, icon }: IProps) => {
         }
         // Only updates when specific course section changes - eg CPSC 110 LAB
     }, [currentSections.filter((currentSection: Section) => currentSection.activity == classType && currentSection.subject == course.department && currentSection.course == course.courseNumber)[0]])
-    console.log('sectionInfo', sectionInfo)
+
     return (
         <>
             <Accordion disableGutters disabled={sectionInfo == null}>

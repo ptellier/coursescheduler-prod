@@ -27,6 +27,7 @@ export interface Section {
     schedule: Timeslot[]
     isNextMove?: boolean
     isOnTarget?: boolean
+    selectedForScheduleSolver?: boolean
 }
 
 /**

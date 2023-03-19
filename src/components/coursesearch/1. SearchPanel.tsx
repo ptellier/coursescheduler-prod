@@ -12,71 +12,21 @@ import { checkCourseCreditLimit, checkDuplicateCourse } from './generateSchedule
 import { getSections } from '../../api/APIWebCrawler'
 import { CourseColorContext } from '../../context/CourseColorContext'
 import { organizeSections } from './generateSchedule/organizeSections'
+import { tCoursesInfo, tCourseOption, tCourseColors } from '../../data/DataDefinition/CourseInfoDD'
+import { Section } from '../../data/DataDefinition/SectionDD'
+import { addCourse } from './addCourse/addCourse'
+import { generateSchedule } from './generateSchedule/generateSchedule'
 
-const SearchPanel = memo(({ coursesInfo, setCoursesInfo }) => {
+type SearchPanelProps = {
+    coursesInfo: tCoursesInfo
+    setCoursesInfo: React.Dispatch<React.SetStateAction<tCoursesInfo>>
+}
+
+const SearchPanel = memo(({ coursesInfo, setCoursesInfo }: SearchPanelProps) => {
     const [courseOptions, setCourseOptions] = useState([])
     const { sections, setSections, setRecommended } = useContext(SectionsContext)
     const { addCourseColor } = useContext(CourseColorContext)
-    const [isGeneratingSchedule, setIsGeneratingSchedule] = useState(false)
     const { clearUndoRedo } = useContext(UndoRedoContext)
-
-    /** solve and generate schedule recommendation */
-    const handleGenerate = () => {
-        setIsGeneratingSchedule(true)
-        const sectionsNoDuplicate = filterDuplicatedSchedules(sections)
-        const sectionsGroup = groupSections(sectionsNoDuplicate)
-        const sectionsSolved = solve(sectionsGroup)
-        const sectionsRecommended = recommend(sectionsSolved)
-        setSections(sectionsGroup.flatMap((section) => section))
-        setRecommended(sectionsRecommended)
-        clearUndoRedo()
-        setIsGeneratingSchedule(false)
-    }
-
-    const handleAddCourse = async (event, courseOption, coursesInfo) => {
-        try {
-            // Error Handling
-            if (courseOption === null) throw Error('NULL')
-            checkCourseCreditLimit(courseOption, coursesInfo.totalCredits)
-            checkDuplicateCourse(courseOption, coursesInfo.courses)
-
-            // Get Course Colors
-            const courseColors = addCourseColor(courseOption.key)
-
-            // Get Course Sections
-            const newSections = await getSections(courseOption.department, courseOption.courseNumber, coursesInfo.term, coursesInfo.session)
-
-            setSections((sections) => [...sections, ...newSections])
-
-            // Sort Sections into labs, lectures, tutorial etc...
-            // Add Property "selected" to Sections
-            const organizedSections = organizeSections(newSections)
-
-            // Get Total Credits
-            const totalCredits = coursesInfo.totalCredits + courseOption.credits
-
-            // Create New Course
-            const newCourse = {
-                department: courseOption.department,
-                courseNumber: courseOption.courseNumber,
-                courseDescription: courseOption.courseDescription,
-                credit: courseOption.credit,
-                courseColors: courseColors,
-                courseSections: organizedSections,
-                courseTerm: coursesInfo.term,
-                courseSession: coursesInfo.session,
-            }
-
-            // Add New Course to Courses that will be passed to CourseInfo State
-            setCoursesInfo((courseInfo) => {
-                const courses = [...coursesInfo.courses, newCourse]
-                return { ...courseInfo, courses, totalCredits }
-            })
-        } catch (e) {
-            if (e.message === 'NULL') return
-            alert(e)
-        }
-    }
 
     /**
      * parse user's raw input of search word then fetch course description data
@@ -86,13 +36,13 @@ const SearchPanel = memo(({ coursesInfo, setCoursesInfo }) => {
      * Note4: fetches from Ben Cheung's API (so much more efficient than Liang's)
      * @param searchWord
      */
-    let loadCourseOptions = async (event) => {
+    let loadCourseOptions = async (event: React.ChangeEvent<HTMLInputElement>) => {
         //: any
         if (event.nativeEvent.type === 'input') {
             const searchWord = event.target.value
             const data = await fetchCourseDesc(searchWord)
             // c.name === the description main desription of the course
-            const options = data.map((c) => ({
+            const options = data.map((c: any) => ({
                 key: c.code,
                 label: c.code + ' - ' + c.name,
                 department: c.dept,
@@ -119,10 +69,10 @@ const SearchPanel = memo(({ coursesInfo, setCoursesInfo }) => {
                     options={courseOptions}
                     sx={{ [`& fieldset`]: { borderRadius: '10px' }, mb: 2 }}
                     renderInput={(params) => <TextField {...params} label="Search Courses" />}
-                    onChange={(e, option) => handleAddCourse(e, option, coursesInfo)}
+                    onChange={(_, courseOption) => addCourse({ courseOption, coursesInfo, setCoursesInfo, addCourseColor, setSections })}
                     onInputChange={(e) => debounceLoadCourseOptions(e)}
                 />
-                <LoadingButton loading={isGeneratingSchedule} className="w-100" variant="contained" color="primary" onClick={handleGenerate}>
+                <LoadingButton className="w-100" variant="contained" color="primary" onClick={() => generateSchedule({ sections, setSections, setRecommended, clearUndoRedo })}>
                     Run
                 </LoadingButton>
             </Box>
@@ -130,18 +80,17 @@ const SearchPanel = memo(({ coursesInfo, setCoursesInfo }) => {
     )
 })
 
-// type TermProps = {
-//     coursesInfo: any
-//     setCoursesInfo: Function
-// }
+type TermProps = {
+    coursesInfo: any
+    setCoursesInfo: Function
+}
 
-const Term = ({ coursesInfo, setCoursesInfo }) => {
-    //: TermProps
+const Term = ({ coursesInfo, setCoursesInfo }: TermProps) => {
+    //
 
     const { flushAllSections } = useContext(SectionsContext)
 
-    const setTermAndSession = (val) => {
-        //: string
+    const setTermAndSession = (val: string) => {
         const session = val[0]
         const term = val[1]
         setCoursesInfo(() => {

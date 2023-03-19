@@ -1,9 +1,9 @@
 import { Section } from '../../../data/DataDefinition/SectionDD'
-
+import { tSectionTypes } from '../../../data/DataDefinition/CourseInfoDD'
 // Organize Sections
-export const organizeSections = (listAllSections) => {
+export const organizeSections = (listAllSections: Section[]) => {
     // See all types of sections commented out below
-    let oSectionTypes = {}
+    let oSectionTypes: tSectionTypes = {}
 
     listAllSections.forEach((oNewSection) => {
         // set Available and Restricted Sections to selected for Schedule Solver
