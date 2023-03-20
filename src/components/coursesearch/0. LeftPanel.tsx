@@ -14,8 +14,8 @@ const LeftPanel = () => {
             {coursesInfo.courses.length > 0 && (
                 <Paper className="Paper" sx={{ borderRadius: '20px', marginTop: 2 }}>
                     <Box p={3}>
-                        {coursesInfo.courses.map((course) => (
-                            <CourseInfo key={course.department + course.courseNumber} course={course} setCoursesInfo={setCoursesInfo} />
+                        {coursesInfo.courses.map((course, index) => (
+                            <CourseInfo key={course.department + course.courseNumber} isFirstCouseRendered={index === 0} course={course} setCoursesInfo={setCoursesInfo} />
                         ))}
                     </Box>
                 </Paper>

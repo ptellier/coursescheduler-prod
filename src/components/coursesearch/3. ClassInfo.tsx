@@ -12,9 +12,11 @@ interface IProps {
     classType: string
     course: Course
     icon?: any
+    isFirstSectionRendered: boolean
 }
 
-const ClassInfo = memo(({ classType, course, icon }: IProps) => {
+const ClassInfo = memo(({ classType, course, icon, isFirstSectionRendered }: IProps) => {
+    const [accordionExpanded, setAccordionExpanded] = useState<boolean>(false)
     const { currentSections } = useContext(SectionsContext)
     const [sectionInfo, setSectionInfo] = useState<any>(null)
 
@@ -30,16 +32,19 @@ const ClassInfo = memo(({ classType, course, icon }: IProps) => {
 
     useEffect(() => {
         // Gets the specific couse section from currentSections - eg CPSC 110 LAB
-        const current = currentSections.filter((currentSection: Section) => currentSection.activity == classType && currentSection.subject == course.department && currentSection.course == course.courseNumber)
+        const current = currentSections.filter((currentSection: Section) => currentSection.activity === classType && currentSection.subject === course.department && currentSection.course == course.courseNumber)
         if (current.length > 0) {
             getSectionInfo(current[0])
+            if (isFirstSectionRendered) {
+                setAccordionExpanded(true)
+            }
         }
         // Only updates when specific course section changes - eg CPSC 110 LAB
-    }, [currentSections.filter((currentSection: Section) => currentSection.activity == classType && currentSection.subject == course.department && currentSection.course == course.courseNumber)[0]])
+    }, [currentSections.filter((currentSection: Section) => currentSection.activity === classType && currentSection.subject === course.department && currentSection.course === course.courseNumber)[0]])
 
     return (
         <>
-            <Accordion disableGutters disabled={sectionInfo == null}>
+            <Accordion onChange={() => setAccordionExpanded((isExpanded: boolean) => !isExpanded)} expanded={accordionExpanded} disableGutters disabled={sectionInfo === null}>
                 <AccordionSummary expandIcon={sectionInfo != null && <ExpandMore />} aria-controls="panel1a-content" id="panel1a-header">
                     <div className="flex-space-between">
                         <RowIconText icon={icon} info={<b style={{ fontSize: '0.8rem', paddingLeft: 10 }}>{classType}</b>} />
@@ -47,16 +52,18 @@ const ClassInfo = memo(({ classType, course, icon }: IProps) => {
                 </AccordionSummary>
 
                 <AccordionDetails>
-                    <div className="flex-space-between">
-                        <Tooltip title="More Info">
-                            <Typography variant="body1">
-                                <a style={{ textDecoration: 'underline' }} target="_blank" href={`https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-section&dept=${sectionInfo?.subject}&course=${sectionInfo?.course}&section=${sectionInfo?.section}`}>
-                                    {sectionInfo?.name}
-                                </a>
-                            </Typography>
-                        </Tooltip>
-                        <RowIconText icon={<FmdGoodOutlined sx={{ fontSize: 20 }} />} info={sectionInfo?.mode} reverseDirection={true} />
-                    </div>
+                    {sectionInfo?.name && (
+                        <div className="flex-space-between">
+                            <Tooltip title="More Info">
+                                <Typography variant="body1">
+                                    <a style={{ textDecoration: 'underline' }} target="_blank" rel="noreferrer" href={`https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-section&dept=${sectionInfo?.subject}&course=${sectionInfo?.course}&section=${sectionInfo?.section}`}>
+                                        {sectionInfo?.name}
+                                    </a>
+                                </Typography>
+                            </Tooltip>
+                            <RowIconText icon={<FmdGoodOutlined sx={{ fontSize: 20 }} />} info={sectionInfo?.mode} reverseDirection={true} />
+                        </div>
+                    )}
                     {sectionInfo?.schedulePrettier.length > 0 && sectionInfo.schedulePrettier.map((x: any) => <RowIconText icon={<AccessTime sx={{ fontSize: 18 }} />} info={`${x.start_time} - ${x.end_time} | ${x.days}`} />)}
                     {sectionInfo?.building && <RowIconText icon={<BusinessOutlined sx={{ fontSize: 18 }} />} info={sectionInfo?.building} />}
                     {sectionInfo?.room && <RowIconText icon={<DoorFrontOutlined sx={{ fontSize: 18 }} />} info={`Room: ${sectionInfo?.room}`} />}

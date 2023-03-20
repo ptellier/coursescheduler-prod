@@ -18,9 +18,10 @@ import { removeCourse } from './removeCourse/removeCourse'
 type CourseInfoProps = {
     course: tCourseInfo
     setCoursesInfo: React.Dispatch<React.SetStateAction<tCoursesInfo>>
+    isFirstCouseRendered: boolean
 }
 
-const CourseInfo = memo(({ course, setCoursesInfo }: CourseInfoProps) => {
+const CourseInfo = memo(({ course, setCoursesInfo, isFirstCouseRendered }: CourseInfoProps) => {
     const name = `${course.department} ${course.courseNumber}`
     return (
         <div style={{ paddingBottom: 15 }}>
@@ -32,16 +33,16 @@ const CourseInfo = memo(({ course, setCoursesInfo }: CourseInfoProps) => {
             </div>
             <Box>
                 {/* Display Lecture Section First */}
-                {course?.courseSections['Lecture'].length > 0 && <ClassInfo key={'Lecture' + name} classType={'Lecture'} course={course} icon={<MenuBookIcon />} />}
+                {course?.courseSections['Lecture'].length > 0 && <ClassInfo key={'Lecture' + name} isFirstSectionRendered={isFirstCouseRendered} classType={'Lecture'} course={course} icon={<MenuBookIcon />} />}
                 {/* Display Lab, Tutorial, etc*/}
-                {Object.entries(course.courseSections).map(([key, value]) => {
+                {Object.entries(course.courseSections).map(([key, value], index) => {
                     // If the course isn't a lab, lecture or tutorial display <ClassIcon/>
                     let icon = <ClassIcon />
                     if (key === 'Laboratory') icon = <ScienceIcon />
                     if (key === 'Tutorial') icon = <CoPresentIcon />
 
                     if (value.length > 0 && key != 'Lecture') {
-                        return <ClassInfo key={key + name} classType={key} course={course} icon={icon} />
+                        return <ClassInfo key={key + name} isFirstSectionRendered={false} classType={key} course={course} icon={icon} />
                     }
                 })}
             </Box>

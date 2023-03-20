@@ -1,19 +1,12 @@
 import { useState, useContext, memo } from 'react'
-import { Autocomplete, Box, debounce, Paper, TextField, MenuItem, LinearProgress } from '@mui/material'
+import { Autocomplete, Box, debounce, Paper, TextField, MenuItem } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { fetchCourseDesc } from '../../api/APICourseListing'
-import { filterDuplicatedSchedules } from './generateSchedule/filter'
-import { solve } from './generateSchedule/solve_newengine'
-import { groupSections } from './generateSchedule/groupby'
-import { recommend } from './generateSchedule/recommend'
 import { SectionsContext } from '../../context/SectionsContext'
 import { UndoRedoContext } from '../../context/UndoRedoContext'
-import { checkCourseCreditLimit, checkDuplicateCourse } from './generateSchedule/Exceptions'
-import { getSections } from '../../api/APIWebCrawler'
+
 import { CourseColorContext } from '../../context/CourseColorContext'
-import { organizeSections } from './generateSchedule/organizeSections'
-import { tCoursesInfo, tCourseOption, tCourseColors } from '../../data/DataDefinition/CourseInfoDD'
-import { Section } from '../../data/DataDefinition/SectionDD'
+import { tCoursesInfo } from '../../data/DataDefinition/CourseInfoDD'
 import { addCourse } from './addCourse/addCourse'
 import { generateSchedule } from './generateSchedule/generateSchedule'
 
@@ -23,6 +16,7 @@ type SearchPanelProps = {
 }
 
 const SearchPanel = memo(({ coursesInfo, setCoursesInfo }: SearchPanelProps) => {
+    const [clearInputBox, setClearInputBox] = useState(0)
     const [courseOptions, setCourseOptions] = useState([])
     const { sections, setSections, setRecommended } = useContext(SectionsContext)
     const { addCourseColor } = useContext(CourseColorContext)
@@ -66,10 +60,14 @@ const SearchPanel = memo(({ coursesInfo, setCoursesInfo }: SearchPanelProps) => 
             <Box p={3}>
                 <Term coursesInfo={coursesInfo} setCoursesInfo={setCoursesInfo} />
                 <Autocomplete
+                    key={clearInputBox}
+                    autoSelect={true}
                     options={courseOptions}
                     sx={{ [`& fieldset`]: { borderRadius: '10px' }, mb: 2 }}
                     renderInput={(params) => <TextField {...params} label="Search Courses" />}
-                    onChange={(_, courseOption) => addCourse({ courseOption, coursesInfo, setCoursesInfo, addCourseColor, setSections })}
+                    onChange={(_, courseOption) => {
+                        addCourse({ courseOption, coursesInfo, setCoursesInfo, addCourseColor, setSections, setClearInputBox })
+                    }}
                     onInputChange={(e) => debounceLoadCourseOptions(e)}
                 />
                 <LoadingButton className="w-100" variant="contained" color="primary" onClick={() => generateSchedule({ sections, setSections, setRecommended, clearUndoRedo })}>

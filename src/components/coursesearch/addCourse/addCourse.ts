@@ -10,9 +10,10 @@ type AddCourseProps = {
     setCoursesInfo: React.Dispatch<React.SetStateAction<tCoursesInfo>>
     addCourseColor: (key: string) => tCourseColors
     setSections: React.Dispatch<React.SetStateAction<Section[]>>
+    setClearInputBox: React.Dispatch<React.SetStateAction<number>>
 }
 
-export const addCourse = async ({ courseOption, coursesInfo, setCoursesInfo, addCourseColor, setSections }: AddCourseProps) => {
+export const addCourse = async ({ courseOption, coursesInfo, setCoursesInfo, addCourseColor, setSections, setClearInputBox }: AddCourseProps) => {
     try {
         // Error Handling
         if (courseOption === null) throw Error('NULL')
@@ -25,7 +26,15 @@ export const addCourse = async ({ courseOption, coursesInfo, setCoursesInfo, add
         // Get Course Sections
         const newSections = await getSections(courseOption.department, courseOption.courseNumber, coursesInfo.term, coursesInfo.session)
 
+        // If there are no sections in that semester the course isn't offered
+        if (newSections.length === 0) {
+            throw Error("This Course isn't offered in this term ")
+        }
+
         setSections((sections: Section[]) => [...sections, ...newSections])
+
+        // Clear "Search Course" Input Box -> Does this by rerendering Autocomplete Component
+        setClearInputBox((prevState) => (prevState === 1 ? 0 : 1))
 
         // Sort Sections into labs, lectures, tutorial etc...
         // Add Property "selected" to Sections

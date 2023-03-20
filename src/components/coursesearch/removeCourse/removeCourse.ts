@@ -23,11 +23,9 @@ export const removeCourse = ({ course, setCoursesInfo, sectionsContextValues, un
     // Set New Recommended Sections
     let newRecommendation: Recommendation = { compact: [], consistent: [], scatter: [], freeDay: [] }
     for (let [key, value] of Object.entries(recommended as Recommendation)) {
-        // @ts-ignore
         let sections: Section[] = value
         const newSections = sections.filter((section: Section) => section.subject + ' ' + section.course !== courseName)
-        // @ts-ignore
-        newRecommendation[key] = newSections
+        newRecommendation[key as 'compact' | 'consistent' | 'scatter' | 'freeDay'] = newSections
     }
 
     setRecommended(newRecommendation)
