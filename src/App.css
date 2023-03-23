@@ -337,6 +337,10 @@ div.cal-background-grid.last-col.last-row {
     justify-content: space-between;
 }
 
+.flex-row {
+    display: flex;
+}
+
 .instruction-info {
     white-space: nowrap;
     overflow: hidden;

@@ -38,3 +38,10 @@ export type tCourseOption = {
     courseDescription: string
     credit: number
 }
+
+export type tCourseRestrictedOrFullProps = {
+    full: boolean
+    restricted: boolean
+    courseName: string
+    restrictedSectionTypes: tSectionTypes
+}

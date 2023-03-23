@@ -6,22 +6,26 @@ import { SectionsContext } from '../../context/SectionsContext'
 import { UndoRedoContext } from '../../context/UndoRedoContext'
 
 import { CourseColorContext } from '../../context/CourseColorContext'
-import { tCoursesInfo } from '../../data/DataDefinition/CourseInfoDD'
-import { addCourse } from './addCourse/addCourse'
-import { generateSchedule } from './generateSchedule/generateSchedule'
+import { tCoursesInfo, tSectionTypes } from '../../data/DataDefinition/CourseInfoDD'
+import { useAddCourse } from './addCourse/useAddCourse'
+import { useGenerateSchedule } from './generateSchedule/useGenerateSchedule'
+import { DialogFullScreen } from '../dialogFullScreen/DialogFullScreen'
+import { DialogClassesFull, DialogClassesFullAndRestrictedAvailable, DialogRestrictedClassesAvailable } from './4. DialogRestrictedFull'
+import { tCourseRestrictedOrFullProps } from '../../data/DataDefinition/CourseInfoDD'
+import { useCoursesInfoSetState } from '../../context/CoursesInfoContext'
 
 type SearchPanelProps = {
     coursesInfo: tCoursesInfo
-    setCoursesInfo: React.Dispatch<React.SetStateAction<tCoursesInfo>>
 }
 
-const SearchPanel = memo(({ coursesInfo, setCoursesInfo }: SearchPanelProps) => {
+const SearchPanel = memo(({ coursesInfo }: SearchPanelProps) => {
+    // const [setDialogInfo, setDialogInfo] = useState({visible: false , info : {title: "Would you like to include the restricted classes them?", content: "There are additional classes of XXXX that you may qualify for. Please check off the classes that you qualify.", additionalContent: <></>, actionButtons}})
     const [clearInputBox, setClearInputBox] = useState(0)
     const [courseOptions, setCourseOptions] = useState([])
-    const { sections, setSections, setRecommended } = useContext(SectionsContext)
-    const { addCourseColor } = useContext(CourseColorContext)
-    const { clearUndoRedo } = useContext(UndoRedoContext)
-
+    const [courseRestrictedOrFull, setCourseRestrictedOrFull] = useState<tCourseRestrictedOrFullProps>({ full: false, restricted: false, courseName: '', restrictedSectionTypes: {} })
+    const courses = coursesInfo.courses
+    const generateSchedule = useGenerateSchedule()
+    const addCourse = useAddCourse({ setClearInputBox, setCourseRestrictedOrFull })
     /**
      * parse user's raw input of search word then fetch course description data
      * Note1: course description data includes course code, name, description, credits
@@ -56,44 +60,46 @@ const SearchPanel = memo(({ coursesInfo, setCoursesInfo }: SearchPanelProps) => 
     }, 500)
 
     return (
-        <Paper className="Paper" elevation={0} sx={{ borderRadius: '20px' }}>
-            <Box p={3}>
-                <Term coursesInfo={coursesInfo} setCoursesInfo={setCoursesInfo} />
-                <Autocomplete
-                    key={clearInputBox}
-                    autoSelect={true}
-                    options={courseOptions}
-                    sx={{ [`& fieldset`]: { borderRadius: '10px' }, mb: 2 }}
-                    renderInput={(params) => <TextField {...params} label="Search Courses" />}
-                    onChange={(_, courseOption) => {
-                        addCourse({ courseOption, coursesInfo, setCoursesInfo, addCourseColor, setSections, setClearInputBox })
-                    }}
-                    onInputChange={(e) => debounceLoadCourseOptions(e)}
-                />
-                <LoadingButton className="w-100" variant="contained" color="primary" onClick={() => generateSchedule({ sections, setSections, setRecommended, clearUndoRedo })}>
-                    Run
-                </LoadingButton>
-            </Box>
-        </Paper>
+        <>
+            <Paper className="Paper" elevation={0} sx={{ borderRadius: '20px' }}>
+                <Box p={3}>
+                    <Term coursesInfo={coursesInfo} />
+                    <Autocomplete
+                        key={clearInputBox}
+                        autoSelect={true}
+                        options={courseOptions}
+                        sx={{ [`& fieldset`]: { borderRadius: '10px' }, mb: 2 }}
+                        renderInput={(params) => <TextField {...params} label="Search Courses" />}
+                        onChange={(_, courseOption) => {
+                            addCourse(courseOption, coursesInfo.term, coursesInfo.session)
+                        }}
+                        onInputChange={(e) => debounceLoadCourseOptions(e)}
+                    />
+                    <LoadingButton className="w-100" variant="contained" color="primary" onClick={() => generateSchedule()}>
+                        Run
+                    </LoadingButton>
+                </Box>
+            </Paper>
+            <DialogRestrictedClassesAvailable courseRestrictedOrFull={courseRestrictedOrFull} setCourseRestrictedOrFull={setCourseRestrictedOrFull} />
+            <DialogClassesFullAndRestrictedAvailable courseRestrictedOrFull={courseRestrictedOrFull} setCourseRestrictedOrFull={setCourseRestrictedOrFull} />
+            <DialogClassesFull courseRestrictedOrFull={courseRestrictedOrFull} setCourseRestrictedOrFull={setCourseRestrictedOrFull} />
+        </>
     )
 })
 
 type TermProps = {
     coursesInfo: any
-    setCoursesInfo: Function
 }
 
-const Term = ({ coursesInfo, setCoursesInfo }: TermProps) => {
-    //
+const Term = ({ coursesInfo }: TermProps) => {
+    const setCoursesInfo = useCoursesInfoSetState()
 
     const { flushAllSections } = useContext(SectionsContext)
 
     const setTermAndSession = (val: string) => {
         const session = val[0]
         const term = val[1]
-        setCoursesInfo(() => {
-            return { courses: [], totalCredits: 0, session: session, term: term }
-        })
+        setCoursesInfo({ courses: [], totalCredits: 0, session: session, term: term })
         flushAllSections()
     }
     const termOptions = [

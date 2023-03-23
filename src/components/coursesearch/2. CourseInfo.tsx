@@ -10,18 +10,15 @@ import ScienceIcon from '@mui/icons-material/Science'
 import MenuBookIcon from '@mui/icons-material/MenuBook'
 import CoPresentIcon from '@mui/icons-material/CoPresent'
 import ClassIcon from '@mui/icons-material/Class'
-import { Section } from '../../data/DataDefinition/SectionDD'
-import { UndoRedoContext } from '../../context/UndoRedoContext'
-import { tCoursesInfo, tCourseInfo } from '../../data/DataDefinition/CourseInfoDD'
-import { removeCourse } from './removeCourse/removeCourse'
+import { tCourseInfo } from '../../data/DataDefinition/CourseInfoDD'
+import { useRemoveCourse } from './removeCourse/useRemoveCourse'
 
 type CourseInfoProps = {
     course: tCourseInfo
-    setCoursesInfo: React.Dispatch<React.SetStateAction<tCoursesInfo>>
     isFirstCouseRendered: boolean
 }
 
-const CourseInfo = memo(({ course, setCoursesInfo, isFirstCouseRendered }: CourseInfoProps) => {
+const CourseInfo = memo(({ course, isFirstCouseRendered }: CourseInfoProps) => {
     const name = `${course.department} ${course.courseNumber}`
     return (
         <div style={{ paddingBottom: 15 }}>
@@ -29,13 +26,13 @@ const CourseInfo = memo(({ course, setCoursesInfo, isFirstCouseRendered }: Cours
                 <div style={{ maxWidth: 250, padding: '0.5rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '80%', fontSize: '1rem', fontFamily: "M PLUS 1p', 'Helvetica', 'Arial', sans-serif" }}>
                     {course.department} {course.courseNumber} - <span>{course.courseDescription}</span>
                 </div>
-                <RemoveCourseButton course={course} setCoursesInfo={setCoursesInfo} />
+                <RemoveCourseButton course={course} />
             </div>
             <Box>
                 {/* Display Lecture Section First */}
                 {course?.courseSections['Lecture'].length > 0 && <ClassInfo key={'Lecture' + name} isFirstSectionRendered={isFirstCouseRendered} classType={'Lecture'} course={course} icon={<MenuBookIcon />} />}
                 {/* Display Lab, Tutorial, etc*/}
-                {Object.entries(course.courseSections).map(([key, value], index) => {
+                {Object.entries(course.courseSections).map(([key, value]) => {
                     // If the course isn't a lab, lecture or tutorial display <ClassIcon/>
                     let icon = <ClassIcon />
                     if (key === 'Laboratory') icon = <ScienceIcon />
@@ -54,16 +51,13 @@ export default CourseInfo
 
 type RemoveCourseButtonProps = {
     course: tCourseInfo
-    setCoursesInfo: React.Dispatch<React.SetStateAction<tCoursesInfo>>
 }
 
-const RemoveCourseButton = memo(({ course, setCoursesInfo }: RemoveCourseButtonProps) => {
-    const sectionsContextValues = useContext(SectionsContext)
-    const undoRedoContextValues = useContext(UndoRedoContext)
-    const courseColorContextValues = useContext(CourseColorContext)
+const RemoveCourseButton = memo(({ course }: RemoveCourseButtonProps) => {
+    const removeCourse = useRemoveCourse()
 
     return (
-        <IconButton onClick={() => removeCourse({ course, setCoursesInfo, sectionsContextValues, undoRedoContextValues, courseColorContextValues })} aria-label="delete">
+        <IconButton onClick={() => removeCourse(course)} aria-label="delete">
             <ClearIcon fontSize="small" />
         </IconButton>
     )
