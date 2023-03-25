@@ -44,7 +44,7 @@ const ClassInfo = memo(({ classType, course, icon, isFirstSectionRendered }: IPr
 
         if (current.length > 0) {
             // Force First Section of First course to open on clicking "Generate Schedule"
-            if (isFirstSectionRendered) {
+            if (isFirstSectionRendered && sectionInfo == null) {
                 setAccordionExpanded(true)
             }
 
@@ -61,7 +61,7 @@ const ClassInfo = memo(({ classType, course, icon, isFirstSectionRendered }: IPr
     return (
         <>
             <Accordion onChange={() => setAccordionExpanded((isExpanded: boolean) => !isExpanded)} expanded={accordionExpanded} disableGutters disabled={!currentSpecificSection[0]?.selectedForScheduleSolver}>
-                <AccordionSummary expandIcon={sectionInfo != null && <ExpandMore />} aria-controls="panel1a-content" id="panel1a-header">
+                <AccordionSummary expandIcon={currentSpecificSection[0]?.selectedForScheduleSolver && <ExpandMore />} aria-controls="panel1a-content" id="panel1a-header">
                     <div className="flex-space-between">
                         <RowIconText icon={icon} info={<b style={{ fontSize: '0.8rem', paddingLeft: 10 }}>{classType}</b>} />
                     </div>
