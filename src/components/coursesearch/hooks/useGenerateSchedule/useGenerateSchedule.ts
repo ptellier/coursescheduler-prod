@@ -16,16 +16,33 @@ type GenerateScheduleProps = {
 }
 
 export const useGenerateSchedule = ({ setLoading }: GenerateScheduleProps) => {
-    const { setSections, setRecommended } = useContext(SectionsContext)
+    const { setSections, setRecommended, sections } = useContext(SectionsContext)
     const { clearUndoRedo } = useContext(UndoRedoContext)
     const { courses } = useCoursesInfo()
 
     const generateSchedule = useCallback(() => {
         setLoading(true)
-        const sections = getSectionsSelectedForScheduleSolver(courses)
-        const sectionsNoDuplicate = filterDuplicatedSchedules(sections)
-        const sectionsGroup = groupSections(sectionsNoDuplicate)
-        const sectionsSolved = solve(sectionsGroup)
+        let sectionsSelected = getSectionsSelectedForScheduleSolver(courses)
+        let sectionsNoDuplicate = filterDuplicatedSchedules(sectionsSelected)
+        let sectionsGroup = groupSections(sectionsNoDuplicate)
+        let sectionsSolved = solve(sectionsGroup)
+        if (sectionsSolved.length === 0) {
+            // Try again with full classes
+            let sectionsSelected = sections
+            const sectionsNoDuplicate = filterDuplicatedSchedules(sectionsSelected)
+            const sectionsGroup = groupSections(sectionsNoDuplicate)
+            const sectionsSolved = solve(sectionsGroup)
+
+            // Full Classes Solved Schedule
+            if (sectionsSolved.length > 0) {
+                alert('Schedule is only possible when using full classes')
+            }
+            // Full Classes Didn't Solve Overlap Issue
+            else {
+                setLoading(false)
+                return alert('No Possible Schedule With These Courses. Please Remove a Course and Try Again')
+            }
+        }
         const sectionsRecommended = recommend(sectionsSolved)
         setSections(sectionsGroup.flatMap((section) => section)) // Do we Need this?
         setRecommended(sectionsRecommended)
