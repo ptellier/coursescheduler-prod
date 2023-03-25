@@ -2,7 +2,7 @@ import { Accordion, AccordionDetails, AccordionSummary, Tooltip, Typography } fr
 import React, { memo, ReactChildren, ReactChild, useContext, useEffect, useState, useMemo, useCallback } from 'react'
 import { SectionsContext } from '../../context/SectionsContext'
 import { Course } from '../../data/DataDefinition/SearchWordDD'
-import { ExpandMore, Clear } from '@mui/icons-material'
+import { ExpandMore, Clear, Check } from '@mui/icons-material'
 import { convertTimeslotsToTime } from './hooks/useGenerateSchedule/time'
 import { Section } from '../../data/DataDefinition/SectionDD'
 import { getSection } from '../../api/APIWebCrawler'
@@ -57,7 +57,7 @@ const ClassInfo = memo(({ classType, course, icon, isFirstSectionRendered }: IPr
         }
         // Gets the specific couse section from currentSections - eg CPSC 110 LAB
     }, [currentSpecificSection[0], accordionExpanded])
-
+    console.log('info', sectionInfo)
     return (
         <>
             <Accordion onChange={() => setAccordionExpanded((isExpanded: boolean) => !isExpanded)} expanded={accordionExpanded} disableGutters disabled={!currentSpecificSection[0]?.selectedForScheduleSolver}>
@@ -97,6 +97,18 @@ const ClassInfo = memo(({ classType, course, icon, isFirstSectionRendered }: IPr
                             }
                         />
                     )}
+                    {sectionInfo?.currentlyRegistered.length > 0 && (
+                        <RowIconText
+                            icon={<SeatsRemainingIcon condition={parseInt(sectionInfo?.totalSeatsRemaining) > 0} />}
+                            info={<SeatsRemainingRow description={'Total Seats'} seats={`${sectionInfo.totalSeatsRemaining} / ${parseInt(sectionInfo.totalSeatsRemaining) + parseInt(sectionInfo.currentlyRegistered)}`} paddingLeft={'36px'} />}
+                        />
+                    )}
+                    {sectionInfo?.generalSeatsRemainings.length > 0 && (
+                        <RowIconText icon={<SeatsRemainingIcon condition={parseInt(sectionInfo?.generalSeatsRemainings) > 0} />} info={<SeatsRemainingRow description={'General Seats'} seats={sectionInfo.generalSeatsRemainings} paddingLeft={'36px'} />} />
+                    )}
+                    {sectionInfo?.restrictedSeatsRemaining.length > 0 && (
+                        <RowIconText icon={<SeatsRemainingIcon condition={parseInt(sectionInfo?.restrictedSeatsRemaining) > 0} />} info={<SeatsRemainingRow description={'Restricted Seats'} seats={sectionInfo.restrictedSeatsRemaining} paddingLeft={'20px'} />} />
+                    )}
                 </AccordionDetails>
             </Accordion>
         </>
@@ -127,4 +139,19 @@ const RowIconText = ({ icon, info, reverseDirection = false }: InfoProps) => {
             </Typography>
         </div>
     )
+}
+
+const SeatsRemainingRow = ({ description, seats, paddingLeft }: { description: string; seats: string; paddingLeft: string }) => {
+    return (
+        <div className="flex-space-between" style={{ width: 200 }}>
+            <div>{description}: </div>
+            <div style={{ paddingLeft: paddingLeft }}>
+                <b>{seats}</b>
+            </div>
+        </div>
+    )
+}
+
+const SeatsRemainingIcon = ({ condition }: { condition: boolean }) => {
+    return condition ? <Check sx={{ fontSize: 20, color: 'green' }} /> : <Clear sx={{ fontSize: 20, color: 'red' }} />
 }
