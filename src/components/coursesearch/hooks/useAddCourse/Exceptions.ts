@@ -8,6 +8,7 @@ export const checkCourseCreditLimit = (newCredits: number, totalCredits: number)
 }
 
 export const checkDuplicateCourse = async (option: any, courses: Course[]) => {
+    console.log(option, courses)
     if (courses.some((course) => course.department === option.department && course.courseNumber === option.courseNumber)) {
         throw Error('This course is already selected!')
     }

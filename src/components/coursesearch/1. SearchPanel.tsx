@@ -20,11 +20,11 @@ type SearchPanelProps = {
 
 const SearchPanel = memo(({ coursesInfo }: SearchPanelProps) => {
     console.log('Search Panel')
-
+    const [loading, setLoading] = useState(false)
     const [clearInputBox, setClearInputBox] = useState(0)
     const [courseOptions, setCourseOptions] = useState([])
     const [courseRestrictedOrFull, setCourseRestrictedOrFull] = useState<tCourseRestrictedOrFullProps>({ full: false, restricted: false, courseName: '', restrictedSectionTypes: {} })
-    const generateSchedule = useGenerateSchedule()
+    const generateSchedule = useGenerateSchedule({ setLoading })
     const addCourse = useAddCourse({ setClearInputBox, setCourseRestrictedOrFull })
     /**
      * parse user's raw input of search word then fetch course description data
@@ -75,7 +75,7 @@ const SearchPanel = memo(({ coursesInfo }: SearchPanelProps) => {
                         }}
                         onInputChange={(e) => debounceLoadCourseOptions(e)}
                     />
-                    <LoadingButton className="w-100" variant="contained" color="primary" onClick={() => generateSchedule()}>
+                    <LoadingButton className="w-100" variant="contained" color="primary" loading={loading} onClick={() => generateSchedule()}>
                         Generate Schedule
                     </LoadingButton>
                     <br />

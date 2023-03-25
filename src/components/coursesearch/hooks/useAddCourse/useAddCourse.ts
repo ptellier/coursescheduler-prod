@@ -28,8 +28,8 @@ export const useAddCourse = ({ setClearInputBox, setCourseRestrictedOrFull }: Ad
             try {
                 // Error Handling
                 if (courseOption === null) throw Error('NULL')
-                checkCourseCreditLimit(courseOption.credit, coursesInfo.totalCredits)
-                checkDuplicateCourse(courseOption, coursesInfo.courses)
+                await checkCourseCreditLimit(courseOption.credit, coursesInfo.totalCredits)
+                await checkDuplicateCourse(courseOption, coursesInfo.courses)
 
                 // Get Course Sections
                 const newSections = await getSections(courseOption.department, courseOption.courseNumber, term, session)
