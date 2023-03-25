@@ -1,5 +1,5 @@
 import { Cell, Cell_display } from './time'
-import { Section, Timeslot } from '../../../data/DataDefinition/SectionDD'
+import { Section, Timeslot } from '../../../../data/DataDefinition/SectionDD'
 import { overlapCells } from './overlap'
 
 /**

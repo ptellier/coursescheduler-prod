@@ -1,5 +1,5 @@
-import { Section } from '../../../data/DataDefinition/SectionDD'
-import { tSectionTypes } from '../../../data/DataDefinition/CourseInfoDD'
+import { Section } from '../../../../data/DataDefinition/SectionDD'
+import { tSectionTypes } from '../../../../data/DataDefinition/CourseInfoDD'
 // Organize Sections
 
 // Sort Sections into labs, lectures, tutorial etc...
@@ -13,9 +13,10 @@ export const organizeSections = (listAllSections: Section[]) => {
 
     listAllSections.forEach((newSection) => {
         // Set Available and Restricted Sections to `selectedForScheduleSolver = true`
-        newSection.selectedForScheduleSolver = newSection.status === 'Available' || newSection.status === 'Restricted'
+        newSection.selectedForScheduleSolver = newSection.status === 'Available'
 
-        // create restrictedSectionsTypes Obj => {"Lectures": sections[], "Lab": sections[] ....}
+        // create restrictedSectionsTypes Object => {"Lectures": sections[], "Lab": sections[] ....}
+        // This object will be used for the dialog for user to select restricted sections
         if (!restrictedSectionTypes[newSection.activity] && newSection.status === 'Restricted') {
             hasRestrictedSections = true
             restrictedSectionTypes[newSection.activity] = [newSection]
@@ -24,6 +25,7 @@ export const organizeSections = (listAllSections: Section[]) => {
         }
 
         // create sectionsTypes Obj => {"Lectures": sections[], "Lab": sections[] ....}
+        // This object will be used for coursesInfo.courses.courseSections = sectionTypes
         if (!sectionTypes[newSection.activity]) {
             sectionTypes[newSection.activity] = [newSection]
         } else {

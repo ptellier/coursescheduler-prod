@@ -1,5 +1,5 @@
 import { useState, useContext, memo } from 'react'
-import { Autocomplete, Box, debounce, Paper, TextField, MenuItem } from '@mui/material'
+import { Autocomplete, Box, debounce, Paper, TextField, MenuItem, Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { fetchCourseDesc } from '../../api/APICourseListing'
 import { SectionsContext } from '../../context/SectionsContext'
@@ -7,23 +7,23 @@ import { UndoRedoContext } from '../../context/UndoRedoContext'
 
 import { CourseColorContext } from '../../context/CourseColorContext'
 import { tCoursesInfo, tSectionTypes } from '../../data/DataDefinition/CourseInfoDD'
-import { useAddCourse } from './addCourse/useAddCourse'
-import { useGenerateSchedule } from './generateSchedule/useGenerateSchedule'
-import { DialogFullScreen } from '../dialogFullScreen/DialogFullScreen'
-import { DialogClassesFull, DialogClassesFullAndRestrictedAvailable, DialogRestrictedClassesAvailable } from './4. DialogRestrictedFull'
+import { useAddCourse } from './hooks/useAddCourse/useAddCourse'
+import { useGenerateSchedule } from './hooks/useGenerateSchedule/useGenerateSchedule'
+import { DialogRestrictedClassesAvailable } from './4. DialogClassesRestricted'
 import { tCourseRestrictedOrFullProps } from '../../data/DataDefinition/CourseInfoDD'
 import { useCoursesInfoSetState } from '../../context/CoursesInfoContext'
+import { DialogClassesFull } from './5. DialogClassesFull'
 
 type SearchPanelProps = {
     coursesInfo: tCoursesInfo
 }
 
 const SearchPanel = memo(({ coursesInfo }: SearchPanelProps) => {
-    // const [setDialogInfo, setDialogInfo] = useState({visible: false , info : {title: "Would you like to include the restricted classes them?", content: "There are additional classes of XXXX that you may qualify for. Please check off the classes that you qualify.", additionalContent: <></>, actionButtons}})
+    console.log('Search Panel')
+
     const [clearInputBox, setClearInputBox] = useState(0)
     const [courseOptions, setCourseOptions] = useState([])
     const [courseRestrictedOrFull, setCourseRestrictedOrFull] = useState<tCourseRestrictedOrFullProps>({ full: false, restricted: false, courseName: '', restrictedSectionTypes: {} })
-    const courses = coursesInfo.courses
     const generateSchedule = useGenerateSchedule()
     const addCourse = useAddCourse({ setClearInputBox, setCourseRestrictedOrFull })
     /**
@@ -76,13 +76,13 @@ const SearchPanel = memo(({ coursesInfo }: SearchPanelProps) => {
                         onInputChange={(e) => debounceLoadCourseOptions(e)}
                     />
                     <LoadingButton className="w-100" variant="contained" color="primary" onClick={() => generateSchedule()}>
-                        Run
+                        Generate Schedule
                     </LoadingButton>
+                    <br />
                 </Box>
             </Paper>
-            <DialogRestrictedClassesAvailable courseRestrictedOrFull={courseRestrictedOrFull} setCourseRestrictedOrFull={setCourseRestrictedOrFull} />
-            <DialogClassesFullAndRestrictedAvailable courseRestrictedOrFull={courseRestrictedOrFull} setCourseRestrictedOrFull={setCourseRestrictedOrFull} />
-            <DialogClassesFull courseRestrictedOrFull={courseRestrictedOrFull} setCourseRestrictedOrFull={setCourseRestrictedOrFull} />
+            {courseRestrictedOrFull.restricted && <DialogRestrictedClassesAvailable courseRestrictedOrFull={courseRestrictedOrFull} setCourseRestrictedOrFull={setCourseRestrictedOrFull} />}
+            {courseRestrictedOrFull.full && !courseRestrictedOrFull.restricted && <DialogClassesFull courseRestrictedOrFull={courseRestrictedOrFull} setCourseRestrictedOrFull={setCourseRestrictedOrFull} />}
         </>
     )
 })

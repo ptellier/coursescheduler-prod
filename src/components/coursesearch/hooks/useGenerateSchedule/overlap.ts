@@ -1,4 +1,4 @@
-import { Section, Timeslot, Time, Term, Day } from '../../../data/DataDefinition/SectionDD'
+import { Section, Timeslot, Time, Term, Day } from '../../../../data/DataDefinition/SectionDD'
 import { groupTimeSlotsByDays } from './groupby'
 import { Cell_display } from './time'
 

@@ -11,7 +11,7 @@ import MenuBookIcon from '@mui/icons-material/MenuBook'
 import CoPresentIcon from '@mui/icons-material/CoPresent'
 import ClassIcon from '@mui/icons-material/Class'
 import { tCourseInfo } from '../../data/DataDefinition/CourseInfoDD'
-import { useRemoveCourse } from './removeCourse/useRemoveCourse'
+import { useRemoveCourse } from './hooks/useRemoveCourse/useRemoveCourse'
 
 type CourseInfoProps = {
     course: tCourseInfo
@@ -19,6 +19,8 @@ type CourseInfoProps = {
 }
 
 const CourseInfo = memo(({ course, isFirstCouseRendered }: CourseInfoProps) => {
+    console.log('Course Info')
+
     const name = `${course.department} ${course.courseNumber}`
     return (
         <div style={{ paddingBottom: 15 }}>
@@ -26,7 +28,7 @@ const CourseInfo = memo(({ course, isFirstCouseRendered }: CourseInfoProps) => {
                 <div style={{ maxWidth: 250, padding: '0.5rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '80%', fontSize: '1rem', fontFamily: "M PLUS 1p', 'Helvetica', 'Arial', sans-serif" }}>
                     {course.department} {course.courseNumber} - <span>{course.courseDescription}</span>
                 </div>
-                <RemoveCourseButton course={course} />
+                <RemoveCourseButton courseName={course.courseName} />
             </div>
             <Box>
                 {/* Display Lecture Section First */}
@@ -50,14 +52,14 @@ const CourseInfo = memo(({ course, isFirstCouseRendered }: CourseInfoProps) => {
 export default CourseInfo
 
 type RemoveCourseButtonProps = {
-    course: tCourseInfo
+    courseName: string
 }
 
-const RemoveCourseButton = memo(({ course }: RemoveCourseButtonProps) => {
+const RemoveCourseButton = memo(({ courseName }: RemoveCourseButtonProps) => {
     const removeCourse = useRemoveCourse()
 
     return (
-        <IconButton onClick={() => removeCourse(course)} aria-label="delete">
+        <IconButton onClick={() => removeCourse(courseName)} aria-label="delete">
             <ClearIcon fontSize="small" />
         </IconButton>
     )

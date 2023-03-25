@@ -1,9 +1,9 @@
 import { Accordion, AccordionDetails, AccordionSummary, Tooltip, Typography } from '@mui/material'
-import React, { memo, ReactChildren, ReactChild, useContext, useEffect, useState } from 'react'
+import React, { memo, ReactChildren, ReactChild, useContext, useEffect, useState, useMemo, useCallback } from 'react'
 import { SectionsContext } from '../../context/SectionsContext'
 import { Course } from '../../data/DataDefinition/SearchWordDD'
 import { ExpandMore, Clear } from '@mui/icons-material'
-import { convertTimeslotsToTime } from './generateSchedule/time'
+import { convertTimeslotsToTime } from './hooks/useGenerateSchedule/time'
 import { Section } from '../../data/DataDefinition/SectionDD'
 import { getSection } from '../../api/APIWebCrawler'
 import { AccessTime, PersonOutline, BusinessOutlined, DoorFrontOutlined, FmdGoodOutlined } from '@mui/icons-material'
@@ -16,6 +16,7 @@ interface IProps {
 }
 
 const ClassInfo = memo(({ classType, course, icon, isFirstSectionRendered }: IProps) => {
+    console.log('Class Info')
     const [accordionExpanded, setAccordionExpanded] = useState<boolean>(false)
     const { currentSections } = useContext(SectionsContext)
     const [sectionInfo, setSectionInfo] = useState<any>(null)
@@ -30,21 +31,36 @@ const ClassInfo = memo(({ classType, course, icon, isFirstSectionRendered }: IPr
         setSectionInfo(newCourseSection)
     }
 
+    // Gets when specific course section for this specific component - eg CPSC 110 LAB
+    const getSpecificSection = () => {
+        return currentSections.filter((currentSection: Section) => currentSection.activity === classType && currentSection.subject === course.department && currentSection.course == course.courseNumber)
+    }
+
+    const currentSpecificSection = getSpecificSection()
+
     useEffect(() => {
         // Gets the specific couse section from currentSections - eg CPSC 110 LAB
-        const current = currentSections.filter((currentSection: Section) => currentSection.activity === classType && currentSection.subject === course.department && currentSection.course == course.courseNumber)
+        const current = currentSpecificSection
+
         if (current.length > 0) {
-            getSectionInfo(current[0])
+            // Force First Section of First course to open on clicking "Generate Schedule"
             if (isFirstSectionRendered) {
                 setAccordionExpanded(true)
             }
+
+            // Prevents API Call if Accordion is not expanded
+            // 1. Fetch if => Accordion Expanded && Have Never Fetched
+            // 2. Fetch if => Accordion Expanded && Dragged and Dropped to New Section
+            if (accordionExpanded && (sectionInfo === null || currentSpecificSection[0].courseName !== sectionInfo.name)) {
+                getSectionInfo(current[0])
+            }
         }
-        // Only updates when specific course section changes - eg CPSC 110 LAB
-    }, [currentSections.filter((currentSection: Section) => currentSection.activity === classType && currentSection.subject === course.department && currentSection.course === course.courseNumber)[0]])
+        // Gets the specific couse section from currentSections - eg CPSC 110 LAB
+    }, [currentSpecificSection[0], accordionExpanded])
 
     return (
         <>
-            <Accordion onChange={() => setAccordionExpanded((isExpanded: boolean) => !isExpanded)} expanded={accordionExpanded} disableGutters disabled={sectionInfo === null}>
+            <Accordion onChange={() => setAccordionExpanded((isExpanded: boolean) => !isExpanded)} expanded={accordionExpanded} disableGutters disabled={!currentSpecificSection[0]?.selectedForScheduleSolver}>
                 <AccordionSummary expandIcon={sectionInfo != null && <ExpandMore />} aria-controls="panel1a-content" id="panel1a-header">
                     <div className="flex-space-between">
                         <RowIconText icon={icon} info={<b style={{ fontSize: '0.8rem', paddingLeft: 10 }}>{classType}</b>} />

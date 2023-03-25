@@ -5,15 +5,9 @@ import { tCoursesInfo, tCourseInfo } from '../data/DataDefinition/CourseInfoDD'
 // Context
 const CoursesInfoContext = createContext<tCoursesInfo>({ courses: [], term: '1', session: 'W', totalCredits: 0 })
 
-type tCoursesInfoUpdateContext = {
-    handleAddCourse: (newCourse: tCourseInfo) => void
-    handleCheckCourseCreditLimit: (newCourse: tCourseInfo) => void
-    handleCheckDuplicateCourse: (newCourse: tCourseInfo) => void
-}
+const CoursesInfoAddCourseContext = createContext<(newCourse: tCourseInfo) => void>(() => {})
 
-const CoursesInfoAddCourseContext = createContext<tCoursesInfoUpdateContext>({ handleAddCourse: () => {}, handleCheckCourseCreditLimit: () => {}, handleCheckDuplicateCourse: () => {} })
-
-const CoursesInfoRemoveCourseContext = createContext<(courseToBeRemoved: tCourseInfo) => void>(() => {})
+const CoursesInfoRemoveCourseContext = createContext<(courseNameDeleted: string) => void>(() => {})
 
 const CoursesInfoSetStateContext = createContext<Dispatch<SetStateAction<tCoursesInfo>>>(() => {})
 
@@ -44,30 +38,19 @@ export const CoursesInfoProvider: FC<Props> = ({ children }) => {
         })
     }, [])
 
-    const handleCheckCourseCreditLimit = useCallback(
-        (newCourseCredits) => {
-            if (coursesInfo.totalCredits + newCourseCredits >= 18) {
-                throw Error('You exceeded maximum (18) credits per term. Remove some courses before adding more')
-            }
-        },
-        [coursesInfo.totalCredits]
-    )
-
-    const handleCheckDuplicateCourse = useCallback(
-        (newCourseOption: any) => {
-            if (coursesInfo.courses.some((course) => course.department === newCourseOption.department && course.courseNumber === newCourseOption.courseNumber)) {
-                throw Error('This course is already selected!')
-            }
-        },
-        [coursesInfo.courses]
-    )
-
-    const handleRemoveCourse = useCallback((courseToBeRemoved: tCourseInfo) => {
+    //eg. CPSC 110
+    const handleRemoveCourse = useCallback((courseNameDeleted: string) => {
         setCoursesInfo((coursesInfo: tCoursesInfo) => {
+            let removedCredit = 0
+
             const courses = coursesInfo.courses.filter((existingCourse: tCourseInfo) => {
-                return existingCourse.department + ' ' + existingCourse.courseNumber !== courseToBeRemoved.courseName
+                // Get Deleted Courses Credit
+                if (existingCourse.courseName === courseNameDeleted) {
+                    removedCredit = existingCourse.credit
+                }
+                return existingCourse.courseName !== courseNameDeleted
             })
-            const totalCredits = coursesInfo.totalCredits - courseToBeRemoved.credit
+            const totalCredits = coursesInfo.totalCredits - removedCredit
 
             return { ...coursesInfo, totalCredits, courses }
         })
@@ -75,7 +58,7 @@ export const CoursesInfoProvider: FC<Props> = ({ children }) => {
 
     return (
         <CoursesInfoContext.Provider value={coursesInfo}>
-            <CoursesInfoAddCourseContext.Provider value={{ handleAddCourse, handleCheckCourseCreditLimit, handleCheckDuplicateCourse }}>
+            <CoursesInfoAddCourseContext.Provider value={handleAddCourse}>
                 <CoursesInfoRemoveCourseContext.Provider value={handleRemoveCourse}>
                     <CoursesInfoSetStateContext.Provider value={setCoursesInfo}>{children}</CoursesInfoSetStateContext.Provider>
                 </CoursesInfoRemoveCourseContext.Provider>

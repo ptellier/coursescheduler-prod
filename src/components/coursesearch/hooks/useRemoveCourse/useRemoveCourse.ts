@@ -1,11 +1,11 @@
-import { Section } from '../../../data/DataDefinition/SectionDD'
-import { Recommendation } from '../../../data/DataDefinition/Recommendation'
-import { tCourseInfo, tCoursesInfo } from '../../../data/DataDefinition/CourseInfoDD'
-import { useCoursesInfoRemoveCourse } from '../../../context/CoursesInfoContext'
+import { Section } from '../../../../data/DataDefinition/SectionDD'
+import { Recommendation } from '../../../../data/DataDefinition/Recommendation'
+import { tCourseInfo, tCoursesInfo } from '../../../../data/DataDefinition/CourseInfoDD'
+import { useCoursesInfoRemoveCourse } from '../../../../context/CoursesInfoContext'
 import { useCallback, useContext } from 'react'
-import { SectionsContext } from '../../../context/SectionsContext'
-import { UndoRedoContext } from '../../../context/UndoRedoContext'
-import { CourseColorContext } from '../../../context/CourseColorContext'
+import { SectionsContext } from '../../../../context/SectionsContext'
+import { UndoRedoContext } from '../../../../context/UndoRedoContext'
+import { CourseColorContext } from '../../../../context/CourseColorContext'
 
 export const useRemoveCourse = () => {
     const { setSections, recommended, setRecommended, changeCurrentSections } = useContext(SectionsContext)
@@ -14,9 +14,9 @@ export const useRemoveCourse = () => {
     const handleRemoveCourse = useCoursesInfoRemoveCourse()
 
     const removeCourse = useCallback(
-        (course: tCourseInfo) => {
+        // eg. CPSC 110
+        (courseName: string) => {
             // Get Course Name Course
-            const courseName = course.department + ' ' + course.courseNumber
 
             // Filter Removed Course from Sections
             setSections((sections: Section[]) => sections.filter((section) => section.subject + ' ' + section.course !== courseName))
@@ -35,7 +35,7 @@ export const useRemoveCourse = () => {
             // Set Courses Info -> local state
             // 1. Get new total credits
             // 2. Get filter out removed course
-            handleRemoveCourse(course)
+            handleRemoveCourse(courseName)
 
             // Remove Course Color
             removeCourseColor(courseName)

@@ -1,5 +1,5 @@
-import { Schedule } from '../../../data/DataDefinition/ScheduleDD'
-import { Section } from '../../../data/DataDefinition/SectionDD'
+import { Schedule } from '../../../../data/DataDefinition/ScheduleDD'
+import { Section } from '../../../../data/DataDefinition/SectionDD'
 import { is_overlap_losections } from './overlap'
 import { calculateTimeGap, countFreeDays, findStartVariance } from './recommend'
 

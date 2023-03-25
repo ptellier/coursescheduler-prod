@@ -8,6 +8,7 @@ import { useCoursesInfo } from '../../context/CoursesInfoContext'
 const LeftPanel = () => {
     /** courses that users looked up and want to get schedule */
     // {term: "1", session: "W", courses: [], totalCredits: 0, }
+    console.log('Left Panel')
     const coursesInfo = useCoursesInfo()
     return (
         <div style={{ minWidth: '23rem' }}>

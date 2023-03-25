@@ -1,5 +1,5 @@
-import { Schedule } from '../../../data/DataDefinition/ScheduleDD'
-import { Section, Timeslot, Time } from '../../../data/DataDefinition/SectionDD'
+import { Schedule } from '../../../../data/DataDefinition/ScheduleDD'
+import { Section, Timeslot, Time } from '../../../../data/DataDefinition/SectionDD'
 import { group5Days, groupTimeSlotsByDays } from './groupby'
 import { convertToTimeSlot } from './time'
 
