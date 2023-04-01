@@ -36,6 +36,8 @@ export const organizeSections = (listAllSections: Section[]) => {
     return { sectionTypes, hasRestrictedSections, restrictedSectionTypes }
 }
 
+// POTENTIAL SECTION TYPES:
+
 // 'Directed Studies': [],
 // Discussion: [],
 // 'Essay/Report': [],
