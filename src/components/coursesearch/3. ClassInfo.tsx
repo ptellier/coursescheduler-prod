@@ -99,7 +99,7 @@ const ClassInfo = memo(({ classType, course, icon, isFirstSectionRendered }: IPr
                     {sectionInfo?.currentlyRegistered.length > 0 && (
                         <RowIconText
                             icon={<SeatsRemainingIcon condition={parseInt(sectionInfo?.totalSeatsRemaining) > 0} />}
-                            info={<SeatsRemainingRow width={250} description={'Total Seats'} seats={`${sectionInfo.totalSeatsRemaining} / ${parseInt(sectionInfo.totalSeatsRemaining) + parseInt(sectionInfo.currentlyRegistered)}`} />}
+                            info={<SeatsRemainingRow width={250} description={'Available Seats'} seats={`${sectionInfo.totalSeatsRemaining} / ${parseInt(sectionInfo.totalSeatsRemaining) + parseInt(sectionInfo.currentlyRegistered)}`} />}
                         />
                     )}
                     <div style={{ paddingLeft: 25 }}>
