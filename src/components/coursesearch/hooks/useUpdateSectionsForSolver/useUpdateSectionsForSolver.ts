@@ -1,7 +1,7 @@
-import { Dispatch, SetStateAction, useCallback } from 'react'
-import { tCoursesInfo, tSectionTypes } from '../../../../data/DataDefinition/CourseInfoDD'
+import { useCallback } from 'react'
+import { tSectionTypes } from '../../../../data/DataDefinition/CourseInfoDD'
 import { Section } from '../../../../data/DataDefinition/SectionDD'
-import { checkCourseFull } from '../useAddCourse/checkCourseFull'
+import { checkCourseFull } from './checkCourseFull'
 import { FormCheckBoxData } from '../../4. DialogClassesRestricted'
 import { useCoursesInfoSetState } from '../../../../context/CoursesInfoContext'
 

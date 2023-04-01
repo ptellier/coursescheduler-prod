@@ -1,6 +1,5 @@
 import { Section } from '../../../../data/DataDefinition/SectionDD'
 import { Recommendation } from '../../../../data/DataDefinition/Recommendation'
-import { tCourseInfo, tCoursesInfo } from '../../../../data/DataDefinition/CourseInfoDD'
 import { useCoursesInfoRemoveCourse } from '../../../../context/CoursesInfoContext'
 import { useCallback, useContext } from 'react'
 import { SectionsContext } from '../../../../context/SectionsContext'

@@ -19,8 +19,6 @@ type CourseInfoProps = {
 }
 
 const CourseInfo = memo(({ course, isFirstCouseRendered }: CourseInfoProps) => {
-    console.log('Course Info')
-
     const name = `${course.department} ${course.courseNumber}`
     return (
         <div style={{ paddingBottom: 15 }}>

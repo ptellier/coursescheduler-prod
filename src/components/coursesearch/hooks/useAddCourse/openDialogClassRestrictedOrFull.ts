@@ -1,4 +1,4 @@
-import { checkCourseFull } from './checkCourseFull'
+import { checkCourseFull } from '../useUpdateSectionsForSolver/checkCourseFull'
 import { tSectionTypes, tCourseRestrictedOrFullProps } from '../../../../data/DataDefinition/CourseInfoDD'
 import { Dispatch, SetStateAction } from 'react'
 

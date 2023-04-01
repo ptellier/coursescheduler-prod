@@ -19,7 +19,6 @@ type SearchPanelProps = {
 }
 
 const SearchPanel = memo(({ coursesInfo }: SearchPanelProps) => {
-    console.log('Search Panel')
     const [loading, setLoading] = useState(false)
     const [clearInputBox, setClearInputBox] = useState(0)
     const [courseOptions, setCourseOptions] = useState([])

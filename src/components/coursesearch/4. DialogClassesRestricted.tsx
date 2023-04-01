@@ -1,13 +1,8 @@
 import { Button, Typography } from '@mui/material'
-import React, { memo, Dispatch, SetStateAction } from 'react'
+import React, { memo } from 'react'
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
-import { tCoursesInfo, tSectionTypes } from '../../data/DataDefinition/CourseInfoDD'
-
 import { tCourseRestrictedOrFullProps } from '../../data/DataDefinition/CourseInfoDD'
 import { Section } from '../../data/DataDefinition/SectionDD'
-import { useCoursesInfoSetState } from '../../context/CoursesInfoContext'
-import { useRemoveCourse } from './hooks/useRemoveCourse/useRemoveCourse'
-import { checkCourseFull } from './hooks/useAddCourse/checkCourseFull'
 import { selectSpecificRestrictedSectionsForScheduleSolver, useUpdateSectionsForSolver } from './hooks/useUpdateSectionsForSolver/useUpdateSectionsForSolver'
 
 type DialogRestrictedClassesAvailableProps = {
@@ -21,7 +16,6 @@ export type FormCheckBoxData = {
 }
 
 export const DialogRestrictedClassesAvailable = memo(({ courseRestrictedOrFull, setCourseRestrictedOrFull }: DialogRestrictedClassesAvailableProps) => {
-    console.log('Dialog Classes Restricted ')
     const updateSectionsForSolver = useUpdateSectionsForSolver()
 
     const handlClassesInScheduleSolver = (e: any) => {

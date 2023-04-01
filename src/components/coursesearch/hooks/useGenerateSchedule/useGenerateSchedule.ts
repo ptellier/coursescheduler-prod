@@ -1,4 +1,3 @@
-import { Recommendation } from '../../../../data/DataDefinition/Recommendation'
 import { filterDuplicatedSchedules } from './filter'
 import { groupSections } from './groupby'
 import { solve } from './solve_newengine'
@@ -26,23 +25,6 @@ export const useGenerateSchedule = ({ setLoading }: GenerateScheduleProps) => {
         let sectionsNoDuplicate = filterDuplicatedSchedules(sectionsSelected)
         let sectionsGroup = groupSections(sectionsNoDuplicate)
         let sectionsSolved = solve(sectionsGroup)
-        if (sectionsSolved.length === 0) {
-            // Try again with full classes
-            let sectionsSelected = sections
-            const sectionsNoDuplicate = filterDuplicatedSchedules(sectionsSelected)
-            const sectionsGroup = groupSections(sectionsNoDuplicate)
-            const sectionsSolved = solve(sectionsGroup)
-
-            // Full Classes Solved Schedule
-            if (sectionsSolved.length > 0) {
-                alert('Schedule is only possible when using full classes')
-            }
-            // Full Classes Didn't Solve Overlap Issue
-            else {
-                setLoading(false)
-                return alert('No Possible Schedule With These Courses. Please Remove a Course and Try Again')
-            }
-        }
         const sectionsRecommended = recommend(sectionsSolved)
         setSections(sectionsGroup.flatMap((section) => section)) // Do we Need this?
         setRecommended(sectionsRecommended)
@@ -52,3 +34,22 @@ export const useGenerateSchedule = ({ setLoading }: GenerateScheduleProps) => {
 
     return generateSchedule
 }
+// MIGHT BE USED LATER: We can use this to check if the schedule is possible with full classes
+
+// if (sectionsSolved.length === 0) {
+//     // Try again with full classes
+//     let sectionsSelected = sections
+//     const sectionsNoDuplicate = filterDuplicatedSchedules(sectionsSelected)
+//     const sectionsGroup = groupSections(sectionsNoDuplicate)
+//     const sectionsSolved = solve(sectionsGroup)
+
+//     // Full Classes Solved Schedule
+//     if (sectionsSolved.length > 0) {
+//         alert('Schedule is only possible when using full classes')
+//     }
+//     // Full Classes Didn't Solve Overlap Issue
+//     else {
+//         setLoading(false)
+//         return alert('No Possible Schedule With These Courses. Please Remove a Course and Try Again')
+//     }
+// }

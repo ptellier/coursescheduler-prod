@@ -1,5 +1,5 @@
 import { Accordion, AccordionDetails, AccordionSummary, Tooltip, Typography } from '@mui/material'
-import React, { memo, ReactChildren, ReactChild, useContext, useEffect, useState, useMemo, useCallback } from 'react'
+import React, { memo, useContext, useEffect, useState } from 'react'
 import { SectionsContext } from '../../context/SectionsContext'
 import { Course } from '../../data/DataDefinition/SearchWordDD'
 import { ExpandMore, Clear, Check } from '@mui/icons-material'
@@ -16,7 +16,6 @@ interface IProps {
 }
 
 const ClassInfo = memo(({ classType, course, icon, isFirstSectionRendered }: IProps) => {
-    console.log('Class Info')
     const [accordionExpanded, setAccordionExpanded] = useState<boolean>(false)
     const { currentSections } = useContext(SectionsContext)
     const [sectionInfo, setSectionInfo] = useState<any>(null)
@@ -57,7 +56,7 @@ const ClassInfo = memo(({ classType, course, icon, isFirstSectionRendered }: IPr
         }
         // Gets the specific couse section from currentSections - eg CPSC 110 LAB
     }, [currentSpecificSection[0], accordionExpanded])
-    console.log('info', sectionInfo)
+
     return (
         <>
             <Accordion onChange={() => setAccordionExpanded((isExpanded: boolean) => !isExpanded)} expanded={accordionExpanded} disableGutters disabled={!currentSpecificSection[0]?.selectedForScheduleSolver}>
@@ -100,15 +99,21 @@ const ClassInfo = memo(({ classType, course, icon, isFirstSectionRendered }: IPr
                     {sectionInfo?.currentlyRegistered.length > 0 && (
                         <RowIconText
                             icon={<SeatsRemainingIcon condition={parseInt(sectionInfo?.totalSeatsRemaining) > 0} />}
-                            info={<SeatsRemainingRow description={'Total Seats'} seats={`${sectionInfo.totalSeatsRemaining} / ${parseInt(sectionInfo.totalSeatsRemaining) + parseInt(sectionInfo.currentlyRegistered)}`} paddingLeft={'36px'} />}
+                            info={<SeatsRemainingRow width={250} description={'Total Seats'} seats={`${sectionInfo.totalSeatsRemaining} / ${parseInt(sectionInfo.totalSeatsRemaining) + parseInt(sectionInfo.currentlyRegistered)}`} />}
                         />
                     )}
-                    {sectionInfo?.generalSeatsRemainings.length > 0 && (
-                        <RowIconText icon={<SeatsRemainingIcon condition={parseInt(sectionInfo?.generalSeatsRemainings) > 0} />} info={<SeatsRemainingRow description={'General Seats'} seats={sectionInfo.generalSeatsRemainings} paddingLeft={'36px'} />} />
-                    )}
-                    {sectionInfo?.restrictedSeatsRemaining.length > 0 && (
-                        <RowIconText icon={<SeatsRemainingIcon condition={parseInt(sectionInfo?.restrictedSeatsRemaining) > 0} />} info={<SeatsRemainingRow description={'Restricted Seats'} seats={sectionInfo.restrictedSeatsRemaining} paddingLeft={'20px'} />} />
-                    )}
+                    <div style={{ paddingLeft: 25 }}>
+                        {sectionInfo?.generalSeatsRemainings.length > 0 && /* prettier-ignore */
+                        <RowIconText 
+                                icon={<SeatsRemainingIcon condition={parseInt(sectionInfo?.generalSeatsRemainings) > 0} />} 
+                                info={<SeatsRemainingRow width={225} description={'General Seats'} seats={sectionInfo.generalSeatsRemainings} />} 
+                            />}
+                        {sectionInfo?.restrictedSeatsRemaining.length > 0 && /* prettier-ignore */
+                        <RowIconText 
+                                icon={<SeatsRemainingIcon condition={parseInt(sectionInfo?.restrictedSeatsRemaining) > 0} />} 
+                                info={<SeatsRemainingRow width={225} description={'Restricted Seats'} seats={sectionInfo.restrictedSeatsRemaining} />} 
+                            />}
+                    </div>
                 </AccordionDetails>
             </Accordion>
         </>
@@ -141,11 +146,11 @@ const RowIconText = ({ icon, info, reverseDirection = false }: InfoProps) => {
     )
 }
 
-const SeatsRemainingRow = ({ description, seats, paddingLeft }: { description: string; seats: string; paddingLeft: string }) => {
+const SeatsRemainingRow = ({ description, seats, width }: { description: string; seats: string; width: number }) => {
     return (
-        <div className="flex-space-between" style={{ width: 200 }}>
+        <div className="flex-space-between" style={{ width: width }}>
             <div>{description}: </div>
-            <div style={{ paddingLeft: paddingLeft }}>
+            <div>
                 <b>{seats}</b>
             </div>
         </div>
