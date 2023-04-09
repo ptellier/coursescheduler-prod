@@ -1,5 +1,5 @@
 import { Analytics } from '@mui/icons-material'
-import { Section, Time, Timeslot, TimeslotUi, Day, AbbreviatedDay } from '../../../data/DataDefinition/SectionDD'
+import { Section, Time, Timeslot, TimeslotUi, Day, AbbreviatedDay } from '../../../../data/DataDefinition/SectionDD'
 import { groupCellsByName } from './groupby'
 import { make_timeslot } from './overlap'
 

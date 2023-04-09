@@ -1,4 +1,4 @@
-import { Section, Timeslot } from '../../../data/DataDefinition/SectionDD'
+import { Section, Timeslot } from '../../../../data/DataDefinition/SectionDD'
 
 /** filter out sections with !=term, waiting list, full - currently turned off for test
  * @param {Section[][]} groupOfSections

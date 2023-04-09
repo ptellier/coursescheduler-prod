@@ -1,9 +1,9 @@
 import { Accordion, AccordionDetails, AccordionSummary, Tooltip, Typography } from '@mui/material'
-import React, { memo, ReactChildren, ReactChild, useContext, useEffect, useState } from 'react'
+import React, { memo, useContext, useEffect, useState } from 'react'
 import { SectionsContext } from '../../context/SectionsContext'
 import { Course } from '../../data/DataDefinition/SearchWordDD'
-import { ExpandMore, Clear } from '@mui/icons-material'
-import { convertTimeslotsToTime } from './generateSchedule/time'
+import { ExpandMore, Clear, Check } from '@mui/icons-material'
+import { convertTimeslotsToTime } from './hooks/useGenerateSchedule/time'
 import { Section } from '../../data/DataDefinition/SectionDD'
 import { getSection } from '../../api/APIWebCrawler'
 import { AccessTime, PersonOutline, BusinessOutlined, DoorFrontOutlined, FmdGoodOutlined } from '@mui/icons-material'
@@ -12,9 +12,11 @@ interface IProps {
     classType: string
     course: Course
     icon?: any
+    isFirstSectionRendered: boolean
 }
 
-const ClassInfo = memo(({ classType, course, icon }: IProps) => {
+const ClassInfo = memo(({ classType, course, icon, isFirstSectionRendered }: IProps) => {
+    const [accordionExpanded, setAccordionExpanded] = useState<boolean>(false)
     const { currentSections } = useContext(SectionsContext)
     const [sectionInfo, setSectionInfo] = useState<any>(null)
 
@@ -28,35 +30,55 @@ const ClassInfo = memo(({ classType, course, icon }: IProps) => {
         setSectionInfo(newCourseSection)
     }
 
+    // Gets when specific course section for this specific component - eg CPSC 110 LAB
+    const getSpecificSection = () => {
+        return currentSections.filter((currentSection: Section) => currentSection.activity === classType && currentSection.subject === course.department && currentSection.course == course.courseNumber)
+    }
+
+    const currentSpecificSection = getSpecificSection()
+
     useEffect(() => {
         // Gets the specific couse section from currentSections - eg CPSC 110 LAB
-        const current = currentSections.filter((currentSection: Section) => currentSection.activity == classType && currentSection.subject == course.department && currentSection.course == course.courseNumber)
+        const current = currentSpecificSection
+
         if (current.length > 0) {
-            getSectionInfo(current[0])
+            // Force First Section of First course to open on clicking "Generate Schedule"
+            if (isFirstSectionRendered && sectionInfo == null) {
+                setAccordionExpanded(true)
+            }
+
+            // Prevents API Call if Accordion is not expanded
+            // 1. Fetch if => Accordion Expanded && Have Never Fetched
+            // 2. Fetch if => Accordion Expanded && Dragged and Dropped to New Section
+            if (accordionExpanded && (sectionInfo === null || currentSpecificSection[0].courseName !== sectionInfo.name)) {
+                getSectionInfo(current[0])
+            }
         }
-        // Only updates when specific course section changes - eg CPSC 110 LAB
-    }, [currentSections.filter((currentSection: Section) => currentSection.activity == classType && currentSection.subject == course.department && currentSection.course == course.courseNumber)[0]])
-    console.log('sectionInfo', sectionInfo)
+        // Gets the specific couse section from currentSections - eg CPSC 110 LAB
+    }, [currentSpecificSection[0], accordionExpanded])
+
     return (
         <>
-            <Accordion disableGutters disabled={sectionInfo == null}>
-                <AccordionSummary expandIcon={sectionInfo != null && <ExpandMore />} aria-controls="panel1a-content" id="panel1a-header">
+            <Accordion onChange={() => setAccordionExpanded((isExpanded: boolean) => !isExpanded)} expanded={accordionExpanded} disableGutters disabled={!currentSpecificSection[0]?.selectedForScheduleSolver}>
+                <AccordionSummary expandIcon={currentSpecificSection[0]?.selectedForScheduleSolver && <ExpandMore />} aria-controls="panel1a-content" id="panel1a-header">
                     <div className="flex-space-between">
                         <RowIconText icon={icon} info={<b style={{ fontSize: '0.8rem', paddingLeft: 10 }}>{classType}</b>} />
                     </div>
                 </AccordionSummary>
 
                 <AccordionDetails>
-                    <div className="flex-space-between">
-                        <Tooltip title="More Info">
-                            <Typography variant="body1">
-                                <a style={{ textDecoration: 'underline' }} target="_blank" href={`https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-section&dept=${sectionInfo?.subject}&course=${sectionInfo?.course}&section=${sectionInfo?.section}`}>
-                                    {sectionInfo?.name}
-                                </a>
-                            </Typography>
-                        </Tooltip>
-                        <RowIconText icon={<FmdGoodOutlined sx={{ fontSize: 20 }} />} info={sectionInfo?.mode} reverseDirection={true} />
-                    </div>
+                    {sectionInfo?.name && (
+                        <div className="flex-space-between">
+                            <Tooltip title="More Info">
+                                <Typography variant="body1">
+                                    <a style={{ textDecoration: 'underline' }} target="_blank" rel="noreferrer" href={`https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-section&dept=${sectionInfo?.subject}&course=${sectionInfo?.course}&section=${sectionInfo?.section}`}>
+                                        {sectionInfo?.name}
+                                    </a>
+                                </Typography>
+                            </Tooltip>
+                            <RowIconText icon={<FmdGoodOutlined sx={{ fontSize: 20 }} />} info={sectionInfo?.mode} reverseDirection={true} />
+                        </div>
+                    )}
                     {sectionInfo?.schedulePrettier.length > 0 && sectionInfo.schedulePrettier.map((x: any) => <RowIconText icon={<AccessTime sx={{ fontSize: 18 }} />} info={`${x.start_time} - ${x.end_time} | ${x.days}`} />)}
                     {sectionInfo?.building && <RowIconText icon={<BusinessOutlined sx={{ fontSize: 18 }} />} info={sectionInfo?.building} />}
                     {sectionInfo?.room && <RowIconText icon={<DoorFrontOutlined sx={{ fontSize: 18 }} />} info={`Room: ${sectionInfo?.room}`} />}
@@ -74,6 +96,24 @@ const ClassInfo = memo(({ classType, course, icon }: IProps) => {
                             }
                         />
                     )}
+                    {sectionInfo?.currentlyRegistered.length > 0 && (
+                        <RowIconText
+                            icon={<SeatsRemainingIcon condition={parseInt(sectionInfo?.totalSeatsRemaining) > 0} />}
+                            info={<SeatsRemainingRow width={250} description={'Available Seats'} seats={`${sectionInfo.totalSeatsRemaining} / ${parseInt(sectionInfo.totalSeatsRemaining) + parseInt(sectionInfo.currentlyRegistered)}`} />}
+                        />
+                    )}
+                    <div style={{ paddingLeft: 25 }}>
+                        {sectionInfo?.generalSeatsRemainings.length > 0 && /* prettier-ignore */
+                        <RowIconText 
+                                icon={<SeatsRemainingIcon condition={parseInt(sectionInfo?.generalSeatsRemainings) > 0} />} 
+                                info={<SeatsRemainingRow width={225} description={'General Seats'} seats={sectionInfo.generalSeatsRemainings} />} 
+                            />}
+                        {sectionInfo?.restrictedSeatsRemaining.length > 0 && /* prettier-ignore */
+                        <RowIconText 
+                                icon={<SeatsRemainingIcon condition={parseInt(sectionInfo?.restrictedSeatsRemaining) > 0} />} 
+                                info={<SeatsRemainingRow width={225} description={'Restricted Seats'} seats={sectionInfo.restrictedSeatsRemaining} />} 
+                            />}
+                    </div>
                 </AccordionDetails>
             </Accordion>
         </>
@@ -104,4 +144,19 @@ const RowIconText = ({ icon, info, reverseDirection = false }: InfoProps) => {
             </Typography>
         </div>
     )
+}
+
+const SeatsRemainingRow = ({ description, seats, width }: { description: string; seats: string; width: number }) => {
+    return (
+        <div className="flex-space-between" style={{ width: width }}>
+            <div>{description}: </div>
+            <div>
+                <b>{seats}</b>
+            </div>
+        </div>
+    )
+}
+
+const SeatsRemainingIcon = ({ condition }: { condition: boolean }) => {
+    return condition ? <Check sx={{ fontSize: 20, color: 'green' }} /> : <Clear sx={{ fontSize: 20, color: 'red' }} />
 }
