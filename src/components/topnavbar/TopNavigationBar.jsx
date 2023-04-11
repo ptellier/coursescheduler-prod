@@ -1,5 +1,4 @@
 import {Paper} from "@mui/material";
-import {BottomNavigation, BottomNavigationAction} from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import PaletteIcon from "@mui/icons-material/Palette";

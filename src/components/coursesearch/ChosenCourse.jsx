@@ -1,5 +1,5 @@
-import {Autocomplete, Box, IconButton, List, Paper, TextField} from "@mui/material";
 import * as React from "react";
+import {IconButton} from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 
 const ChosenCourse = ({subject, courseNum, description, credits, 

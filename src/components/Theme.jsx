@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import { red, pink, green, lime, lightGreen, lightBlue, grey, purple, yellow, orange, brown, teal, deepOrange } from '@mui/material/colors';
 import { createTheme } from '@mui/material/styles';
 

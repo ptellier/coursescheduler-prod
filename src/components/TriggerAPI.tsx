@@ -1,6 +1,6 @@
 import { Course } from "../data/DataDefinition/SearchWordDD";
 import { Section } from "../data/DataDefinition/SectionDD";
-import { fetchParallel,fetchSections } from "../helpers/fetch";
+import { fetchParallel } from "../helpers/fetch";
 import {
   filter_term_avail_waitlist,
   filter_duplicate_schedules,
@@ -24,6 +24,7 @@ export interface TriggerAPIProps {
 export const TriggerAPI = ({ loc, set_recommended, userTerm, setUserTerm, setSections}: TriggerAPIProps) => {
   /** If true, show loading icon (pulse) on the generate schedule btn */
   const [loading, setLoading] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [status, setStatus] = useState("Run")
 
   /**
