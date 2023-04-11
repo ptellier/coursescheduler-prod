@@ -13,7 +13,7 @@ Try searching for "CPSC 110" and "CPSC 121", then selecting one of the recommend
 You can choose among four different schedule criteria:
 - most consistent start times ->  for students that want their first class to start at nearly the same time every day
 - most compact ->   for students that need to minimize the time between when their first class starts and when their last class ends
-- scattered schedules ->  for students that want as much times between classes as possible
+- scattered schedules ->  for students that want as much time between classes as possible
 - most free days -> for students that want to have as many days without school as possible
 
 ![til](./asset/recommend.gif)

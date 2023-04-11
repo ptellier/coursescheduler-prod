@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext, useContext, useCallback } from 'react'
+import { useState, useEffect, createContext, useCallback } from 'react'
 import { Recommended } from '../data/DataDefinition/RecommendDD'
 
 export const SectionsContext = createContext()
@@ -95,8 +95,7 @@ export const SectionsProvider = (props) => {
      */
     const getNextSections = (section) => {
         const nextSections = sections.filter((fetchedSection) => fetchedSection.subject === section.subject && fetchedSection.course === section.course && fetchedSection.activity === section.activity)
-        const excludeThisSections = nextSections.filter((nextSection) => !(nextSection.name === section.name))
-        return excludeThisSections
+        return nextSections.filter((nextSection) => !(nextSection.name === section.name))
     }
 
     /**

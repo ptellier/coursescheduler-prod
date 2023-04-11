@@ -1,5 +1,3 @@
-import { info } from 'console'
-import { Course } from '../data/DataDefinition/SearchWordDD'
 import { cleanSections } from './DataCleaner'
 
 export const getSections = async (department: string, courseNumber: string, term: string, session: string) => {

@@ -1,5 +1,4 @@
-import { Analytics } from '@mui/icons-material'
-import { Section, Time, Timeslot, TimeslotUi, Day, AbbreviatedDay } from '../../../../data/DataDefinition/SectionDD'
+import { Section, Time, Timeslot } from '../../../../data/DataDefinition/SectionDD'
 import { groupCellsByName } from './groupby'
 import { make_timeslot } from './overlap'
 
@@ -32,7 +31,7 @@ export interface Cell {
 }
 
 /**
- * GUI diplay info for a cell in a timetable that has...
+ * GUI display info for a cell in a timetable that has...
  * @property {number} height
  * @property {number} start
  * @property {number} end
@@ -65,8 +64,7 @@ export const createCells = (los: Section[]): Cell_display[] => {
     // 5.group cells by name
     const grouped_cells = groupCellsByName(sorted_merged_cells)
     // 6.process cells for display
-    const cells_display = convertToDisplay(grouped_cells)
-    return cells_display
+    return convertToDisplay(grouped_cells);
 }
 
 export const convertToDisplay = (grouped_cells: Cell[][]) => {
@@ -127,8 +125,6 @@ export const getOccupiedCells = (los: Section[]): Cell[][] => {
 
 /**
  * interpolate, fill from starting to ending times, each array of cells
- * @param {Cell[]} lloc
- * @return {Cell[]}
  */
 export const interpolateTimes = (loc: Cell[]): Cell[] => {
     if (loc.length === 0) return [] // return empty if loc is empty
@@ -204,14 +200,14 @@ export const extractTimes = (loc: Cell[]): Time[] => {
  */
 export const getGapCells = (occupied: Time[], times: Time[]): Cell[] => {
     const gap_times = times.filter((time) => !occupied.includes(time))
-    const gap_cells = gap_times.map((gap_time) => ({
+    return gap_times.map((gap_time) => ({
         id: 'gap',
         time: gap_time,
         name: `gap_${gap_time}`,
         is_occupied: false,
         isNextMove: false,
     }))
-    return gap_cells //stub
+    // Todo: finish this stub
 }
 
 /**
@@ -315,13 +311,12 @@ export const convertTimeslotsToTime = (timeslots: Timeslot[]) => {
 }
 
 export const convert24hrInt_To_12HrString = (time: number) => {
-    let timeUI: string
 
     // Calculate Minutes String
     let minutes: string
     let minutesCalc: number = time % 60
 
-    if (minutesCalc == 0) {
+    if (minutesCalc === 0) {
         minutes = '00'
     } else if (minutesCalc < 10) {
         minutes = `0${minutesCalc}`
@@ -354,5 +349,5 @@ export const convert24hrInt_To_12HrString = (time: number) => {
 
 const sortMonths = (ts1: Timeslot, ts2: Timeslot) => {
     const dayValue = { Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5 }
-    return dayValue[ts1.day] < dayValue[ts2.day] === true ? 1 : 0
+    return dayValue[ts1.day] < dayValue[ts2.day] ? 1 : 0
 }

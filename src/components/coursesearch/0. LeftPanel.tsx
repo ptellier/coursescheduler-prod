@@ -1,8 +1,6 @@
-import React, { useState } from 'react'
 import { Box, Paper } from '@mui/material'
 import SearchPanel from './1. SearchPanel'
 import CourseInfo from './2. CourseInfo'
-import { tCoursesInfo } from '../../data/DataDefinition/CourseInfoDD'
 import { useCoursesInfo } from '../../context/CoursesInfoContext'
 
 const LeftPanel = () => {
