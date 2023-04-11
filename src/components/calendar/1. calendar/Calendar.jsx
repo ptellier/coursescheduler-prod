@@ -17,11 +17,12 @@ const Calendar = () => {
     // }, [selectedRecommended, recommended])
 
     
-    /** Important: designating Calendard <div> element 
+    /** Important: designating Calendar <div> element
      * to be droppable fixes hanging next timeslots bug
      * when user drops outside of nextTimeSlots.
      * so, DO NOT REMOVE THIS HOOK --
      */
+        // eslint-disable-next-line no-unused-vars
     const [{ isOver }, drop] = useDrop(() => ({
         accept: "calendarTimeSlot",
         drop: (item) => {

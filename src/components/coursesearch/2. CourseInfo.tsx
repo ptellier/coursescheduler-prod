@@ -1,10 +1,6 @@
-import { Box, IconButton, Paper } from '@mui/material'
+import { Box, IconButton } from '@mui/material'
 import ClearIcon from '@mui/icons-material/Clear'
-import { red, pink, green, lime, lightGreen, lightBlue, grey, purple, yellow, orange, brown, teal, deepOrange } from '@mui/material/colors'
-import { CourseColorContext } from '../../context/CourseColorContext'
-import { memo, useCallback, useContext, useMemo, useState } from 'react'
-import { Course } from '../../data/DataDefinition/SearchWordDD'
-import { SectionsContext } from '../../context/SectionsContext'
+import { memo } from 'react'
 import ClassInfo from './3. ClassInfo'
 import ScienceIcon from '@mui/icons-material/Science'
 import MenuBookIcon from '@mui/icons-material/MenuBook'
@@ -38,7 +34,7 @@ const CourseInfo = memo(({ course, isFirstCouseRendered }: CourseInfoProps) => {
                     if (key === 'Laboratory') icon = <ScienceIcon />
                     if (key === 'Tutorial') icon = <CoPresentIcon />
 
-                    if (value.length > 0 && key != 'Lecture') {
+                    if (value.length > 0 && key !== 'Lecture') {
                         return <ClassInfo key={key + name} isFirstSectionRendered={false} classType={key} course={course} icon={icon} />
                     }
                 })}

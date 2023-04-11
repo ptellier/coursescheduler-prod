@@ -32,7 +32,7 @@ const ClassInfo = memo(({ classType, course, icon, isFirstSectionRendered }: IPr
 
     // Gets when specific course section for this specific component - eg CPSC 110 LAB
     const getSpecificSection = () => {
-        return currentSections.filter((currentSection: Section) => currentSection.activity === classType && currentSection.subject === course.department && currentSection.course == course.courseNumber)
+        return currentSections.filter((currentSection: Section) => currentSection.activity === classType && currentSection.subject === course.department && currentSection.course === course.courseNumber)
     }
 
     const currentSpecificSection = getSpecificSection()
@@ -55,6 +55,7 @@ const ClassInfo = memo(({ classType, course, icon, isFirstSectionRendered }: IPr
             }
         }
         // Gets the specific couse section from currentSections - eg CPSC 110 LAB
+        // eslint-disable-next-line
     }, [currentSpecificSection[0], accordionExpanded])
 
     return (
@@ -86,10 +87,10 @@ const ClassInfo = memo(({ classType, course, icon, isFirstSectionRendered }: IPr
                         <RowIconText
                             icon={<PersonOutline sx={{ fontSize: 20 }} />}
                             info={
-                                sectionInfo?.instructor == 'TBA' ? (
+                                sectionInfo?.instructor === 'TBA' ? (
                                     'Instructor: TBA'
                                 ) : (
-                                    <a target="_blank" href={sectionInfo?.instructorUrl}>
+                                    <a target="_blank" rel="noreferrer" href={sectionInfo?.instructorUrl}>
                                         {sectionInfo?.instructor}
                                     </a>
                                 )

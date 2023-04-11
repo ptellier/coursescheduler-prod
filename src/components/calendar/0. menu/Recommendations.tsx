@@ -5,7 +5,7 @@ import ViewTimelineIcon from '@mui/icons-material/ViewTimeline'
 import ViewKanbanIcon from '@mui/icons-material/ViewKanban'
 import { SectionsContext } from '../../../context/SectionsContext'
 import { Recommended } from '../../../data/DataDefinition/RecommendDD'
-import { IconButton, Stack, ToggleButton, ToggleButtonGroup, Tooltip } from '@mui/material'
+import { Stack, ToggleButton, ToggleButtonGroup, Tooltip } from '@mui/material'
 
 interface RecommendationProps {
     prevent: boolean

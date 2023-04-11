@@ -1,6 +1,5 @@
 import { FC } from 'react'
 import { Box, Stack } from '@mui/material'
-import { ThemeProvider } from '@mui/material/styles'
 import TopNavigationBar from './topnavbar/TopNavigationBar'
 import Calendar from './calendar/1. calendar/Calendar'
 import { CalandarMenu } from './calendar/0. menu/CalandarMenu'

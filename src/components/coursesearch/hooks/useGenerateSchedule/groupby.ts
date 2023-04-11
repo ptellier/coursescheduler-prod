@@ -1,6 +1,5 @@
-import { Cell, Cell_display } from './time'
+import { Cell } from './time'
 import { Section, Timeslot } from '../../../../data/DataDefinition/SectionDD'
-import { overlapCells } from './overlap'
 
 /**
  * group sections by course and activity

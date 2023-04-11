@@ -1,5 +1,4 @@
-import { Analytics } from '@mui/icons-material'
-import { Section, Time, Timeslot, TimeslotUi, Day, AbbreviatedDay } from '../../../../data/DataDefinition/SectionDD'
+import { Section, Time, Timeslot, } from '../../../../data/DataDefinition/SectionDD'
 import { groupCellsByName } from './groupby'
 import { make_timeslot } from './overlap'
 
@@ -315,13 +314,12 @@ export const convertTimeslotsToTime = (timeslots: Timeslot[]) => {
 }
 
 export const convert24hrInt_To_12HrString = (time: number) => {
-    let timeUI: string
 
     // Calculate Minutes String
     let minutes: string
     let minutesCalc: number = time % 60
 
-    if (minutesCalc == 0) {
+    if (minutesCalc === 0) {
         minutes = '00'
     } else if (minutesCalc < 10) {
         minutes = `0${minutesCalc}`
@@ -354,5 +352,5 @@ export const convert24hrInt_To_12HrString = (time: number) => {
 
 const sortMonths = (ts1: Timeslot, ts2: Timeslot) => {
     const dayValue = { Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5 }
-    return dayValue[ts1.day] < dayValue[ts2.day] === true ? 1 : 0
+    return dayValue[ts1.day] < dayValue[ts2.day] ? 1 : 0
 }
