@@ -5,13 +5,13 @@ import {
 } from "@mui/material";
 import { Recommended } from '../data/DataDefinition/RecommendDD';
 
-function generate(element) {
-    return [0, 1, 2].map((value) =>
-        React.cloneElement(element, {
-            key: value,
-        }),
-    );
-}
+// function generate(element) {
+//     return [0, 1, 2].map((value) =>
+//         React.cloneElement(element, {
+//             key: value,
+//         }),
+//     );
+// }
 
 const OptionsPaper = ({setSelectedRecommended}) => {
     const H_SPACING = "2rem";
