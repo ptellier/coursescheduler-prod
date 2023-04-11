@@ -46,8 +46,7 @@ export const getGapTimes = (occupiedTimes, minStartTime, maxEndTime) => {
         right ++;
     }
     const startInserted = getStartGap(hashGaps, minStartTime, occupiedTimes, INTERVAL)
-    const endInserted = getEndGap(startInserted, maxEndTime, occupiedTimes, INTERVAL)
-    return endInserted;
+    return getEndGap(startInserted, maxEndTime, occupiedTimes, INTERVAL)
 }
 
 /**

@@ -1,9 +1,8 @@
 import * as React from 'react';
 import {
-    Box, Button, Divider, FormControl, FormControlLabel, FormLabel, List, ListItem, ListItemIcon, ListItemText,
+    Box, FormControl, FormControlLabel, FormLabel,
     Paper, Radio, RadioGroup, Stack,
 } from "@mui/material";
-import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { Recommended } from '../data/DataDefinition/RecommendDD';
 
 function generate(element) {

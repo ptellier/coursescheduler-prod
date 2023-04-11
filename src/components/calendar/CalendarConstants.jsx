@@ -76,7 +76,7 @@ export function timeToGridRow(time) {
  */
 export function stringTimeToGridRow(timeString) {
     const stringArr = timeString.split(":");
-    const numToAdd = stringArr[1] == "30" ? 1 : 0;
+    const numToAdd = stringArr[1] === "30" ? 1 : 0;
     return (stringArr[0].valueOf() - 6) * 2 + numToAdd;
 }
 

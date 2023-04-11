@@ -1,6 +1,5 @@
-import { Cell, Cell_display } from "./time";
+import { Cell } from "./time";
 import { Section, Timeslot } from "../data/DataDefinition/SectionDD";
-import { overlapCells } from "./overlap";
 
 
 
@@ -18,10 +17,9 @@ import { overlapCells } from "./overlap";
  * @returns {Section[][]}
  */
 export const groupSections = (los: Section[]): Section[][] => {
-  const result = groupBy(los, function (section:Section) {
+  return groupBy(los, function (section:Section) {
       return [section.subject, section.course, section.activity];
   })
-  return result
 }
 
 
@@ -31,10 +29,9 @@ export const groupSections = (los: Section[]): Section[][] => {
  * @returns {Cell[][]}
  */
 export const groupCellsByName = (loc: Cell[]): Cell[][] => {
-  const result = groupBy(loc, function (cell:Cell) {
+  return groupBy(loc, function (cell:Cell) {
     return [cell.name];
-})
-  return result
+  })
 }
 
 /**
@@ -43,10 +40,9 @@ export const groupCellsByName = (loc: Cell[]): Cell[][] => {
  * @returns {Timeslot[][]}
  */
 export const groupTimeSlotsByDays = (lots: Timeslot[]): Timeslot[][] => {
-  const result = groupBy(lots, (timeslot: Timeslot) => {
+  return groupBy(lots, (timeslot: Timeslot) => {
     return [timeslot.day];
   });
-  return result
 };
 
 

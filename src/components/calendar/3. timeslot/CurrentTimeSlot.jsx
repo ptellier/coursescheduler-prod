@@ -7,6 +7,7 @@ import ReportIcon from '@mui/icons-material/Report';
 
 
 const CurrentTimeSlot = ({section, timeSlot, isInOverlapGroup}) => {
+    // eslint-disable-next-line no-unused-vars
     const {showNextSections, hideNextSections, nextSections} = useContext(SectionsContext);
     const theme = useTheme();
     const backgroundColors = theme.palette.calendarTimeSlotBackgroundColors;
@@ -37,6 +38,7 @@ const CurrentTimeSlot = ({section, timeSlot, isInOverlapGroup}) => {
      */
     useEffect(() => {
         isDragging && showNextSections(section);
+        // eslint-disable-next-line
     }, [isDragging])
 
     

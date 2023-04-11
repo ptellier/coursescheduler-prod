@@ -17,6 +17,7 @@ const Calendar = ({ recommended }) => {
     useEffect(() => {
         setCurrentSections(recommended);
         setHistory([recommended]);
+        // eslint-disable-next-line
     }, [recommended])
 
     

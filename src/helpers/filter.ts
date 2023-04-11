@@ -46,12 +46,12 @@ export const filter_duplicate_schedules = (los: Section[]): Section[] => {
   );
 };
 
-/**
- * filter out sections that conflicts in time with rest of sections
- * @param node
- * @returns
- */
-const filter_timeconflict = (node: Node) => {
-  //TODO: Implement
-  return true;
-};
+// /**
+//  * filter out sections that conflicts in time with rest of sections
+//  * @param node
+//  * @returns
+//  */
+// const filter_timeconflict = (node: Node) => {
+//   //TODO: Implement
+//   return true;
+// };

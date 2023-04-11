@@ -1,9 +1,9 @@
-import React, { useContext, useEffect } from 'react'
+import React, {useContext, useEffect} from 'react'
 import {useDrop} from "react-dnd";
-import { timeToGridRow } from '../CalendarConstants';
-import { SectionsContext } from '../context/SectionsContext';
-import { useTheme } from '@mui/material';
-import { HistoryContext } from '../../context/HistoryContext';
+import {timeToGridRow} from '../CalendarConstants';
+import {SectionsContext} from '../context/SectionsContext';
+import {useTheme} from '@mui/material';
+import {HistoryContext} from '../../context/HistoryContext';
 import ReportIcon from '@mui/icons-material/Report';
 
 
@@ -14,7 +14,7 @@ const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
     const {addToHistory} = useContext(HistoryContext);
 
     const theme = useTheme();
-    const backgroundColors = theme.palette.calendarTimeSlotBackgroundColors;
+    // const backgroundColors = theme.palette.calendarTimeSlotBackgroundColors;
     const textColors = theme.palette.calendarTimeSlotTextColors;
     const dropAcceptedColor = theme.palette.calendarTimeSlotDropAccepted;
     
@@ -24,9 +24,7 @@ const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
         drop: (item) => {
           // parse from and to sections 
           // then invoke handleDrop(from, to)
-          const from = item
-          const to = section
-          handleDrop(from, to)
+            handleDrop(/*from*/ item, /*to*/ section)
         },
         collect: (monitor) => ({
           isOver:  !!monitor.isOver(),
@@ -42,6 +40,7 @@ const NextTimeSlot = ({ section, timeSlot, isInOverlapGroup }) => {
      */
     useEffect(() => {
       !isOver && blurNextSection();
+        // eslint-disable-next-line
     }, [isOver])
 
     /**

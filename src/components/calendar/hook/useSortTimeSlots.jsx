@@ -1,5 +1,3 @@
-import React from 'react'
-
 const useSortTimeSlots = () => {
     /**
      * EFFECTS: sort given timeslots based start time
