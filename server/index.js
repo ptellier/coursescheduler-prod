@@ -1,8 +1,10 @@
 const puppeteer = require("puppeteer");
 const express = require("express");
+const cors = require("cors")
+
 const app = express();
 let port = process.env.PORT || 3001;
-const cors = require("cors")
+
 app.use(
   cors({
     // origin:"https://ubcscheduler.herokuapp.com",
