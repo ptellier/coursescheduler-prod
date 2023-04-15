@@ -18,14 +18,14 @@ export interface TriggerAPIProps {
   set_recommended: Function;
   userTerm: string;
   setUserTerm: Function;
+  season: string;
   setSections: Function;
 }
 
-export const TriggerAPI = ({ loc, set_recommended, userTerm, setUserTerm, setSections}: TriggerAPIProps) => {
+export const TriggerAPI = ({ loc, set_recommended, userTerm, setUserTerm, season, setSections}: TriggerAPIProps) => {
   /** If true, show loading icon (pulse) on the generate schedule btn */
   const [loading, setLoading] = useState(false);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [status, setStatus] = useState("Run")
+  const [, setStatus] = useState("Run")
 
   /**
    * update los with fetched data when a user clicks Generate Schedule btn
@@ -37,15 +37,14 @@ export const TriggerAPI = ({ loc, set_recommended, userTerm, setUserTerm, setSec
     // const sections_api = await fetchSections(loc.map((c) => c.sw));
     // console.log("fetched: ", sections_api)
     // Warning:fast, but too much load on the server
-    const sections_api = await fetchParallel(loc.map((c) => c.sw)); 
+    const sections_api = await fetchParallel(loc.map((c) => c.sw), userTerm, season);
     // console.log(sections_api)
     // 2) Prepare sections data for solve
     // TODO  1.1) take note of required sections (lecs, labs, tuts); are they all present?
     const prep = (sections: Section[]) => {
       const prep1 = filter_term_avail_waitlist(sections, userTerm);
       const prep2 = filter_duplicate_schedules(prep1);
-      const prep3 = groupSections(prep2);
-      return prep3;
+      return groupSections(prep2);
     };
     const sections_prepped = prep(sections_api);
     // console.log("prepped: ", sections_prepped);
@@ -66,14 +65,16 @@ export const TriggerAPI = ({ loc, set_recommended, userTerm, setUserTerm, setSec
               id="term-choice-field"
               select
               label="Term"
-              value={userTerm}
-              onChange={(event) => setUserTerm((event.target.value))}
+              value={season+userTerm}
+              onChange={(event) => {
+                setUserTerm(event.target.value.charAt(1))
+              }}
               sx={{[`& fieldset`]:{borderRadius:"10px"}, width:"100%", marginTop:"20px"}}
           >
-              <MenuItem key={1} value={"1"}>#1 Winter (Sept - Dec)</MenuItem>
-              <MenuItem key={2} value={"2"}>#2 Winter (Jan - Apr)</MenuItem>
-              <MenuItem key={3} value={"3"}>#1 Summer (May - June)</MenuItem>
-              <MenuItem key={4} value={"4"}>#2 Summer (July - Aug)</MenuItem>
+              <MenuItem key={1} value={"W1"}>Winter T1 2024 (Sept - Dec)</MenuItem>
+              <MenuItem key={2} value={"W2"}>Winter T2 2024 (Jan - Apr)</MenuItem>
+              <MenuItem key={3} value={"S1"}>Summer T1 2023 (May-June)</MenuItem>
+              <MenuItem key={4} value={"S2"}>Summer T2 2023 (July-Aug)</MenuItem>
           </TextField>
           <div className="d-flex justify-content-center">
             <LoadingButton className="mt-3 w-100" 

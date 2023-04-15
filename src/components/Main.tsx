@@ -10,9 +10,10 @@ import OptionsPaper from "./OptionsPaper";
 import Calendar from "./calendar/1. calendar/Calendar";
 import { theme } from "./Theme";
 import { Recommended } from "../data/DataDefinition/RecommendDD";
-import Instruction from "./Instruction";
-import History from "./History";
+// import Instructions from "./Instructions";
+// import History from "./History";
 import { HistoryProvider } from "./context/HistoryContext";
+import TutorialPopup from "./TutorialPopup";
 
 
 /**
@@ -32,6 +33,10 @@ export interface Recommendation {
 
 const Main: FC = () => {
 
+  /** initial tutorial pop-up **/
+  const [open, setOpen] = useState(true);
+  const openInstructions = () => {setOpen(true)};
+
   /** all sections that were fetched from web scrapper */
   const [sections, setSections] = useState<Section[]>([]);
 
@@ -48,6 +53,8 @@ const Main: FC = () => {
 
   /** raw user input from search bar and term selection components */
   const [userTerm, setUserTerm] = useState<string>("1");
+  const [season, ] = useState<string>("W");
+
 
   /** indicates the current category of recommendation that user selected*/
   const [selectedRecommended, setSelectedRecommended] = useState<Recommended>(Recommended.compact)
@@ -78,19 +85,22 @@ const Main: FC = () => {
   return (
       <ThemeProvider theme={theme}>
 
+        <TutorialPopup open={open} setOpen={setOpen}/>
+
         <div className="Page">
-          <TopNavigationBar/>
+          <TopNavigationBar openInstructions={openInstructions}/>
           <Box m={2} sx={{height:"100%"}}>
             <div className="main-page-flexbox">
               <div className="main-page-left">
                 <Stack direction="column" spacing={2}>
-                <Instruction />
+                {/*<Instructions />*/}
                   <CourseSearchPaper coursesToFetch={coursesToFetch}
                                      setCoursesToFetch={setCoursesToFetch}
                                      set_recommended={set_recommended}
                                      userTerm={userTerm}
                                      setUserTerm={setUserTerm}
                                      setSections={setSections}
+                                     season={season}
                   />
                   <OptionsPaper setSelectedRecommended={setSelectedRecommended}/>
                   
@@ -101,7 +111,7 @@ const Main: FC = () => {
                 <SectionsProvider allSections={sections}>
                 <HistoryProvider setCurrentRecommended={setCurrentRecommended}>
                   <Stack direction="column" spacing={1}>
-                    <History />
+                    {/*<History />*/}
                       <Calendar recommended={currentRecommended}/>
                   </Stack>
                 </ HistoryProvider>

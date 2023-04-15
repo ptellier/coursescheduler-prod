@@ -13,7 +13,8 @@ import {CourseColorMap} from "../../data/DataDefinition/CourseColorMap";
 
 
 const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch,
-                             set_recommended, userTerm, setUserTerm, setSections}) => {
+                             set_recommended, userTerm, setUserTerm,
+                               season, setSections}) => {
 
 
       const theme = useTheme();
@@ -36,7 +37,7 @@ const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch,
        * Note2: course description data are options available for user to choose
        * Note3: course data are different from section data
        * Note4: fetches from Ben Cheung's API (so much more efficient than Liang's)
-       * @param searchWord
+       * @param event
        */
       const loadCourseOptions = async (event) => {
         if (event.nativeEvent.type === "input") {
@@ -57,11 +58,12 @@ const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch,
        * push user selected course option to coursesChosen and keep track of
        * total credits. If exceed, raise warning.
        * Note: this function is triggered when user clicks the course option in popover box
+       * @param event
        * @param option
        */
         const handleChange = (event, option) => {
             if (option === null) {
-                return
+                // pass and return
             } else if (exceededCredLimit(option)) {
                 alert("You exceeded maximum (18) credits per term. Remove some courses before adding more");
             } else if (selectedDuplicate(option)) {
@@ -81,7 +83,7 @@ const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch,
 
       /**
      * create course with search word, credit, description then accumulate it in coursesChosen
-     * @param sw
+     * @param key
      * @param cred
      * @param desc
      */
@@ -155,6 +157,7 @@ const CourseSearchPaper = ({ coursesToFetch, setCoursesToFetch,
                 setSections={setSections}
                 userTerm={userTerm}
                 setUserTerm={setUserTerm}
+                season={season}
             />
 
         </Box>
