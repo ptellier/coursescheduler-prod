@@ -6,7 +6,7 @@ const app = express()
 
 app.use(
     cors({
-        origin: 'https://ubc-course-scheduler.phillip.tel/',
+        origin: 'https://ubc-course-scheduler.phillip.tel',
         // origin:"*",
         // origin:"https://ubcscheduler.pythonanywhere.com",
         optionsSuccessStatus: 200,
