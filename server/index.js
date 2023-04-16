@@ -6,10 +6,11 @@ const app = express()
 
 app.use(
     cors({
-      origin: '*',
-      // origin:"https://ubcscheduler.pythonanywhere.com",
-      optionsSuccessStatus: 200,
-      methods: ['GET'],
+        origin: 'https://ubc-course-scheduler.phillip.tel/',
+        // origin:"*",
+        // origin:"https://ubcscheduler.pythonanywhere.com",
+        optionsSuccessStatus: 200,
+        methods: ['GET'],
     })
 )
 

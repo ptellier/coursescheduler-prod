@@ -35,10 +35,10 @@ const getHTML = (url) => {
     return new Promise(function (resolve, reject) {
         request(url, (error, response, html) => {
             if (!error && response.statusCode === 200) {
-                console.log('success')
+                //console.log('success')
                 resolve(html)
             } else {
-                console.log('fail')
+                //console.log('fail')
                 reject(error)
             }
         })

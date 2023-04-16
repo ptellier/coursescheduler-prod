@@ -2,8 +2,8 @@ import {SearchWord} from "../data/DataDefinition/SearchWordDD";
 import {Section} from "../data/DataDefinition/SectionDD";
 // Note: Functions in this file fetches data from Course API
 
-const BASE_SERVER_URL = "http://localhost:8000"
-// const BASE_SERVER_URL = "https://jungle-green-shark-coat.cyclic.app"
+// const BASE_SERVER_URL = "http://localhost:8000"
+const BASE_SERVER_URL = "https://jungle-green-shark-coat.cyclic.app"
 
 /**
  * fetch sections from API in parallel
