@@ -71,7 +71,7 @@ const OverlapTimeSlot = ({ group }) => {
 
     /**
      * EFFECTS: display and create a div with height of 30px
-     * INVARIANT: interval must follow exact height of 30 minutes interval
+     * INVARIANT: Interval must follow exact height of 30 minutes Interval
      */
     const displayGapTimeSlot = (timeSlot) => { 
         return <div className="p-0 m-0" key={getUUID()}
@@ -89,7 +89,7 @@ const OverlapTimeSlot = ({ group }) => {
     }
 
     /**
-     * EFFECTS: generates times between start time, and end time, by given interval
+     * EFFECTS: generates times between start time, and end time, by given Interval
      * @param start
      * @param end
      * @param interval

@@ -13,3 +13,6 @@ import { Section } from "./SectionDD";
     startVariance:number;
     numFreeDays:number;
   }
+
+  // list of indexes of the IntervalBundle in each Choiceset
+  export type IndexSchedule = number[];

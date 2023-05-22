@@ -164,7 +164,7 @@ export const interpolateTimes = (loc: Cell[]): Cell[] => {
 };
 
 /**
- * generates times between start time, and end time, by given interval
+ * generates times between start time, and end time, by given Interval
  * @param start
  * @param end
  * @param interval
@@ -251,7 +251,7 @@ export const cellHeight = (loc: Cell[], port_h: number): number => {
 };
 
 /**
- * generates times from start to end, by given interval
+ * generates times from start to end, by given Interval
  * @param {number} start
  * @param {number} end
  * @param {number} interval

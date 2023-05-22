@@ -27,7 +27,7 @@ const HandleOverlapTimeSlots = ({ timeSlots }) => {
     }
 
     /**
-     * EFFECTS: group timeSlots by overlapping time interval
+     * EFFECTS: group timeSlots by overlapping time Interval
      * INVARIANT: timeSlots must be sorted by start time
      * @param {TimeSlot[]} timeSlots 
      * @returns 
